@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BootDeal AI</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+<div class="logo">
+
+<span class="logoIcon">BD</span>
+
+<div>
+
+<h1>BootDeal AI</h1>
+
+<p>Career Sponsorship Simulator</p>
+
+</div>
+
+</div>
+
+<div class="status">
+
+<span class="statusDot"></span>
+
+NEGOTIATION AI ONLINE
+
+</div>
+
+</header>
+
+
+<main>
+
+<section id="playerScreen" class="screen active">
+
+<div class="hero">
+
+<span class="tag">PLAYER CAREER TOOL</span>
+
+<h2>Transforme sua carreira<br>em uma <span>marca.</span></h2>
+
+<p>
+
+Cadastre os dados do seu jogador e descubra quais marcas
+estão interessadas em um contrato de patrocínio.
+
+</p>
+
+</div>
+
+
+<div class="playerCard">
+
+<h3>PERFIL DO JOGADOR</h3>
+
+<div class="formGrid">
+
+<div class="inputGroup">
+
+<label>NOME DO JOGADOR</label>
+
+<input id="playerName" type="text" placeholder="Ex: Guilherme Assis">
+
+</div>
+
+
+<div class="inputGroup">
+
+<label>IDADE</label>
+
+<input id="playerAge" type="number" placeholder="18">
+
+</div>
+
+
+<div class="inputGroup">
+
+<label>CLUBE</label>
+
+<input id="playerClub" type="text" placeholder="Real Madrid">
+
+</div>
+
+
+<div class="inputGroup">
+
+<label>POSIÇÃO</label>
+
+<select id="playerPosition">
+
+<option value="ATA">ATA</option>
+
+<option value="PE">PE</option>
+
+<option value="PD">PD</option>
+
+<option value="MEI">MEI</option>
+
+<option value="MC">MC</option>
+
+<option value="VOL">VOL</option>
+
+<option value="ZAG">ZAG</option>
+
+<option value="LE">LE</option>
+
+<option value="LD">LD</option>
+
+<option value="GOL">GOL</option>
+
+</select>
+
+</div>
+
+
+<div class="inputGroup">
+
+<label>OVERALL</label>
+
+<input id="playerOverall" type="number" min="50" max="99" placeholder="82">
+
+</div>
+
+
+<div class="inputGroup">
+
+<label>VALOR DE MERCADO (€ MILHÕES)</label>
+
+<input id="playerValue" type="number" placeholder="75">
+
+</div>
+
+
+<div class="inputGroup">
+
+<label>GOLS NA TEMPORADA</label>
+
+<input id="playerGoals" type="number" placeholder="21">
+
+</div>
+
+
+<div class="inputGroup">
+
+<label>ASSISTÊNCIAS</label>
+
+<input id="playerAssists" type="number" placeholder="14">
+
+</div>
+
+</div>
+
+
+<button class="mainButton" onclick="analyzePlayer()">
+
+ANALISAR VALOR COMERCIAL
+
+</button>
+
+</div>
+
+</section>
+
+
+
+<section id="brandsScreen" class="screen">
+
+<div class="sectionHeader">
+
+<div>
+
+<span class="tag">SCOUTING REPORT</span>
+
+<h2>Interesse das marcas</h2>
+
+<p id="playerSummary"></p>
+
+</div>
+
+<div class="commercialScore">
+
+<span>VALOR COMERCIAL</span>
+
+<strong id="commercialScore">0</strong>
+
+<small>/100</small>
+
+</div>
+
+</div>
+
+
+<div id="brandsContainer" class="brandsGrid"></div>
+
+
+<button class="secondaryButton" onclick="backToPlayer()">
+
+EDITAR JOGADOR
+
+</button>
+
+</section>
+
+
+
+<section id="negotiationScreen" class="screen">
+
+<div class="negotiationLayout">
+
+<div class="dealSidebar">
+
+<button class="backButton" onclick="backToBrands()">←</button>
+
+<span class="sidebarLabel">NEGOCIAÇÃO</span>
+
+<h2 id="brandName"></h2>
+
+<div class="playerMini">
+
+<span>JOGADOR</span>
+
+<strong id="miniPlayerName"></strong>
+
+<small id="miniPlayerClub"></small>
+
+</div>
+
+
+<div class="dealInfo">
+
+<div>
+
+<span>VALOR OFERECIDO</span>
+
+<strong id="offerValue"></strong>
+
+</div>
+
+<div>
+
+<span>DURAÇÃO</span>
+
+<strong id="offerDuration"></strong>
+
+</div>
+
+<div>
+
+<span>BÔNUS</span>
+
+<strong id="offerBonus"></strong>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="chatArea">
+
+<div class="chatHeader">
+
+<div>
+
+<span id="representativeInitial"></span>
+
+</div>
+
+<section>
+
+<strong id="representativeName"></strong>
+
+<small>Representante de patrocínios</small>
+
+</section>
+
+</div>
+
+
+<div id="chatMessages" class="chatMessages"></div>
+
+
+<div id="quickActions" class="quickActions">
+
+<button onclick="quickAction('accept')">ACEITAR PROPOSTA</button>
+
+<button onclick="quickAction('money')">NEGOCIAR VALOR</button>
+
+<button onclick="quickAction('duration')">ALTERAR DURAÇÃO</button>
+
+<button onclick="quickAction('bonus')">PEDIR BÔNUS</button>
+
+<button class="reject" onclick="quickAction('reject')">RECUSAR</button>
+
+</div>
+
+
+<div class="messageBox">
+
+<input
+
+id="messageInput"
+
+type="text"
+
+placeholder="Digite sua contraproposta..."
+
+onkeydown="handleEnter(event)"
+
+>
+
+<button onclick="sendMessage()">ENVIAR</button>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
