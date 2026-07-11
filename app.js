@@ -1,863 +1,1529 @@
 let player = {};
 
 let currentBrand = null;
-
 let currentOffer = {};
 
 let negotiationEnded = false;
 
+let negotiationState = {
+    patience: 100,
+    rounds: 0,
+    moneyRequests: 0,
+    bonusRequests: 0,
+    durationRequests: 0
+};
+
 
 const brands = [
+    {
+        name: "NIKE",
+        representative: "Alex Morgan",
+        tier: 5,
+        personality: "elite",
+        baseInterest: -12,
+        multiplier: 1.30,
+        patience: 60,
+        minOverall: 80
+    },
 
-{
+    {
+        name: "ADIDAS",
+        representative: "Thomas Weber",
+        tier: 5,
+        personality: "long",
+        baseInterest: -10,
+        multiplier: 1.25,
+        patience: 70,
+        minOverall: 79
+    },
 
-name:"NIKE",
+    {
+        name: "PUMA",
+        representative: "Lena Fischer",
+        tier: 4,
+        personality: "young",
+        baseInterest: -3,
+        multiplier: 1.10,
+        patience: 78,
+        minOverall: 75
+    },
 
-representative:"Alex Morgan",
+    {
+        name: "NEW BALANCE",
+        representative: "James Miller",
+        tier: 3,
+        personality: "growth",
+        baseInterest: 3,
+        multiplier: 1.05,
+        patience: 85,
+        minOverall: 72
+    },
 
-personality:"aggressive",
+    {
+        name: "MIZUNO",
+        representative: "Hiroshi Tanaka",
+        tier: 3,
+        personality: "technical",
+        baseInterest: 2,
+        multiplier: 0.95,
+        patience: 90,
+        minOverall: 70
+    },
 
-baseInterest:10,
+    {
+        name: "UNDER ARMOUR",
+        representative: "Michael Reed",
+        tier: 2,
+        personality: "opportunity",
+        baseInterest: 7,
+        multiplier: 0.90,
+        patience: 88,
+        minOverall: 68
+    },
 
-multiplier:1.15
+    {
+        name: "SKECHERS",
+        representative: "Daniel Brooks",
+        tier: 2,
+        personality: "aggressiveGrowth",
+        baseInterest: 10,
+        multiplier: 1,
+        patience: 80,
+        minOverall: 68
+    },
 
-},
-
-{
-
-name:"ADIDAS",
-
-representative:"Thomas Weber",
-
-personality:"long",
-
-baseInterest:8,
-
-multiplier:1.05
-
-},
-
-{
-
-name:"PUMA",
-
-representative:"Lena Fischer",
-
-personality:"young",
-
-baseInterest:12,
-
-multiplier:0.90
-
-},
-
-{
-
-name:"NEW BALANCE",
-
-representative:"James Miller",
-
-personality:"money",
-
-baseInterest:5,
-
-multiplier:1.20
-
-}
-
+    {
+        name: "UMBRO",
+        representative: "Oliver Bennett",
+        tier: 1,
+        personality: "traditional",
+        baseInterest: 13,
+        multiplier: 0.75,
+        patience: 95,
+        minOverall: 65
+    }
 ];
 
 
-function showScreen(id){
+const eliteClubs = [
+    "real madrid",
+    "barcelona",
+    "manchester city",
+    "man city",
+    "liverpool",
+    "arsenal",
+    "bayern",
+    "bayern munich",
+    "psg",
+    "paris saint germain",
+    "inter",
+    "inter milan",
+    "juventus",
+    "chelsea",
+    "manchester united",
+    "man united",
+    "atletico madrid"
+];
 
-document.querySelectorAll(".screen").forEach(screen => {
 
-screen.classList.remove("active");
+const bigClubs = [
+    "tottenham",
+    "napoli",
+    "milan",
+    "ac milan",
+    "roma",
+    "dortmund",
+    "borussia dortmund",
+    "leverkusen",
+    "newcastle",
+    "aston villa",
+    "benfica",
+    "porto",
+    "sporting",
+    "ajax",
+    "marseille",
+    "monaco",
+    "lyon"
+];
 
-});
 
-document.getElementById(id).classList.add("active");
+function showScreen(id) {
+    document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+    });
 
-window.scrollTo(0,0);
+    document.getElementById(id).classList.add("active");
 
+    window.scrollTo(0, 0);
 }
 
 
-function analyzePlayer(){
+function analyzePlayer() {
+    player = {
+        name: document.getElementById("playerName").value.trim(),
 
-player = {
+        age: Number(
+            document.getElementById("playerAge").value
+        ),
 
-name:document.getElementById("playerName").value,
+        club: document.getElementById("playerClub").value.trim(),
 
-age:Number(document.getElementById("playerAge").value),
+        position: document.getElementById("playerPosition").value,
 
-club:document.getElementById("playerClub").value,
+        overall: Number(
+            document.getElementById("playerOverall").value
+        ),
 
-position:document.getElementById("playerPosition").value,
+        value: Number(
+            document.getElementById("playerValue").value
+        ) || 0,
 
-overall:Number(document.getElementById("playerOverall").value),
+        goals: Number(
+            document.getElementById("playerGoals").value
+        ) || 0,
 
-value:Number(document.getElementById("playerValue").value),
-
-goals:Number(document.getElementById("playerGoals").value),
-
-assists:Number(document.getElementById("playerAssists").value)
-
-};
+        assists: Number(
+            document.getElementById("playerAssists").value
+        ) || 0
+    };
 
 
-if(
+    if (
+        !player.name ||
+        !player.age ||
+        !player.club ||
+        !player.overall
+    ) {
+        alert("Preencha os principais dados do jogador.");
+        return;
+    }
 
-!player.name ||
 
-!player.age ||
+    if (
+        player.overall < 50 ||
+        player.overall > 99
+    ) {
+        alert("O overall deve estar entre 50 e 99.");
+        return;
+    }
 
-!player.club ||
 
-!player.overall
+    player.clubReputation = calculateClubReputation();
 
-){
+    player.commercialScore = calculateCommercialScore();
 
-alert("Preencha os principais dados do jogador.");
 
-return;
+    document.getElementById("commercialScore").innerText =
+        player.commercialScore;
 
+
+    document.getElementById("playerSummary").innerText =
+        `${player.name} • ${player.club} • ${player.position} • OVR ${player.overall}`;
+
+
+    renderBrands();
+
+    showScreen("brandsScreen");
 }
 
 
-player.commercialScore = calculateCommercialScore();
+function calculateClubReputation() {
+    const club = player.club.toLowerCase();
 
 
-document.getElementById("commercialScore").innerText = player.commercialScore;
+    if (
+        eliteClubs.some(name =>
+            club.includes(name)
+        )
+    ) {
+        return 100;
+    }
 
 
-document.getElementById("playerSummary").innerText =
+    if (
+        bigClubs.some(name =>
+            club.includes(name)
+        )
+    ) {
+        return 75;
+    }
 
-`${player.name} • ${player.club} • ${player.position} • OVR ${player.overall}`;
 
-
-renderBrands();
-
-showScreen("brandsScreen");
-
+    return 40;
 }
 
 
-function calculateCommercialScore(){
-
-let score = 0;
-
-
-score += (player.overall - 50) * 1.3;
-
-score += player.goals * 0.6;
-
-score += player.assists * 0.4;
-
-score += player.value * 0.15;
+function calculateCommercialScore() {
+    let score = 0;
 
 
-if(player.age <= 21){
+    if (player.overall < 65) {
+        score += 5;
+    }
 
-score += 10;
+    else if (player.overall < 70) {
+        score += 12;
+    }
 
-}
+    else if (player.overall < 75) {
+        score += 22;
+    }
 
-else if(player.age <= 25){
+    else if (player.overall < 80) {
+        score += 35;
+    }
 
-score += 7;
+    else if (player.overall < 85) {
+        score += 50;
+    }
 
-}
+    else if (player.overall < 90) {
+        score += 65;
+    }
 
-
-if(player.goals >= 30){
-
-score += 8;
-
-}
-
-
-if(player.overall >= 90){
-
-score += 12;
-
-}
-
-
-return Math.min(Math.round(score),100);
-
-}
+    else {
+        score += 78;
+    }
 
 
-function calculateBrandInterest(brand){
+    score += player.clubReputation * 0.10;
 
-let interest = player.commercialScore + brand.baseInterest;
+    score += Math.min(player.goals * 0.35, 12);
 
+    score += Math.min(player.assists * 0.25, 8);
 
-if(
-
-brand.personality === "young" &&
-
-player.age <= 21
-
-){
-
-interest += 10;
-
-}
+    score += Math.min(player.value * 0.08, 8);
 
 
-if(
-
-brand.personality === "aggressive" &&
-
-player.goals >= 20
-
-){
-
-interest += 8;
-
-}
+    if (
+        player.age <= 21 &&
+        player.overall >= 75
+    ) {
+        score += 5;
+    }
 
 
-if(
+    if (player.overall < 70) {
+        score -= 12;
+    }
 
-brand.personality === "long" &&
 
-player.overall >= 80
+    if (
+        player.clubReputation === 40 &&
+        player.overall < 78
+    ) {
+        score -= 8;
+    }
 
-){
 
-interest += 5;
+    if (
+        player.overall < 75 &&
+        player.goals < 10 &&
+        player.assists < 10
+    ) {
+        score -= 5;
+    }
 
+
+    return Math.min(
+        Math.max(Math.round(score), 5),
+        100
+    );
 }
 
 
-if(
+function calculateBrandInterest(brand) {
+    let interest =
+        player.commercialScore +
+        brand.baseInterest;
 
-brand.personality === "money" &&
 
-player.commercialScore < 80
+    const overallDifference =
+        player.overall -
+        brand.minOverall;
 
-){
 
-interest += 10;
+    if (overallDifference < 0) {
+        interest += overallDifference * 6;
+    }
 
+    else {
+        interest += Math.min(
+            overallDifference * 2,
+            12
+        );
+    }
+
+
+    if (
+        brand.tier === 5 &&
+        player.clubReputation === 40
+    ) {
+        interest -= 20;
+    }
+
+
+    if (
+        brand.tier === 4 &&
+        player.clubReputation === 40
+    ) {
+        interest -= 10;
+    }
+
+
+    if (
+        brand.personality === "young" &&
+        player.age <= 21 &&
+        player.overall >= 75
+    ) {
+        interest += 15;
+    }
+
+
+    if (
+        brand.personality === "elite" &&
+        player.overall >= 88
+    ) {
+        interest += 15;
+    }
+
+
+    if (
+        brand.personality === "technical" &&
+        (
+            player.position === "MEI" ||
+            player.position === "MC"
+        )
+    ) {
+        interest += 8;
+    }
+
+
+    if (
+        brand.personality === "growth" &&
+        player.overall >= 73 &&
+        player.overall <= 82
+    ) {
+        interest += 12;
+    }
+
+
+    if (
+        brand.personality === "opportunity" &&
+        player.clubReputation === 40
+    ) {
+        interest += 8;
+    }
+
+
+    if (
+        brand.personality === "aggressiveGrowth" &&
+        player.age <= 25
+    ) {
+        interest += 10;
+    }
+
+
+    return Math.min(
+        Math.max(Math.round(interest), 1),
+        99
+    );
 }
 
 
-return Math.min(Math.round(interest),99);
+function renderBrands() {
+    const container =
+        document.getElementById("brandsContainer");
 
+
+    container.innerHTML = "";
+
+
+    brands.forEach((brand, index) => {
+        const interest =
+            calculateBrandInterest(brand);
+
+
+        let interestText = "SEM INTERESSE";
+        let interestClass = "low";
+
+
+        if (interest >= 85) {
+            interestText = "PRIORIDADE MÁXIMA 🔥";
+            interestClass = "high";
+        }
+
+        else if (interest >= 70) {
+            interestText = "MUITO ALTO";
+            interestClass = "high";
+        }
+
+        else if (interest >= 55) {
+            interestText = "ALTO";
+            interestClass = "high";
+        }
+
+        else if (interest >= 40) {
+            interestText = "MÉDIO";
+            interestClass = "medium";
+        }
+
+        else if (interest >= 25) {
+            interestText = "BAIXO";
+            interestClass = "low";
+        }
+
+
+        const estimatedOffer =
+            calculateInitialOffer(brand);
+
+
+        const canNegotiate =
+            interest >= 25;
+
+
+        container.innerHTML += `
+            <div class="brandCard">
+
+                <div class="brandTop">
+
+                    <div class="brandLogo">
+                        ${brand.name}
+                    </div>
+
+                    <div class="interest ${interestClass}">
+                        ${interestText} • ${interest}%
+                    </div>
+
+                </div>
+
+                <div class="interestBar">
+
+                    <div
+                        class="interestProgress"
+                        style="width:${interest}%"
+                    ></div>
+
+                </div>
+
+                <div class="brandDetails">
+
+                    <div>
+
+                        <span>
+                            PROPOSTA ESTIMADA
+                        </span>
+
+                        <strong>
+                            ${
+                                canNegotiate
+                                    ? "€ " + formatMoney(estimatedOffer)
+                                    : "SEM PROPOSTA"
+                            }
+                        </strong>
+
+                    </div>
+
+                    <button
+                        class="negotiateButton"
+                        onclick="startNegotiation(${index})"
+                        ${!canNegotiate ? "disabled" : ""}
+                    >
+                        ${
+                            canNegotiate
+                                ? "NEGOCIAR CONTRATO"
+                                : "SEM INTERESSE"
+                        }
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+    });
 }
 
 
-function renderBrands(){
-
-const container = document.getElementById("brandsContainer");
-
-container.innerHTML = "";
+function calculateInitialOffer(brand) {
+    let value = 0;
 
 
-brands.forEach((brand,index) => {
+    value += player.overall * 2200;
 
-const interest = calculateBrandInterest(brand);
+    value += player.commercialScore * 2800;
+
+    value += player.value * 1000;
+
+    value *= brand.multiplier;
 
 
-let interestText = "BAIXO";
+    if (player.clubReputation === 40) {
+        value *= 0.65;
+    }
 
-let interestClass = "low";
+
+    if (player.overall < 70) {
+        value *= 0.45;
+    }
+
+    else if (player.overall < 75) {
+        value *= 0.65;
+    }
+
+    else if (player.overall < 80) {
+        value *= 0.80;
+    }
 
 
-if(interest >= 80){
-
-interestText = "MUITO ALTO 🔥";
-
-interestClass = "high";
-
-}
-
-else if(interest >= 60){
-
-interestText = "ALTO";
-
-interestClass = "high";
-
-}
-
-else if(interest >= 40){
-
-interestText = "MÉDIO";
-
-interestClass = "medium";
-
+    return Math.max(
+        Math.round(value / 5000) * 5000,
+        10000
+    );
 }
 
 
-const estimatedOffer = calculateInitialOffer(brand);
+function startNegotiation(index) {
+    currentBrand = brands[index];
 
 
-container.innerHTML += `
-
-<div class="brandCard">
-
-<div class="brandTop">
-
-<div class="brandLogo">
-
-${brand.name}
-
-</div>
-
-<div class="interest ${interestClass}">
-
-${interestText} • ${interest}%
-
-</div>
-
-</div>
+    const interest =
+        calculateBrandInterest(currentBrand);
 
 
-<div class="interestBar">
-
-<div
-
-class="interestProgress"
-
-style="width:${interest}%"
-
-></div>
-
-</div>
+    if (interest < 25) {
+        return;
+    }
 
 
-<div class="brandDetails">
-
-<div>
-
-<span>PROPOSTA ESTIMADA</span>
-
-<strong>
-
-€ ${formatMoney(estimatedOffer)}
-
-</strong>
-
-</div>
+    negotiationEnded = false;
 
 
-<button
+    negotiationState = {
+        patience: currentBrand.patience,
+        rounds: 0,
+        moneyRequests: 0,
+        bonusRequests: 0,
+        durationRequests: 0
+    };
 
-class="negotiateButton"
 
-onclick="startNegotiation(${index})"
+    const value =
+        calculateInitialOffer(currentBrand);
 
->
 
-NEGOCIAR CONTRATO
+    currentOffer = {
+        value: value,
 
-</button>
+        duration:
+            currentBrand.personality === "long"
+                ? 3
+                : 2,
 
-</div>
+        bonus:
+            Math.round(value * 0.15)
+    };
 
-</div>
 
-`;
+    document.getElementById("brandName").innerText =
+        currentBrand.name;
 
-});
 
+    document.getElementById("miniPlayerName").innerText =
+        player.name;
+
+
+    document.getElementById("miniPlayerClub").innerText =
+        player.club;
+
+
+    document.getElementById("representativeName").innerText =
+        currentBrand.representative;
+
+
+    document.getElementById("representativeInitial").innerText =
+        currentBrand.name.charAt(0);
+
+
+    updateOfferUI();
+
+
+    document.getElementById("chatMessages").innerHTML = "";
+
+
+    addAIMessage(
+`Olá, ${player.name}.
+
+Nossa equipe analisou seu desempenho no ${player.club}.
+
+Seu valor comercial foi avaliado internamente e decidimos abrir uma negociação.
+
+Nossa proposta é de € ${formatMoney(currentOffer.value)} por temporada durante ${currentOffer.duration} temporadas.
+
+O contrato inclui € ${formatMoney(currentOffer.bonus)} em bônus por desempenho.
+
+Estamos dispostos a ouvir sua contraproposta.`
+    );
+
+
+    showScreen("negotiationScreen");
 }
 
 
-function calculateInitialOffer(brand){
-
-let value = player.commercialScore * 5000;
-
-value += player.value * 1500;
-
-value *= brand.multiplier;
+function updateOfferUI() {
+    document.getElementById("offerValue").innerText =
+        "€ " + formatMoney(currentOffer.value);
 
 
-return Math.round(value / 10000) * 10000;
+    document.getElementById("offerDuration").innerText =
+        currentOffer.duration +
+        (
+            currentOffer.duration === 1
+                ? " TEMPORADA"
+                : " TEMPORADAS"
+        );
 
+
+    document.getElementById("offerBonus").innerText =
+        "€ " + formatMoney(currentOffer.bonus);
 }
 
 
-function startNegotiation(index){
-
-currentBrand = brands[index];
-
-negotiationEnded = false;
+function addAIMessage(text) {
+    const chat =
+        document.getElementById("chatMessages");
 
 
-const value = calculateInitialOffer(currentBrand);
+    const message =
+        document.createElement("div");
 
 
-currentOffer = {
+    message.className = "message ai";
 
-value:value,
-
-duration:
-
-currentBrand.personality === "long" ? 3 : 2,
-
-bonus:Math.round(value * 0.2)
-
-};
+    message.innerText = text;
 
 
-document.getElementById("brandName").innerText = currentBrand.name;
-
-document.getElementById("miniPlayerName").innerText = player.name;
-
-document.getElementById("miniPlayerClub").innerText = player.club;
+    chat.appendChild(message);
 
 
-document.getElementById("representativeName").innerText = currentBrand.representative;
-
-document.getElementById("representativeInitial").innerText = currentBrand.name.charAt(0);
-
-
-updateOfferUI();
-
-
-const chat = document.getElementById("chatMessages");
-
-chat.innerHTML = "";
-
-
-addAIMessage(
-
-`Olá, ${player.name}. Temos acompanhado sua temporada no ${player.club}.
-
-Seu desempenho chamou a atenção da nossa equipe de marketing.
-
-Gostaríamos de oferecer um contrato de ${currentOffer.duration} temporadas no valor de € ${formatMoney(currentOffer.value)} por temporada.
-
-Também incluímos um bônus de € ${formatMoney(currentOffer.bonus)} por metas de desempenho.
-
-Estamos interessados em ouvir sua posição.`
-
-);
-
-
-showScreen("negotiationScreen");
-
+    chat.scrollTop =
+        chat.scrollHeight;
 }
 
 
-function updateOfferUI(){
-
-document.getElementById("offerValue").innerText =
-
-"€ " + formatMoney(currentOffer.value);
+function addUserMessage(text) {
+    const chat =
+        document.getElementById("chatMessages");
 
 
-document.getElementById("offerDuration").innerText =
+    const message =
+        document.createElement("div");
 
-currentOffer.duration + " TEMPORADAS";
+
+    message.className = "message user";
+
+    message.innerText = text;
 
 
-document.getElementById("offerBonus").innerText =
+    chat.appendChild(message);
 
-"€ " + formatMoney(currentOffer.bonus);
 
+    chat.scrollTop =
+        chat.scrollHeight;
 }
 
 
-function addAIMessage(text){
+function addSystemMessage(text) {
+    const chat =
+        document.getElementById("chatMessages");
 
-const chat = document.getElementById("chatMessages");
 
-const message = document.createElement("div");
+    const message =
+        document.createElement("div");
 
-message.className = "message ai";
 
-message.innerText = text;
+    message.className = "message system";
 
-chat.appendChild(message);
+    message.innerText = text;
 
-chat.scrollTop = chat.scrollHeight;
 
+    chat.appendChild(message);
+
+
+    chat.scrollTop =
+        chat.scrollHeight;
 }
 
 
-function addUserMessage(text){
+function reducePatience(amount) {
+    negotiationState.patience -= amount;
 
-const chat = document.getElementById("chatMessages");
 
-const message = document.createElement("div");
+    if (negotiationState.patience <= 0) {
+        endNegotiationByBrand();
 
-message.className = "message user";
+        return true;
+    }
 
-message.innerText = text;
 
-chat.appendChild(message);
-
-chat.scrollTop = chat.scrollHeight;
-
+    return false;
 }
 
 
-function addSystemMessage(text){
+function registerRound() {
+    negotiationState.rounds++;
 
-const chat = document.getElementById("chatMessages");
 
-const message = document.createElement("div");
+    if (negotiationState.rounds >= 8) {
+        negotiationState.patience -= 5;
+    }
 
-message.className = "message system";
 
-message.innerText = text;
+    if (
+        negotiationState.rounds >= 12 &&
+        !negotiationEnded
+    ) {
+        endNegotiationByBrand();
 
-chat.appendChild(message);
+        return true;
+    }
 
-chat.scrollTop = chat.scrollHeight;
 
+    if (negotiationState.patience <= 0) {
+        endNegotiationByBrand();
+
+        return true;
+    }
+
+
+    return false;
 }
 
 
-function quickAction(action){
+function endNegotiationByBrand() {
+    if (negotiationEnded) {
+        return;
+    }
 
-if(negotiationEnded){
 
-return;
+    negotiationEnded = true;
 
+
+    addAIMessage(
+`Acreditamos que nossas posições estão muito distantes.
+
+Neste momento, a ${currentBrand.name} decidiu encerrar as negociações.
+
+Agradecemos pelo seu tempo.`
+    );
+
+
+    addSystemMessage(
+        "A MARCA ABANDONOU A NEGOCIAÇÃO"
+    );
 }
 
 
-if(action === "accept"){
+function quickAction(action) {
+    if (negotiationEnded) {
+        return;
+    }
 
-addUserMessage("Aceitamos a proposta.");
 
-setTimeout(() => {
+    const input =
+        document.getElementById("messageInput");
 
-addAIMessage(
 
-`Excelente, ${player.name}. É um prazer receber você na família ${currentBrand.name}. Nossa equipe enviará os documentos finais.`
+    if (action === "accept") {
+        acceptOffer();
 
-);
+        return;
+    }
 
-addSystemMessage("CONTRATO ACEITO ✓");
 
-negotiationEnded = true;
+    if (action === "money") {
+        input.value =
+            `Quero € ${formatMoney(
+                Math.round(
+                    currentOffer.value * 1.25
+                )
+            )} por temporada.`;
 
-},700);
 
+        input.focus();
+
+        return;
+    }
+
+
+    if (action === "duration") {
+        input.value =
+            `Quero ${Math.max(
+                currentOffer.duration - 1,
+                1
+            )} temporada(s).`;
+
+
+        input.focus();
+
+        return;
+    }
+
+
+    if (action === "bonus") {
+        input.value =
+            `Quero aumentar o bônus para € ${formatMoney(
+                Math.round(
+                    currentOffer.bonus * 1.5
+                )
+            )}.`;
+
+
+        input.focus();
+
+        return;
+    }
+
+
+    if (action === "reject") {
+        addUserMessage(
+            "Não tenho interesse na proposta."
+        );
+
+
+        negotiationEnded = true;
+
+
+        setTimeout(() => {
+            addAIMessage(
+                "Entendemos sua decisão. A negociação está encerrada."
+            );
+
+
+            addSystemMessage(
+                "NEGOCIAÇÃO ENCERRADA"
+            );
+
+        }, 600);
+    }
 }
 
 
-if(action === "money"){
+function sendMessage() {
+    if (negotiationEnded) {
+        return;
+    }
 
-document.getElementById("messageInput").value =
 
-`Quero € ${formatMoney(Math.round(currentOffer.value * 1.4))} por temporada.`;
+    const input =
+        document.getElementById("messageInput");
 
+
+    const text =
+        input.value.trim();
+
+
+    if (!text) {
+        return;
+    }
+
+
+    addUserMessage(text);
+
+
+    input.value = "";
+
+
+    setTimeout(() => {
+        generateAIResponse(text);
+
+    }, 650);
 }
 
 
-if(action === "duration"){
+function generateAIResponse(text) {
+    if (registerRound()) {
+        return;
+    }
 
-document.getElementById("messageInput").value =
 
-"Gostaria de negociar a duração do contrato.";
+    const lower =
+        text.toLowerCase();
 
+
+    if (
+        lower.includes("aceito") ||
+        lower.includes("fechado") ||
+        lower.includes("concordo")
+    ) {
+        acceptOffer();
+
+        return;
+    }
+
+
+    if (
+        lower.includes("temporada") ||
+        lower.includes("temporadas") ||
+        lower.includes("duração") ||
+        lower.includes("duracao") ||
+        lower.includes("ano") ||
+        lower.includes("anos") ||
+        lower.includes("mais curto") ||
+        lower.includes("mais longo") ||
+        lower.includes("diminuir contrato") ||
+        lower.includes("aumentar contrato")
+    ) {
+        negotiateDuration(text);
+
+        return;
+    }
+
+
+    if (
+        lower.includes("bônus") ||
+        lower.includes("bonus")
+    ) {
+        negotiateBonus(text);
+
+        return;
+    }
+
+
+    if (
+        lower.includes("€") ||
+        lower.includes("valor") ||
+        lower.includes("dinheiro") ||
+        lower.includes("pagamento")
+    ) {
+        const requestedValue =
+            extractMoneyValue(text);
+
+
+        if (requestedValue) {
+            negotiateMoney(requestedValue);
+
+            return;
+        }
+    }
+
+
+    if (reducePatience(3)) {
+        return;
+    }
+
+
+    addAIMessage(
+`Precisamos manter a conversa nos termos do contrato.
+
+Podemos discutir valor por temporada, duração ou bônus.`
+    );
 }
 
 
-if(action === "bonus"){
+function extractMoneyValue(text) {
+    const cleanText =
+        text
+            .replace(/\./g, "")
+            .replace(/,/g, "");
 
-document.getElementById("messageInput").value =
 
-"Quero um bônus maior por metas de desempenho.";
+    const numbers =
+        cleanText.match(/\d+/g);
 
+
+    if (!numbers) {
+        return null;
+    }
+
+
+    return Number(
+        numbers.join("")
+    );
 }
 
 
-if(action === "reject"){
+function negotiateMoney(requestedValue) {
+    negotiationState.moneyRequests++;
 
-addUserMessage("Não tenho interesse na proposta.");
 
-setTimeout(() => {
+    const initialOffer =
+        calculateInitialOffer(currentBrand);
 
-addAIMessage(
 
-"Entendemos sua decisão. Agradecemos pelo seu tempo e desejamos sucesso na sequência da temporada."
+    const interest =
+        calculateBrandInterest(currentBrand);
 
-);
 
-addSystemMessage("NEGOCIAÇÃO ENCERRADA");
+    const maxMultiplier =
+        1.10 +
+        interest / 250;
 
-negotiationEnded = true;
 
-},700);
+    const absoluteLimit =
+        initialOffer *
+        maxMultiplier;
 
-}
 
-}
+    if (
+        requestedValue >
+        currentOffer.value * 2
+    ) {
+        if (reducePatience(35)) {
+            return;
+        }
 
 
-function sendMessage(){
+        addAIMessage(
+`Esse valor está muito distante da realidade desta negociação.
 
-if(negotiationEnded){
+Não podemos considerar € ${formatMoney(requestedValue)} por temporada.
 
-return;
+Se as próximas exigências permanecerem nesse nível, encerraremos as conversas.`
+        );
 
-}
 
+        return;
+    }
 
-const input = document.getElementById("messageInput");
 
-const text = input.value.trim();
+    if (
+        requestedValue >
+        absoluteLimit
+    ) {
+        if (reducePatience(18)) {
+            return;
+        }
 
 
-if(!text){
+        const counterOffer =
+            Math.round(
+                absoluteLimit / 5000
+            ) * 5000;
 
-return;
 
-}
+        currentOffer.value =
+            counterOffer;
 
 
-addUserMessage(text);
+        updateOfferUI();
 
-input.value = "";
 
-
-setTimeout(() => {
-
-generateAIResponse(text);
-
-},800);
-
-}
-
-
-function generateAIResponse(text){
-
-const lower = text.toLowerCase();
-
-
-const numbers = text.match(/\d+/g);
-
-
-if(
-
-lower.includes("quero") &&
-
-numbers
-
-){
-
-let requestedValue = Number(numbers.join(""));
-
-
-if(requestedValue > 10000){
-
-negotiateMoney(requestedValue);
-
-return;
-
-}
-
-}
-
-
-if(
-
-lower.includes("duração") ||
-
-lower.includes("temporada") ||
-
-lower.includes("anos")
-
-){
-
-negotiateDuration();
-
-return;
-
-}
-
-
-if(
-
-lower.includes("bônus") ||
-
-lower.includes("bonus")
-
-){
-
-negotiateBonus();
-
-return;
-
-}
-
-
-if(
-
-lower.includes("aceito") ||
-
-lower.includes("fechado")
-
-){
-
-quickAction("accept");
-
-return;
-
-}
-
-
-addAIMessage(
-
-`Entendo sua posição, ${player.name}. Neste momento precisamos discutir os termos financeiros, a duração do contrato ou os bônus de desempenho. Qual ponto você gostaria de alterar?`
-
-);
-
-}
-
-
-function negotiateMoney(requestedValue){
-
-const maxOffer =
-
-calculateInitialOffer(currentBrand) *
-
-(
-
-1.25 +
-
-player.commercialScore / 250
-
-);
-
-
-if(requestedValue <= maxOffer){
-
-currentOffer.value = requestedValue;
-
-updateOfferUI();
-
-
-addAIMessage(
-
-`Analisamos sua contraproposta.
-
-Podemos aceitar € ${formatMoney(requestedValue)} por temporada.
-
-Acreditamos que esse valor representa sua importância comercial para a ${currentBrand.name}.`
-
-);
-
-}
-
-else{
-
-const counterOffer = Math.round(maxOffer / 10000) * 10000;
-
-currentOffer.value = counterOffer;
-
-updateOfferUI();
-
-
-addAIMessage(
-
-`€ ${formatMoney(requestedValue)} está acima do investimento aprovado pela nossa diretoria.
+        addAIMessage(
+`Sua exigência supera nosso limite financeiro.
 
 Podemos chegar a € ${formatMoney(counterOffer)} por temporada.
 
-Esse é um esforço significativo da ${currentBrand.name} para concluir o acordo.`
+Esse é praticamente o teto aprovado pela diretoria.`
+        );
 
-);
 
+        return;
+    }
+
+
+    if (
+        negotiationState.moneyRequests >= 4
+    ) {
+        if (reducePatience(20)) {
+            return;
+        }
+
+
+        addAIMessage(
+`Já revisamos o valor financeiro diversas vezes.
+
+Não pretendemos continuar alterando esse termo indefinidamente.
+
+A proposta atual é € ${formatMoney(currentOffer.value)} por temporada.`
+        );
+
+
+        return;
+    }
+
+
+    currentOffer.value =
+        requestedValue;
+
+
+    updateOfferUI();
+
+
+    if (reducePatience(6)) {
+        return;
+    }
+
+
+    addAIMessage(
+`Após uma revisão interna, podemos aceitar € ${formatMoney(requestedValue)} por temporada.
+
+A proposta foi atualizada.`
+    );
 }
 
-}
+
+function negotiateBonus(text) {
+    negotiationState.bonusRequests++;
 
 
-function negotiateDuration(){
-
-if(currentOffer.duration < 4){
-
-currentOffer.duration++;
-
-updateOfferUI();
+    const requestedBonus =
+        extractMoneyValue(text);
 
 
-addAIMessage(
-
-`Podemos ajustar o contrato para ${currentOffer.duration} temporadas.
-
-Em troca, esperamos que você mantenha exclusividade com chuteiras ${currentBrand.name} durante todo o período.`
-
-);
-
-}
-
-else{
-
-addAIMessage(
-
-"Não estamos preparados para oferecer um vínculo superior a 4 temporadas neste momento."
-
-);
-
-}
-
-}
+    const maxBonus =
+        calculateInitialOffer(currentBrand) *
+        0.60;
 
 
-function negotiateBonus(){
-
-const increase = Math.round(
-
-currentOffer.value * 0.15
-
-);
-
-
-currentOffer.bonus += increase;
-
-updateOfferUI();
+    if (
+        negotiationState.bonusRequests >= 4
+    ) {
+        if (reducePatience(25)) {
+            return;
+        }
 
 
-addAIMessage(
+        addAIMessage(
+`Já revisamos os bônus diversas vezes.
 
+Não faremos novas alterações nesse termo.
+
+O bônus permanece em € ${formatMoney(currentOffer.bonus)}.`
+        );
+
+
+        return;
+    }
+
+
+    if (requestedBonus) {
+        if (
+            requestedBonus > maxBonus
+        ) {
+            if (reducePatience(18)) {
+                return;
+            }
+
+
+            const counterBonus =
+                Math.round(
+                    maxBonus / 5000
+                ) * 5000;
+
+
+            currentOffer.bonus =
+                counterBonus;
+
+
+            updateOfferUI();
+
+
+            addAIMessage(
+`Esse bônus está acima do limite autorizado.
+
+Podemos oferecer até € ${formatMoney(counterBonus)} em metas de desempenho.`
+            );
+
+
+            return;
+        }
+
+
+        currentOffer.bonus =
+            requestedBonus;
+
+
+        updateOfferUI();
+
+
+        if (reducePatience(5)) {
+            return;
+        }
+
+
+        addAIMessage(
+`Podemos aceitar um bônus de € ${formatMoney(requestedBonus)} condicionado às metas de desempenho.`
+        );
+
+
+        return;
+    }
+
+
+    const increase =
+        Math.round(
+            currentOffer.bonus *
+            0.20 /
+            5000
+        ) * 5000;
+
+
+    const newBonus =
+        currentOffer.bonus +
+        Math.max(increase, 5000);
+
+
+    if (
+        newBonus > maxBonus
+    ) {
+        if (reducePatience(10)) {
+            return;
+        }
+
+
+        addAIMessage(
+`Não temos margem para aumentar o bônus além dos € ${formatMoney(currentOffer.bonus)} já oferecidos.`
+        );
+
+
+        return;
+    }
+
+
+    currentOffer.bonus =
+        newBonus;
+
+
+    updateOfferUI();
+
+
+    if (reducePatience(5)) {
+        return;
+    }
+
+
+    addAIMessage(
 `Podemos melhorar o bônus para € ${formatMoney(currentOffer.bonus)}.
 
-O pagamento será ativado caso você alcance as metas de desempenho definidas no contrato.`
-
-);
-
+Não significa que aceitaremos novos aumentos posteriormente.`
+    );
 }
 
 
-function handleEnter(event){
+function negotiateDuration(text) {
+    negotiationState.durationRequests++;
 
-if(event.key === "Enter"){
 
-sendMessage();
+    const lower =
+        text.toLowerCase();
 
+
+    const match =
+        lower.match(
+            /(\d+)\s*(temporada|temporadas|ano|anos)/
+        );
+
+
+    let requestedDuration = null;
+
+
+    if (match) {
+        requestedDuration =
+            Number(match[1]);
+    }
+
+    else if (
+        lower.includes("diminuir") ||
+        lower.includes("diminua") ||
+        lower.includes("reduzir") ||
+        lower.includes("reduza") ||
+        lower.includes("mais curto") ||
+        lower.includes("menos tempo")
+    ) {
+        requestedDuration =
+            currentOffer.duration - 1;
+    }
+
+    else if (
+        lower.includes("aumentar") ||
+        lower.includes("aumente") ||
+        lower.includes("mais longo") ||
+        lower.includes("mais tempo")
+    ) {
+        requestedDuration =
+            currentOffer.duration + 1;
+    }
+
+
+    if (!requestedDuration) {
+        addAIMessage(
+            `Informe a duração desejada. Por exemplo: "Quero 2 temporadas".`
+        );
+
+        return;
+    }
+
+
+    if (
+        requestedDuration < 1 ||
+        requestedDuration > 5
+    ) {
+        if (reducePatience(12)) {
+            return;
+        }
+
+
+        addAIMessage(
+            "Trabalhamos apenas com contratos entre 1 e 5 temporadas."
+        );
+
+
+        return;
+    }
+
+
+    if (
+        negotiationState.durationRequests >= 4
+    ) {
+        if (reducePatience(20)) {
+            return;
+        }
+
+
+        addAIMessage(
+`Já discutimos a duração diversas vezes.
+
+Precisamos avançar com os termos atuais ou concluir a negociação.`
+        );
+
+
+        return;
+    }
+
+
+    if (
+        requestedDuration ===
+        currentOffer.duration
+    ) {
+        addAIMessage(
+            `A proposta já possui ${currentOffer.duration} temporada(s).`
+        );
+
+
+        return;
+    }
+
+
+    const oldDuration =
+        currentOffer.duration;
+
+
+    currentOffer.duration =
+        requestedDuration;
+
+
+    if (
+        requestedDuration <
+        oldDuration
+    ) {
+        currentOffer.value =
+            Math.round(
+                currentOffer.value *
+                0.94 /
+                5000
+            ) * 5000;
+
+
+        if (reducePatience(7)) {
+            return;
+        }
+
+
+        updateOfferUI();
+
+
+        addAIMessage(
+`Aceitamos reduzir o vínculo para ${requestedDuration} temporada(s).
+
+Como teremos menos segurança comercial, o valor foi ajustado para € ${formatMoney(currentOffer.value)} por temporada.`
+        );
+
+
+        return;
+    }
+
+
+    currentOffer.value =
+        Math.round(
+            currentOffer.value *
+            1.04 /
+            5000
+        ) * 5000;
+
+
+    if (reducePatience(4)) {
+        return;
+    }
+
+
+    updateOfferUI();
+
+
+    addAIMessage(
+`Um contrato de ${requestedDuration} temporadas é interessante.
+
+Podemos aceitar e ajustar o valor para € ${formatMoney(currentOffer.value)} por temporada.
+
+A exclusividade com a ${currentBrand.name} será obrigatória durante todo o vínculo.`
+    );
 }
 
+
+function acceptOffer() {
+    if (negotiationEnded) {
+        return;
+    }
+
+
+    negotiationEnded = true;
+
+
+    addUserMessage(
+        "Aceito os termos atuais."
+    );
+
+
+    setTimeout(() => {
+        addAIMessage(
+`Temos um acordo, ${player.name}.
+
+€ ${formatMoney(currentOffer.value)} por temporada.
+
+${currentOffer.duration} temporada(s) de contrato.
+
+€ ${formatMoney(currentOffer.bonus)} em bônus por desempenho.
+
+Bem-vindo à ${currentBrand.name}.`
+        );
+
+
+        addSystemMessage(
+            "CONTRATO ASSINADO ✓"
+        );
+
+    }, 600);
 }
 
 
-function formatMoney(value){
-
-return value.toLocaleString("pt-BR");
-
+function handleEnter(event) {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
 }
 
 
-function backToPlayer(){
-
-showScreen("playerScreen");
-
+function formatMoney(value) {
+    return Math.round(value).toLocaleString(
+        "pt-BR"
+    );
 }
 
 
-function backToBrands(){
+function backToPlayer() {
+    showScreen("playerScreen");
+}
 
-showScreen("brandsScreen");
 
+function backToBrands() {
+    showScreen("brandsScreen");
 }
