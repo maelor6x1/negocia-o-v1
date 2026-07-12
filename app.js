@@ -86,7 +86,7 @@ const brands = [
 
     {
         name: "MIZUNO",
-        logo: `${ICON_CDN}/mizuno.svg`,
+        logo: "https://commons.wikimedia.org/wiki/Special:Redirect/file/MIZUNO_logo.svg",
         representative: "Hiroshi Tanaka",
         tier: 3,
         multiplier: 0.95,
@@ -112,7 +112,7 @@ const brands = [
 
     {
         name: "SKECHERS",
-        logo: `${ICON_CDN}/skechers.svg`,
+        logo: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Skechers.svg",
         representative: "Daniel Brooks",
         tier: 2,
         multiplier: 0.88,
@@ -125,7 +125,7 @@ const brands = [
 
     {
         name: "UMBRO",
-        logo: `${ICON_CDN}/umbro.svg`,
+        logo: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Umbro_logo.svg",
         representative: "Oliver Bennett",
         tier: 1,
         multiplier: 0.72,
