@@ -1,0 +1,2015 @@
+:root {
+    --green: #b6ff22;
+    --green-soft: #caff66;
+    --green-dark: #7ebd12;
+
+    --bg: #080b0d;
+    --panel: #10141a;
+    --panel-soft: #151a22;
+
+    --border: #272d36;
+
+    --text: #f5f7fa;
+    --muted: #858e9f;
+
+    --danger: #ff414d;
+    --warning: #ff9d24;
+
+    /* Glow/opacidade do verde consolidados aqui para evitar
+       rgba(182, 255, 34, X) repetido e inconsistente pelo arquivo */
+    --glow-06: rgba(182, 255, 34, 0.06);
+    --glow-08: rgba(182, 255, 34, 0.08);
+    --glow-12: rgba(182, 255, 34, 0.12);
+    --glow-15: rgba(182, 255, 34, 0.15);
+    --glow-20: rgba(182, 255, 34, 0.2);
+    --glow-30: rgba(182, 255, 34, 0.3);
+    --glow-35: rgba(182, 255, 34, 0.35);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    background: var(--bg);
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% -20%,
+            var(--glow-08),
+            transparent 35%
+        ),
+        var(--bg);
+
+    color: var(--text);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    overflow-x: hidden;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+    width: 100%;
+    min-height: 100vh;
+}
+
+.header {
+    width: 100%;
+
+    min-height: 128px;
+
+    padding:
+        max(24px, env(safe-area-inset-top))
+        34px
+        24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 24px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+
+    background: rgba(8, 11, 13, 0.92);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    position: relative;
+    z-index: 20;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.logoIcon {
+    width: 96px;
+    height: 96px;
+
+    border-radius: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--green),
+            var(--green-soft)
+        );
+
+    color: #050704;
+
+    font-size: 28px;
+    font-weight: 900;
+
+    box-shadow:
+        0 0 35px var(--glow-15);
+}
+
+.logo h1 {
+    font-size: 30px;
+    letter-spacing: 5px;
+    font-weight: 900;
+}
+
+.logo p {
+    margin-top: 12px;
+
+    color: var(--muted);
+
+    font-size: 14px;
+    font-weight: 700;
+
+    letter-spacing: 4px;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+.statusDot {
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow:
+        0 0 12px var(--green);
+
+    animation: statusPulse 1.7s infinite;
+}
+
+@keyframes statusPulse {
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.4;
+        transform: scale(0.7);
+    }
+}
+
+main {
+    width: 100%;
+}
+
+.screen {
+    display: none;
+
+    width: 100%;
+
+    padding: 56px 32px 80px;
+
+    animation: screenEnter 0.5s ease;
+}
+
+.screen.active {
+    display: block;
+}
+
+@keyframes screenEnter {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* HERO */
+
+.hero {
+    max-width: 850px;
+
+    margin:
+        0 auto
+        42px;
+
+    text-align: center;
+}
+
+.tag {
+    display: inline-block;
+
+    color: var(--green);
+
+    font-size: 13px;
+    font-weight: 900;
+
+    letter-spacing: 3px;
+}
+
+.hero h2 {
+    margin-top: 22px;
+
+    font-size: clamp(46px, 7vw, 82px);
+
+    line-height: 0.95;
+
+    font-weight: 900;
+
+    letter-spacing: -4px;
+}
+
+.hero h2 span {
+    color: var(--green);
+}
+
+.hero p {
+    max-width: 680px;
+
+    margin:
+        28px auto
+        0;
+
+    color: var(--muted);
+
+    font-size: 18px;
+
+    line-height: 1.7;
+}
+
+/* PLAYER CARD */
+
+.playerCard {
+    width: 100%;
+    max-width: 980px;
+
+    margin: 0 auto;
+
+    padding: 34px;
+
+    border: 1px solid var(--border);
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.025),
+            transparent
+        ),
+        var(--panel);
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.25);
+}
+
+.playerCard h3 {
+    margin-bottom: 28px;
+
+    font-size: 17px;
+
+    letter-spacing: 3px;
+}
+
+.formGrid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 22px;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.inputGroup label {
+    color: var(--muted);
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+.inputGroup input,
+.inputGroup select {
+    width: 100%;
+    height: 58px;
+
+    padding: 0 18px;
+
+    border: 1px solid var(--border);
+    border-radius: 15px;
+
+    outline: none;
+
+    background: #0c1015;
+
+    color: var(--text);
+
+    transition:
+        border 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus {
+    border-color: var(--green);
+
+    box-shadow:
+        0 0 0 4px var(--glow-08);
+
+    transform: translateY(-1px);
+}
+
+.mainButton,
+.secondaryButton,
+.negotiateButton,
+.quickActions button,
+.messageBox button {
+    position: relative;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.25s ease,
+        opacity 0.25s ease;
+}
+
+.mainButton::after,
+.negotiateButton::after,
+.messageBox button::after {
+    content: "";
+
+    position: absolute;
+
+    top: -100%;
+    left: -60%;
+
+    width: 40%;
+    height: 300%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.4),
+            transparent
+        );
+
+    transform: rotate(25deg);
+
+    transition: left 0.55s ease;
+}
+
+.mainButton:hover::after,
+.negotiateButton:hover::after,
+.messageBox button:hover::after {
+    left: 130%;
+}
+
+.mainButton:active,
+.secondaryButton:active,
+.negotiateButton:active,
+.quickActions button:active,
+.messageBox button:active {
+    transform: scale(0.96);
+}
+
+.mainButton {
+    width: 100%;
+    height: 62px;
+
+    margin-top: 30px;
+
+    border: 0;
+    border-radius: 17px;
+
+    background: var(--green);
+
+    color: #070a05;
+
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+
+    box-shadow:
+        0 0 28px var(--glow-12);
+}
+
+/* BRANDS */
+
+.sectionHeader {
+    width: 100%;
+    max-width: 1100px;
+
+    margin:
+        0 auto
+        42px;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 30px;
+}
+
+.sectionHeader > div:first-child {
+    min-width: 0;
+    flex: 1 1 320px;
+}
+
+.sectionHeader h2 {
+    margin-top: 16px;
+
+    font-size: clamp(46px, 6vw, 76px);
+
+    line-height: 0.95;
+
+    letter-spacing: -3px;
+
+    font-weight: 900;
+}
+
+.sectionHeader p {
+    margin-top: 22px;
+
+    color: var(--muted);
+
+    font-size: 18px;
+}
+
+.commercialScore {
+    min-width: 190px;
+
+    padding: 22px;
+
+    border: 1px solid var(--border);
+    border-radius: 22px;
+
+    background: var(--panel);
+
+    text-align: center;
+}
+
+.commercialScore span {
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+.commercialScore strong {
+    color: var(--green);
+
+    font-size: 54px;
+}
+
+.commercialScore small {
+    color: var(--muted);
+
+    font-size: 17px;
+}
+
+.brandsGrid {
+    width: 100%;
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    gap: 28px;
+}
+
+.brandCard {
+    width: 100%;
+
+    padding: 32px;
+
+    border: 1px solid var(--border);
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.025),
+            transparent
+        ),
+        var(--panel);
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+
+    animation: brandCardEnter 0.55s ease both;
+}
+
+.brandCard:hover {
+    transform: translateY(-4px);
+
+    border-color: var(--glow-35);
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+@keyframes brandCardEnter {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.brandTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.brandIdentity {
+    display: flex;
+    align-items: center;
+
+    gap: 24px;
+}
+
+.brandCardLogo {
+    width: 102px;
+    height: 102px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 24px;
+
+    overflow: hidden;
+
+    background: #fff;
+}
+
+.brandCardLogo img {
+    width: 76%;
+    height: 76%;
+
+    object-fit: contain;
+
+    display: block;
+}
+
+/* Badge de texto usado quando a marca não tem URL de logo
+   (ex.: Mizuno, Skechers, Umbro, desde o fim da Clearbit Logo API) */
+.textLogo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #0c1015;
+
+    font-weight: 900;
+
+    letter-spacing: 0.5px;
+}
+
+.brandCardImage.textLogo {
+    width: 76%;
+    height: 76%;
+
+    font-size: 20px;
+}
+
+.representativeBrandImage.textLogo {
+    width: 74%;
+    height: 74%;
+
+    font-size: 18px;
+}
+
+.brandLogo {
+    font-size: 28px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.interest {
+    color: var(--muted);
+
+    font-size: 13px;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    text-align: right;
+}
+
+.interest.high {
+    color: var(--green);
+}
+
+.interest.medium {
+    color: var(--warning);
+}
+
+/* INTEREST BAR FIX */
+
+.interestBar {
+    width: 100%;
+    height: 13px;
+
+    margin: 32px 0;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: #252b32;
+}
+
+.interestProgress {
+    width: 0;
+    height: 100%;
+
+    max-width: 100%;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--green-dark),
+            var(--green),
+            var(--green-soft)
+        );
+
+    box-shadow:
+        0 0 14px rgba(182, 255, 34, 0.45);
+
+    animation:
+        interestGrow 0.9s cubic-bezier(.22, 1, .36, 1);
+}
+
+.interestProgress::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -70%;
+
+    width: 55%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.75),
+            transparent
+        );
+
+    animation:
+        interestShine 2.4s ease-in-out infinite;
+}
+
+@keyframes interestGrow {
+    from {
+        transform: scaleX(0);
+        transform-origin: left;
+    }
+
+    to {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+}
+
+@keyframes interestShine {
+    0% {
+        left: -70%;
+    }
+
+    55%,
+    100% {
+        left: 130%;
+    }
+}
+
+.brandDetails {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 24px;
+}
+
+.brandDetails span {
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+}
+
+.brandDetails strong {
+    font-size: 28px;
+}
+
+.negotiateButton {
+    min-width: 230px;
+    height: 62px;
+
+    padding: 0 24px;
+
+    border: 0;
+    border-radius: 18px;
+
+    background: var(--green);
+
+    color: #080b05;
+
+    font-size: 13px;
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+}
+
+.negotiateButton:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 30px var(--glow-20);
+}
+
+.negotiateButton:disabled {
+    cursor: default;
+
+    opacity: 0.35;
+
+    box-shadow: none;
+}
+
+.secondaryButton {
+    display: block;
+
+    margin:
+        34px auto
+        0;
+
+    padding: 18px 26px;
+
+    border: 1px solid var(--border);
+    border-radius: 15px;
+
+    background: var(--panel);
+
+    color: var(--text);
+
+    font-weight: 800;
+}
+
+/* NEGOTIATION */
+
+#negotiationScreen {
+    padding: 0;
+}
+
+.negotiationLayout {
+    min-height:
+        calc(
+            100vh - 128px
+        );
+
+    display: grid;
+
+    grid-template-columns:
+        340px minmax(0, 1fr);
+}
+
+.dealSidebar {
+    padding: 34px 28px;
+
+    border-right:
+        1px solid var(--border);
+
+    background: #0b0f12;
+}
+
+.backButton {
+    width: 48px;
+    height: 48px;
+
+    margin-bottom: 30px;
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    background: var(--panel);
+
+    color: var(--text);
+
+    cursor: pointer;
+
+    font-size: 21px;
+}
+
+.sidebarLabel {
+    color: var(--green);
+
+    font-size: 11px;
+    font-weight: 900;
+
+    letter-spacing: 3px;
+}
+
+.dealSidebar h2 {
+    margin-top: 10px;
+
+    font-size: 37px;
+    font-weight: 900;
+}
+
+.playerMini {
+    margin-top: 30px;
+
+    padding: 20px;
+
+    border: 1px solid var(--border);
+    border-radius: 18px;
+
+    background: var(--panel);
+}
+
+.playerMini span,
+.dealInfo span,
+.counterPanel span {
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+.playerMini strong {
+    display: block;
+
+    margin-top: 9px;
+
+    font-size: 18px;
+}
+
+.playerMini small {
+    display: block;
+
+    margin-top: 6px;
+
+    color: var(--muted);
+}
+
+.dealInfo {
+    margin-top: 22px;
+
+    display: grid;
+
+    gap: 12px;
+}
+
+.dealInfo > div {
+    padding: 18px;
+
+    border: 1px solid var(--border);
+    border-radius: 17px;
+
+    background: var(--panel);
+}
+
+.dealInfo strong {
+    display: block;
+
+    margin-top: 8px;
+
+    font-size: 20px;
+}
+
+/* TENSION */
+
+.tensionPanel {
+    margin-top: 22px;
+
+    padding: 20px;
+
+    border: 1px solid var(--border);
+    border-radius: 19px;
+
+    background: var(--panel);
+
+    overflow: hidden;
+}
+
+.tensionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+.tensionHeader span {
+    color: var(--muted);
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+}
+
+.tensionHeader strong {
+    color: var(--green);
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+}
+
+.tensionBar {
+    width: 100%;
+    height: 11px;
+
+    margin: 16px 0;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: #272d34;
+}
+
+.tensionProgress {
+    width: 0;
+    height: 100%;
+
+    max-width: 100%;
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            #b6ff22,
+            #dcff65
+        );
+
+    transition:
+        width 0.6s cubic-bezier(.22, 1, .36, 1);
+}
+
+.tensionProgress::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 45%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.95),
+            transparent
+        );
+
+    animation:
+        tensionEnergy 1.1s linear infinite;
+}
+
+.tensionProgress.medium {
+    background:
+        linear-gradient(
+            90deg,
+            #ffbf24,
+            #ffe068
+        );
+
+    box-shadow:
+        0 0 16px rgba(255, 191, 36, 0.5);
+}
+
+.tensionProgress.high {
+    background:
+        linear-gradient(
+            90deg,
+            #ff7a22,
+            #ffb126
+        );
+
+    box-shadow:
+        0 0 18px rgba(255, 122, 34, 0.6);
+}
+
+.tensionProgress.critical {
+    background:
+        linear-gradient(
+            90deg,
+            #ff2738,
+            #ff6b32,
+            #ff2738
+        );
+
+    box-shadow:
+        0 0 22px rgba(255, 39, 56, 0.7);
+
+    animation:
+        criticalFire 0.55s ease-in-out infinite alternate;
+}
+
+@keyframes tensionEnergy {
+    from {
+        transform: translateX(-150%);
+    }
+
+    to {
+        transform: translateX(350%);
+    }
+}
+
+@keyframes criticalFire {
+    from {
+        filter: brightness(1);
+    }
+
+    to {
+        filter: brightness(1.6);
+    }
+}
+
+.tensionPanel p {
+    color: var(--muted);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+.counterPanel {
+    margin-top: 14px;
+
+    padding: 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    background: var(--panel);
+}
+
+/* CHAT */
+
+.chatArea {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg);
+}
+
+.chatHeader {
+    min-height: 112px;
+
+    padding: 20px 32px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+
+    border-bottom:
+        1px solid var(--border);
+
+    background:
+        rgba(11, 15, 18, 0.92);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+#representativeInitial {
+    width: 70px;
+    height: 70px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background: #fff;
+
+    color: #000;
+
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.representativeBrandImage {
+    width: 74%;
+    height: 74%;
+
+    object-fit: contain;
+}
+
+.chatHeader strong {
+    display: block;
+
+    font-size: 20px;
+}
+
+.chatHeader small {
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+}
+
+.chatMessages {
+    flex: 1;
+
+    min-height: 420px;
+    max-height:
+        calc(
+            100vh - 330px
+        );
+
+    padding: 34px;
+
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 22px;
+
+    scroll-behavior: smooth;
+}
+
+.message {
+    max-width: 74%;
+
+    padding: 21px 25px;
+
+    border-radius: 24px;
+
+    white-space: pre-line;
+
+    font-size: 16px;
+
+    line-height: 1.65;
+
+    animation:
+        messageEnter 0.45s cubic-bezier(.22, 1, .36, 1);
+}
+
+@keyframes messageEnter {
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(14px)
+            scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+.message.ai {
+    align-self: flex-start;
+
+    border: 1px solid var(--border);
+
+    border-bottom-left-radius: 7px;
+
+    background: var(--panel-soft);
+
+    color: var(--text);
+}
+
+.message.user {
+    align-self: flex-end;
+
+    border-bottom-right-radius: 7px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--green),
+            var(--green-soft)
+        );
+
+    color: #080b05;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 8px 30px var(--glow-08);
+}
+
+.message.system {
+    align-self: center;
+
+    max-width: 90%;
+
+    padding: 12px 20px;
+
+    border: 1px solid var(--glow-30);
+
+    border-radius: 999px;
+
+    background: var(--glow-06);
+
+    color: var(--green);
+
+    font-size: 11px;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    text-align: center;
+}
+
+/* TYPING (usa a mesma base de .message.ai) */
+
+.message.typing {
+    width: auto;
+    max-width: 280px;
+
+    display: inline-flex;
+    align-items: center;
+
+    gap: 12px;
+
+    color: var(--muted);
+}
+
+.typingText {
+    font-size: 12px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+.typingDots {
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+}
+
+.typingDots span {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    animation:
+        typingDot 1.15s infinite ease-in-out;
+}
+
+.typingDots span:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.typingDots span:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes typingDot {
+    0%,
+    60%,
+    100% {
+        opacity: 0.3;
+
+        transform:
+            translateY(0)
+            scale(0.8);
+    }
+
+    30% {
+        opacity: 1;
+
+        transform:
+            translateY(-4px)
+            scale(1);
+    }
+}
+
+/* ACTIONS */
+
+.quickActions {
+    padding: 18px 28px;
+
+    display: flex;
+
+    gap: 12px;
+
+    overflow-x: auto;
+
+    border-top:
+        1px solid var(--border);
+
+    scrollbar-width: none;
+}
+
+.quickActions::-webkit-scrollbar {
+    display: none;
+}
+
+.quickActions button {
+    min-width: max-content;
+
+    height: 54px;
+
+    padding: 0 24px;
+
+    border: 1px solid var(--border);
+    border-radius: 15px;
+
+    background: var(--panel);
+
+    color: var(--text);
+
+    font-size: 12px;
+    font-weight: 900;
+
+    letter-spacing: 1.3px;
+}
+
+.quickActions button:hover {
+    border-color: var(--green);
+
+    transform: translateY(-2px);
+}
+
+.quickActions .reject:hover {
+    border-color: var(--danger);
+
+    color: var(--danger);
+}
+
+.messageBox {
+    padding:
+        18px
+        28px
+        max(
+            22px,
+            env(safe-area-inset-bottom)
+        );
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        150px;
+
+    gap: 16px;
+
+    border-top:
+        1px solid rgba(255, 255, 255, 0.04);
+}
+
+.messageBox input {
+    width: 100%;
+    height: 64px;
+
+    padding: 0 22px;
+
+    border: 1px solid var(--border);
+    border-radius: 18px;
+
+    outline: none;
+
+    background: var(--panel);
+
+    color: var(--text);
+
+    font-size: 16px;
+
+    transition:
+        border 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.messageBox input:focus {
+    border-color: var(--green);
+
+    box-shadow:
+        0 0 0 4px var(--glow-08);
+}
+
+.messageBox button {
+    border: 0;
+    border-radius: 18px;
+
+    background: var(--green);
+
+    color: #080b05;
+
+    font-size: 13px;
+    font-weight: 900;
+}
+
+/* CONTROLES OCULTOS (fix: classe usada pelo app.js mas ausente antes) */
+
+.quickActions.controlsHidden,
+.messageBox.controlsHidden {
+    display: none;
+}
+
+/* MOBILE */
+
+@media (max-width: 760px) {
+
+    .header {
+        min-height: 112px;
+
+        padding:
+            max(
+                20px,
+                env(safe-area-inset-top)
+            )
+            24px
+            20px;
+    }
+
+    .logo {
+        gap: 16px;
+    }
+
+    .logoIcon {
+        width: 76px;
+        height: 76px;
+
+        border-radius: 23px;
+
+        font-size: 23px;
+    }
+
+    .logo h1 {
+        font-size: 21px;
+
+        letter-spacing: 3px;
+    }
+
+    .logo p {
+        margin-top: 8px;
+
+        font-size: 10px;
+
+        letter-spacing: 2.5px;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .screen {
+        padding:
+            42px
+            24px
+            65px;
+    }
+
+    .hero {
+        margin-bottom: 32px;
+
+        text-align: left;
+    }
+
+    .hero h2 {
+        font-size: 52px;
+
+        letter-spacing: -3px;
+    }
+
+    .hero p {
+        margin-top: 22px;
+
+        font-size: 16px;
+    }
+
+    .playerCard {
+        padding: 25px;
+
+        border-radius: 24px;
+    }
+
+    .formGrid {
+        grid-template-columns: 1fr;
+
+        gap: 18px;
+    }
+
+    .sectionHeader {
+        flex-direction: column;
+        align-items: center;
+
+        text-align: center;
+    }
+
+    .sectionHeader > div:first-child {
+        flex-basis: auto;
+    }
+
+    .sectionHeader h2 {
+        font-size: 48px;
+    }
+
+    .commercialScore {
+        min-width: 130px;
+
+        margin: 0 auto;
+
+        padding: 17px;
+    }
+
+    .commercialScore strong {
+        font-size: 43px;
+    }
+
+    .brandsGrid {
+        gap: 24px;
+    }
+
+    .brandCard {
+        padding: 28px;
+
+        border-radius: 25px;
+    }
+
+    .brandCardLogo {
+        width: 82px;
+        height: 82px;
+
+        border-radius: 21px;
+    }
+
+    .brandIdentity {
+        gap: 18px;
+    }
+
+    .brandLogo {
+        font-size: 23px;
+    }
+
+    .interest {
+        font-size: 11px;
+
+        letter-spacing: 1.4px;
+    }
+
+    .interestBar {
+        height: 11px;
+
+        margin: 28px 0;
+    }
+
+    .brandDetails strong {
+        font-size: 25px;
+    }
+
+    .negotiateButton {
+        min-width: 190px;
+
+        height: 58px;
+
+        padding: 0 20px;
+
+        font-size: 11px;
+    }
+
+    .negotiationLayout {
+        display: block;
+
+        min-height: auto;
+    }
+
+    .dealSidebar {
+        padding: 24px;
+
+        border-right: 0;
+
+        border-bottom:
+            1px solid var(--border);
+    }
+
+    .dealSidebar h2 {
+        font-size: 32px;
+    }
+
+    .dealInfo {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+    .dealInfo > div {
+        padding: 15px;
+    }
+
+    .dealInfo strong {
+        font-size: 16px;
+    }
+
+    .tensionPanel {
+        padding: 18px;
+    }
+
+    .chatHeader {
+        min-height: 100px;
+
+        padding: 17px 24px;
+    }
+
+    #representativeInitial {
+        width: 64px;
+        height: 64px;
+
+        border-radius: 18px;
+    }
+
+    .chatMessages {
+        min-height: 480px;
+
+        max-height: 620px;
+
+        padding: 28px 24px;
+
+        gap: 20px;
+    }
+
+    .message {
+        max-width: 88%;
+
+        padding: 19px 22px;
+
+        font-size: 16px;
+    }
+
+    .message.typing {
+        max-width: 260px;
+    }
+
+    .quickActions {
+        padding: 17px 24px;
+    }
+
+    .messageBox {
+        padding:
+            18px
+            24px
+            max(
+                24px,
+                env(safe-area-inset-bottom)
+            );
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            128px;
+    }
+}
+
+@media (max-width: 540px) {
+
+    .header {
+        padding-left: 17px;
+        padding-right: 17px;
+    }
+
+    .logoIcon {
+        width: 66px;
+        height: 66px;
+
+        border-radius: 20px;
+    }
+
+    .logo h1 {
+        font-size: 18px;
+
+        letter-spacing: 2.6px;
+    }
+
+    .logo p {
+        font-size: 8px;
+
+        letter-spacing: 2px;
+    }
+
+    .screen {
+        padding:
+            36px
+            17px
+            55px;
+    }
+
+    .hero h2 {
+        font-size: 45px;
+    }
+
+    .playerCard {
+        padding: 21px;
+    }
+
+    .sectionHeader {
+        gap: 15px;
+    }
+
+    .sectionHeader h2 {
+        font-size: 42px;
+    }
+
+    .sectionHeader p {
+        font-size: 15px;
+    }
+
+    .commercialScore {
+        min-width: 96px;
+
+        padding: 13px;
+    }
+
+    .commercialScore span {
+        font-size: 8px;
+
+        letter-spacing: 1px;
+    }
+
+    .commercialScore strong {
+        font-size: 36px;
+    }
+
+    .brandCard {
+        padding: 20px;
+
+        border-radius: 22px;
+    }
+
+    .brandTop {
+        align-items: center;
+    }
+
+    .brandIdentity {
+        gap: 14px;
+    }
+
+    .brandCardLogo {
+        width: 66px;
+        height: 66px;
+
+        border-radius: 18px;
+    }
+
+    .brandLogo {
+        font-size: 19px;
+    }
+
+    .interest {
+        font-size: 9px;
+
+        letter-spacing: 1px;
+    }
+
+    .interestBar {
+        margin: 23px 0;
+
+        height: 10px;
+    }
+
+    .brandDetails {
+        align-items: center;
+
+        gap: 12px;
+    }
+
+    .brandDetails span {
+        font-size: 10px;
+
+        letter-spacing: 1.4px;
+    }
+
+    .brandDetails strong {
+        font-size: 22px;
+    }
+
+    .negotiateButton {
+        min-width: 154px;
+
+        height: 54px;
+
+        padding: 0 14px;
+
+        border-radius: 16px;
+
+        font-size: 9px;
+
+        letter-spacing: 1px;
+    }
+
+    .dealSidebar {
+        padding: 20px 17px;
+    }
+
+    .dealInfo {
+        grid-template-columns: 1fr;
+    }
+
+    .chatHeader {
+        padding: 15px 17px;
+    }
+
+    #representativeInitial {
+        width: 58px;
+        height: 58px;
+    }
+
+    .chatHeader strong {
+        font-size: 18px;
+    }
+
+    .chatMessages {
+        min-height: 430px;
+
+        max-height: 590px;
+
+        padding: 24px 17px;
+    }
+
+    .message {
+        max-width: 91%;
+
+        padding: 17px 19px;
+
+        border-radius: 21px;
+
+        font-size: 15px;
+    }
+
+    .message.typing {
+        max-width: 230px;
+
+        padding: 17px 19px;
+
+        border-radius: 21px;
+    }
+
+    .typingText {
+        font-size: 11px;
+    }
+
+    .typingDots span {
+        width: 5px;
+        height: 5px;
+    }
+
+    .quickActions {
+        padding: 15px 17px;
+
+        gap: 10px;
+    }
+
+    .quickActions button {
+        height: 51px;
+
+        padding: 0 20px;
+
+        font-size: 10px;
+    }
+
+    .messageBox {
+        padding:
+            16px
+            17px
+            max(
+                22px,
+                env(safe-area-inset-bottom)
+            );
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            105px;
+
+        gap: 11px;
+    }
+
+    .messageBox input {
+        height: 59px;
+
+        padding: 0 17px;
+
+        font-size: 14px;
+    }
+
+    .messageBox button {
+        border-radius: 16px;
+
+        font-size: 11px;
+    }
+}
