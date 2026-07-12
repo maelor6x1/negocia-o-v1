@@ -1,8 +1,8 @@
 :root {
-    --bg: #080b10;
-    --panel: #0f1319;
+    --bg: #080a0e;
+    --panel: #0e1218;
     --panel-light: #171c24;
-    --border: #2a303a;
+    --border: #2b313b;
 
     --green: #c8ff00;
     --green-dark: #9dcc00;
@@ -10,15 +10,15 @@
     --text: #f5f5f5;
     --muted: #8f96a3;
 
-    --danger: #ff3b3b;
+    --danger: #ff4141;
     --warning: #ff9f1c;
 
-    --max-width: 1180px;
+    --max-width: 1400px;
 }
 
 
 /* =========================================
-   RESET
+RESET
 ========================================= */
 
 * {
@@ -56,48 +56,57 @@ img {
     display: block;
 }
 
+.app {
+    width: 100%;
+    max-width: var(--max-width);
+
+    margin: 0 auto;
+
+    padding: 42px 45px 70px;
+}
+
 
 /* =========================================
-   TELAS
+TELAS
 ========================================= */
 
 .screen {
     display: none;
-
-    width: 100%;
-    min-height: 100vh;
 }
 
 .screen.active {
     display: block;
 }
 
-.container {
-    width: 100%;
-    max-width: var(--max-width);
-
-    margin: 0 auto;
-
-    padding: 45px 32px 70px;
-}
-
 
 /* =========================================
-   HEADER
+HEADER
 ========================================= */
 
 .header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 
-    gap: 24px;
+    gap: 30px;
 
-    margin-bottom: 80px;
+    margin-bottom: 110px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+
+    gap: 22px;
+
+    min-width: 0;
 }
 
 .logoIcon {
     width: 72px;
     height: 72px;
+
+    flex: 0 0 72px;
 
     display: flex;
     align-items: center;
@@ -109,70 +118,103 @@ img {
     font-size: 25px;
     font-weight: 900;
     font-style: italic;
-
-    flex-shrink: 0;
 }
 
-.logoText h1 {
-    font-size: 34px;
+.logo h1 {
+    font-size: 31px;
     font-weight: 900;
 
     letter-spacing: 3px;
 }
 
-.logoText p {
-    margin-top: 8px;
+.logo p {
+    margin-top: 7px;
 
     color: var(--muted);
 
-    font-size: 15px;
+    font-size: 13px;
+
     letter-spacing: 2px;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    letter-spacing: 2px;
+
+    white-space: nowrap;
+}
+
+.statusDot {
+    width: 9px;
+    height: 9px;
+
+    background: var(--green);
+
+    border-radius: 50%;
+
+    box-shadow: 0 0 12px var(--green);
 }
 
 
 /* =========================================
-   HERO
+HERO
 ========================================= */
 
-.eyebrow {
+.hero {
+    max-width: 1000px;
+}
+
+.tag {
+    display: block;
+
     color: var(--green);
 
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 800;
 
     letter-spacing: 5px;
-
-    margin-bottom: 35px;
 }
 
-.heroTitle {
-    max-width: 850px;
+.hero h2 {
+    margin-top: 38px;
 
-    font-size: clamp(55px, 8vw, 105px);
+    font-size: clamp(55px, 7vw, 105px);
     font-weight: 900;
 
-    line-height: 0.9;
+    line-height: 0.88;
 
     letter-spacing: -5px;
 }
 
-.heroDescription {
+.hero h2 span {
+    display: block;
+}
+
+.hero p {
     max-width: 850px;
 
-    margin-top: 45px;
+    margin-top: 48px;
 
     color: var(--muted);
 
-    font-size: 24px;
+    font-size: 23px;
     line-height: 1.8;
 }
 
 
 /* =========================================
-   FORMULÁRIO
+PLAYER CARD
 ========================================= */
 
-.playerForm {
+.playerCard {
     margin-top: 100px;
 
     padding: 45px;
@@ -182,11 +224,11 @@ img {
     border: 1px solid var(--border);
 }
 
-.sectionTitle {
+.playerCard h3 {
     margin-bottom: 45px;
 
     font-size: 18px;
-    font-weight: 800;
+    font-weight: 900;
 
     letter-spacing: 5px;
 }
@@ -200,28 +242,29 @@ img {
     gap: 35px;
 }
 
-.formGroup {
+.inputGroup {
     display: flex;
     flex-direction: column;
 
     gap: 14px;
+
+    min-width: 0;
 }
 
-.formGroup.full {
-    grid-column: 1 / -1;
-}
-
-.formGroup label {
+.inputGroup label {
     color: var(--muted);
 
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 12px;
+    font-weight: 800;
 
     letter-spacing: 2px;
 }
 
-.formGroup input,
-.formGroup select {
+.inputGroup input,
+.inputGroup select {
+    appearance: none;
+    -webkit-appearance: none;
+
     width: 100%;
     height: 58px;
 
@@ -231,27 +274,44 @@ img {
     color: var(--text);
 
     border: 1px solid var(--border);
-
     border-radius: 0;
 
     outline: none;
 
-    transition: 0.2s;
+    font-size: 16px;
+
+    transition: border-color 0.2s;
 }
 
-.formGroup input:focus,
-.formGroup select:focus {
+.inputGroup select {
+    background-image:
+        linear-gradient(45deg, transparent 50%, var(--green) 50%),
+        linear-gradient(135deg, var(--green) 50%, transparent 50%);
+
+    background-position:
+        calc(100% - 20px) 25px,
+        calc(100% - 14px) 25px;
+
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+
+    padding-right: 45px;
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus {
     border-color: var(--green);
 }
 
-.formGroup input::placeholder {
-    color: #5e6570;
+.inputGroup input::placeholder {
+    color: #626975;
 }
 
-.primaryButton {
+.mainButton {
     width: 100%;
 
     margin-top: 45px;
+
     padding: 22px;
 
     background: transparent;
@@ -260,84 +320,50 @@ img {
     border: 2px solid var(--green);
 
     font-weight: 900;
+
     letter-spacing: 2px;
 
     transition: 0.2s;
 }
 
-.primaryButton:hover {
+.mainButton:hover {
     background: var(--green);
     color: #050505;
 }
 
 
 /* =========================================
-   TOPO DAS TELAS
+BRANDS SCREEN
 ========================================= */
 
-.topBar {
+.sectionHeader {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    justify-content: space-between;
 
-    gap: 20px;
+    gap: 40px;
 
-    margin-bottom: 55px;
+    margin-bottom: 60px;
 }
 
-.backButton {
-    width: 52px;
-    height: 52px;
+.sectionHeader h2 {
+    margin-top: 25px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: transparent;
-    color: var(--text);
-
-    border: 1px solid var(--border);
-
-    font-size: 24px;
-}
-
-.backButton:hover {
-    border-color: var(--green);
-    color: var(--green);
-}
-
-.pageTitle {
-    font-size: 30px;
+    font-size: clamp(38px, 5vw, 70px);
     font-weight: 900;
 
-    letter-spacing: 2px;
+    letter-spacing: -3px;
 }
 
-.pageSubtitle {
-    margin-top: 7px;
+.sectionHeader p {
+    margin-top: 20px;
 
     color: var(--muted);
 
-    font-size: 14px;
+    font-size: 17px;
 }
 
-
-/* =========================================
-   SCORE COMERCIAL
-========================================= */
-
-.analysisHeader {
-    display: grid;
-
-    grid-template-columns: 1fr auto;
-
-    gap: 30px;
-
-    align-items: center;
-
-    margin-bottom: 55px;
-}
-
-.scoreCard {
+.commercialScore {
     min-width: 190px;
 
     padding: 30px;
@@ -348,30 +374,34 @@ img {
     text-align: center;
 }
 
-.scoreCard span {
+.commercialScore span {
     display: block;
 
-    font-size: 12px;
-    font-weight: 800;
+    font-size: 11px;
+    font-weight: 900;
 
     letter-spacing: 2px;
 }
 
-.scoreCard strong {
-    display: block;
+.commercialScore strong {
+    display: inline-block;
 
-    margin-top: 10px;
+    margin-top: 12px;
 
-    font-size: 55px;
+    font-size: 54px;
+    font-weight: 900;
+}
+
+.commercialScore small {
     font-weight: 900;
 }
 
 
 /* =========================================
-   MARCAS
+BRAND GRID
 ========================================= */
 
-.brandsContainer {
+.brandsGrid {
     display: grid;
 
     grid-template-columns:
@@ -406,44 +436,48 @@ img {
     display: flex;
     align-items: center;
 
-    gap: 16px;
+    gap: 18px;
 
     min-width: 0;
 }
 
 
 /* =========================================
-   LOGO DOS CARDS
+LOGOS DAS MARCAS
 ========================================= */
 
-.brandCardLogo {
-    width: 64px;
-    height: 64px;
+.brandCardLogo,
+.brandLogoImage,
+.brandIcon {
+    width: 70px;
+    height: 70px;
 
-    min-width: 64px;
-    max-width: 64px;
+    min-width: 70px;
+    max-width: 70px;
 
-    min-height: 64px;
-    max-height: 64px;
+    min-height: 70px;
+    max-height: 70px;
 
-    flex: 0 0 64px;
+    flex: 0 0 70px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    position: relative;
-
     padding: 12px;
 
     background: #ffffff;
 
-    border-radius: 10px;
+    border-radius: 0;
 
     overflow: hidden;
+
+    position: relative;
 }
 
-.brandCardLogo img {
+.brandCardLogo img,
+.brandLogoImage img,
+.brandIcon img {
     width: 100% !important;
     height: 100% !important;
 
@@ -470,10 +504,8 @@ img {
 
     color: var(--text);
 
-    font-size: 25px;
+    font-size: 27px;
     font-weight: 900;
-
-    letter-spacing: 1px;
 
     overflow-wrap: anywhere;
 }
@@ -481,24 +513,10 @@ img {
 .interest {
     flex-shrink: 0;
 
-    color: var(--muted);
-
-    font-size: 13px;
-    font-weight: 900;
-
-    text-align: right;
-}
-
-.interest.high {
     color: var(--green);
-}
 
-.interest.medium {
-    color: var(--warning);
-}
-
-.interest.low {
-    color: var(--muted);
+    font-size: 14px;
+    font-weight: 900;
 }
 
 .interestBar {
@@ -517,7 +535,7 @@ img {
 
     background: var(--green);
 
-    transition: width 0.5s ease;
+    transition: width 0.4s ease;
 }
 
 .brandDetails {
@@ -543,9 +561,9 @@ img {
 }
 
 .negotiateButton {
-    min-width: 210px;
+    min-width: 220px;
 
-    padding: 18px 22px;
+    padding: 19px 20px;
 
     background: transparent;
     color: var(--green);
@@ -571,16 +589,33 @@ img {
     cursor: not-allowed;
 }
 
+.secondaryButton {
+    width: 100%;
+
+    margin-top: 40px;
+
+    padding: 20px;
+
+    background: transparent;
+    color: var(--muted);
+
+    border: 1px solid var(--border);
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
+
 
 /* =========================================
-   NEGOCIAÇÃO
+NEGOTIATION
 ========================================= */
 
 .negotiationLayout {
     display: grid;
 
     grid-template-columns:
-        minmax(280px, 360px)
+        minmax(300px, 390px)
         minmax(0, 1fr);
 
     gap: 30px;
@@ -588,55 +623,140 @@ img {
     align-items: start;
 }
 
-.negotiationSidebar {
-    display: flex;
-    flex-direction: column;
 
-    gap: 20px;
+/* =========================================
+SIDEBAR
+========================================= */
+
+.dealSidebar {
+    min-width: 0;
 }
 
-.offerCard,
-.tensionCard,
-.counterCard {
-    padding: 28px;
+.backButton {
+    width: 52px;
+    height: 52px;
 
-    background: var(--panel-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 35px;
+
+    background: transparent;
+    color: var(--text);
+
+    border: 1px solid var(--border);
+
+    font-size: 24px;
+}
+
+.sidebarLabel {
+    color: var(--green);
+
+    font-size: 12px;
+    font-weight: 900;
+
+    letter-spacing: 4px;
+}
+
+.dealSidebar > h2 {
+    margin-top: 18px;
+
+    font-size: 45px;
+    font-weight: 900;
+
+    overflow-wrap: anywhere;
+}
+
+.playerMini {
+    margin-top: 35px;
+
+    padding: 25px;
+
+    background: var(--panel);
 
     border: 1px solid var(--border);
 }
 
-.offerItem {
-    padding: 20px 0;
+.playerMini span {
+    display: block;
 
-    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
 }
 
-.offerItem:first-child {
-    padding-top: 0;
+.playerMini strong {
+    display: block;
+
+    margin-top: 12px;
+
+    font-size: 20px;
 }
 
-.offerItem:last-child {
-    padding-bottom: 0;
+.playerMini small {
+    display: block;
 
+    margin-top: 6px;
+
+    color: var(--muted);
+}
+
+
+/* =========================================
+DEAL INFO
+========================================= */
+
+.dealInfo {
+    margin-top: 20px;
+}
+
+.dealInfo > div {
+    padding: 25px;
+
+    background: var(--panel-light);
+
+    border: 1px solid var(--border);
     border-bottom: none;
 }
 
-.offerItem span {
+.dealInfo > div:last-child {
+    border-bottom: 1px solid var(--border);
+}
+
+.dealInfo span {
     display: block;
 
     margin-bottom: 12px;
 
     color: var(--muted);
 
-    font-size: 12px;
+    font-size: 11px;
 
     letter-spacing: 2px;
 }
 
-.offerItem strong {
+.dealInfo strong {
     color: var(--green);
 
-    font-size: 24px;
+    font-size: 23px;
+}
+
+
+/* =========================================
+TENSION
+========================================= */
+
+.tensionPanel {
+    margin-top: 25px;
+
+    padding: 28px;
+
+    background: var(--panel-light);
+
+    border: 1px solid var(--border);
 }
 
 .tensionHeader {
@@ -650,7 +770,7 @@ img {
 .tensionHeader span {
     color: var(--muted);
 
-    font-size: 12px;
+    font-size: 11px;
 
     letter-spacing: 2px;
 }
@@ -658,7 +778,7 @@ img {
 #tensionText {
     color: var(--green);
 
-    font-weight: 900;
+    font-size: 14px;
 }
 
 .tensionBar {
@@ -673,7 +793,7 @@ img {
 }
 
 .tensionProgress {
-    width: 0;
+    width: 5%;
     height: 100%;
 
     background: var(--green);
@@ -699,34 +819,42 @@ img {
     color: var(--muted);
 
     font-size: 14px;
+
     line-height: 1.6;
 }
 
-.counterCard {
+.counterPanel {
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     gap: 20px;
+
+    margin-top: 20px;
+
+    padding: 25px;
+
+    background: var(--panel-light);
+
+    border: 1px solid var(--border);
 }
 
-.counterCard span {
+.counterPanel span {
     color: var(--muted);
 
-    font-size: 12px;
+    font-size: 11px;
 }
 
-#counterOffers {
+.counterPanel strong {
     font-size: 18px;
-    font-weight: 900;
 }
 
 
 /* =========================================
-   PAINEL DE CONVERSA
+CHAT AREA
 ========================================= */
 
-.negotiationMain {
+.chatArea {
     min-width: 0;
 
     background: var(--panel);
@@ -736,13 +864,11 @@ img {
     overflow: hidden;
 }
 
-.representative {
+.chatHeader {
     display: flex;
     align-items: center;
 
-    gap: 16px;
-
-    min-width: 0;
+    gap: 18px;
 
     padding: 25px;
 
@@ -753,37 +879,40 @@ img {
 
 
 /* =========================================
-   LOGO DA MARCA NA NEGOCIAÇÃO
+LOGO NO CHAT
 ========================================= */
 
 #representativeInitial {
-    width: 64px !important;
-    height: 64px !important;
+    width: 70px !important;
+    height: 70px !important;
 
-    min-width: 64px !important;
-    max-width: 64px !important;
+    min-width: 70px !important;
+    max-width: 70px !important;
 
-    min-height: 64px !important;
-    max-height: 64px !important;
+    min-height: 70px !important;
+    max-height: 70px !important;
 
-    flex: 0 0 64px !important;
+    flex: 0 0 70px !important;
 
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
 
-    position: relative !important;
-
     padding: 12px !important;
 
     background: #ffffff !important;
-
-    border-radius: 10px !important;
+    color: #050505;
 
     overflow: hidden !important;
+
+    position: relative !important;
+
+    font-size: 25px;
+    font-weight: 900;
 }
 
 #representativeInitial img,
+#representativeInitial .representativeBrandImage,
 .representativeBrandImage {
     width: 100% !important;
     height: 100% !important;
@@ -810,14 +939,14 @@ img {
     flex: none !important;
 }
 
-.representativeInfo {
+.chatHeader section {
     min-width: 0;
 
     flex: 1;
 }
 
 #representativeName {
-    color: var(--text);
+    display: block;
 
     font-size: 20px;
     font-weight: 900;
@@ -827,24 +956,26 @@ img {
     white-space: nowrap;
 }
 
-.representativeInfo p {
-    margin-top: 6px;
+.chatHeader small {
+    display: block;
+
+    margin-top: 7px;
 
     color: var(--muted);
 
-    font-size: 13px;
+    font-size: 12px;
 }
 
 
 /* =========================================
-   CHAT
+CHAT MESSAGES
 ========================================= */
 
 .chatMessages {
-    min-height: 420px;
-    max-height: 570px;
+    min-height: 470px;
+    max-height: 600px;
 
-    padding: 30px;
+    padding: 35px;
 
     overflow-y: auto;
     overflow-x: hidden;
@@ -859,6 +990,7 @@ img {
     padding: 22px;
 
     font-size: 16px;
+
     line-height: 1.7;
 
     white-space: pre-line;
@@ -884,8 +1016,6 @@ img {
 
     margin: 25px auto;
 
-    padding: 15px;
-
     background: transparent;
     color: var(--green);
 
@@ -901,16 +1031,16 @@ img {
 
 
 /* =========================================
-   AÇÕES RÁPIDAS
+QUICK ACTIONS
 ========================================= */
 
 .quickActions {
     display: grid;
 
     grid-template-columns:
-        repeat(4, minmax(0, 1fr));
+        repeat(5, minmax(0, 1fr));
 
-    gap: 10px;
+    gap: 9px;
 
     padding: 18px;
 
@@ -918,9 +1048,10 @@ img {
 }
 
 .quickActions button {
-    min-height: 52px;
+    min-width: 0;
+    min-height: 55px;
 
-    padding: 12px;
+    padding: 10px;
 
     background: transparent;
     color: var(--text);
@@ -928,7 +1059,7 @@ img {
     border: 1px solid var(--border);
 
     font-size: 11px;
-    font-weight: 800;
+    font-weight: 900;
 
     transition: 0.2s;
 }
@@ -939,12 +1070,18 @@ img {
     border-color: var(--green);
 }
 
+.quickActions .reject:hover {
+    color: var(--danger);
+
+    border-color: var(--danger);
+}
+
 
 /* =========================================
-   INPUT DO CHAT
+MESSAGE BOX
 ========================================= */
 
-.chatInput {
+.messageBox {
     display: flex;
 
     gap: 12px;
@@ -954,8 +1091,9 @@ img {
     border-top: 1px solid var(--border);
 }
 
-.chatInput input {
+.messageBox input {
     min-width: 0;
+
     flex: 1;
 
     height: 58px;
@@ -966,47 +1104,49 @@ img {
     color: var(--text);
 
     border: 1px solid var(--border);
+    border-radius: 0;
 
     outline: none;
+
+    appearance: none;
+    -webkit-appearance: none;
 }
 
-.chatInput input:focus {
+.messageBox input:focus {
     border-color: var(--green);
 }
 
-.chatInput input::placeholder {
+.messageBox input::placeholder {
     color: var(--muted);
 }
 
-.chatInput button {
-    width: 62px;
+.messageBox button {
+    min-width: 110px;
     height: 58px;
 
-    flex-shrink: 0;
+    padding: 0 20px;
 
     background: var(--green);
     color: #050505;
 
     border: none;
 
-    font-size: 22px;
+    font-size: 12px;
     font-weight: 900;
 }
 
 
 /* =========================================
-   TABLET
+TABLET
 ========================================= */
 
-@media (max-width: 900px) {
+@media (max-width: 950px) {
 
-    .container {
-        padding:
-            35px 25px
-            60px;
+    .app {
+        padding: 35px 25px 60px;
     }
 
-    .brandsContainer {
+    .brandsGrid {
         grid-template-columns: 1fr;
     }
 
@@ -1014,99 +1154,108 @@ img {
         grid-template-columns: 1fr;
     }
 
-    .negotiationSidebar {
-        display: grid;
-
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-
-    .offerCard {
-        grid-row: span 2;
-    }
-
     .quickActions {
         grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+            repeat(3, minmax(0, 1fr));
     }
 
 }
 
 
 /* =========================================
-   MOBILE
+MOBILE
 ========================================= */
 
 @media (max-width: 600px) {
 
-    .container {
+    .app {
         padding:
-            28px 16px
-            50px;
+            calc(25px + env(safe-area-inset-top))
+            16px
+            calc(45px + env(safe-area-inset-bottom));
     }
 
 
     /* HEADER */
 
     .header {
-        gap: 15px;
+        align-items: flex-start;
 
-        margin-bottom: 65px;
+        margin-bottom: 75px;
+
+        gap: 15px;
+    }
+
+    .logo {
+        gap: 13px;
     }
 
     .logoIcon {
-        width: 55px;
-        height: 55px;
+        width: 54px;
+        height: 54px;
 
-        font-size: 20px;
+        flex-basis: 54px;
+
+        font-size: 18px;
     }
 
-    .logoText h1 {
-        font-size: 23px;
-
-        letter-spacing: 2px;
-    }
-
-    .logoText p {
-        font-size: 10px;
+    .logo h1 {
+        font-size: 21px;
 
         letter-spacing: 1px;
+    }
+
+    .logo p {
+        max-width: 180px;
+
+        font-size: 9px;
+
+        line-height: 1.5;
+
+        letter-spacing: 1px;
+    }
+
+    .status {
+        display: none;
     }
 
 
     /* HERO */
 
-    .eyebrow {
-        margin-bottom: 25px;
-
-        font-size: 12px;
+    .tag {
+        font-size: 11px;
 
         letter-spacing: 3px;
     }
 
-    .heroTitle {
-        font-size: 52px;
+    .hero h2 {
+        margin-top: 28px;
+
+        font-size: 51px;
+
+        line-height: 0.9;
 
         letter-spacing: -3px;
     }
 
-    .heroDescription {
+    .hero p {
         margin-top: 35px;
 
-        font-size: 19px;
+        font-size: 18px;
+
         line-height: 1.7;
     }
 
 
-    /* FORM */
+    /* PLAYER */
 
-    .playerForm {
+    .playerCard {
         margin-top: 70px;
 
-        padding: 25px 20px;
+        padding: 27px 20px;
     }
 
-    .sectionTitle {
+    .playerCard h3 {
         margin-bottom: 35px;
 
         font-size: 15px;
@@ -1120,50 +1269,46 @@ img {
         gap: 25px;
     }
 
-    .formGroup.full {
-        grid-column: auto;
+    .inputGroup input,
+    .inputGroup select {
+        height: 56px;
+
+        font-size: 16px;
     }
 
+    .mainButton {
+        margin-top: 35px;
 
-    /* TOP BAR */
+        padding: 19px 14px;
 
-    .topBar {
-        margin-bottom: 40px;
-    }
-
-    .backButton {
-        width: 45px;
-        height: 45px;
-
-        flex-shrink: 0;
-    }
-
-    .pageTitle {
-        font-size: 21px;
-    }
-
-    .pageSubtitle {
         font-size: 12px;
+
+        line-height: 1.5;
     }
 
 
-    /* ANÁLISE */
+    /* BRANDS */
 
-    .analysisHeader {
-        grid-template-columns: 1fr;
+    .sectionHeader {
+        align-items: stretch;
 
-        gap: 20px;
+        flex-direction: column;
+
+        gap: 25px;
     }
 
-    .scoreCard {
+    .sectionHeader h2 {
+        font-size: 42px;
+
+        letter-spacing: -2px;
+    }
+
+    .commercialScore {
         width: 100%;
     }
 
-
-    /* CARDS */
-
     .brandCard {
-        padding: 28px 22px;
+        padding: 27px 21px;
     }
 
     .brandTop {
@@ -1173,41 +1318,33 @@ img {
     }
 
     .brandIdentity {
-        gap: 12px;
-
         width: 100%;
+
+        gap: 13px;
     }
 
 
-    /* LOGOS DOS CARDS */
+    /* LOGOS MOBILE */
 
-    .brandCardLogo {
-        width: 52px;
-        height: 52px;
+    .brandCardLogo,
+    .brandLogoImage,
+    .brandIcon {
+        width: 58px;
+        height: 58px;
 
-        min-width: 52px;
-        max-width: 52px;
+        min-width: 58px;
+        max-width: 58px;
 
-        min-height: 52px;
-        max-height: 52px;
+        min-height: 58px;
+        max-height: 58px;
 
-        flex: 0 0 52px;
+        flex: 0 0 58px;
 
         padding: 10px;
-
-        border-radius: 8px;
     }
 
     .brandLogo {
         font-size: 23px;
-    }
-
-    .interest {
-        text-align: left;
-    }
-
-    .interestBar {
-        margin: 28px 0;
     }
 
     .brandDetails {
@@ -1218,76 +1355,65 @@ img {
 
     .negotiateButton {
         width: 100%;
+
         min-width: 0;
-
-        padding: 19px;
     }
 
 
-    /* NEGOCIAÇÃO */
+    /* NEGOTIATION */
 
-    .negotiationSidebar {
-        display: flex;
-
-        flex-direction: column;
+    .dealSidebar > h2 {
+        font-size: 38px;
     }
 
-    .offerCard,
-    .tensionCard,
-    .counterCard {
+    .tensionPanel {
         padding: 22px;
     }
 
-    .offerItem strong {
-        font-size: 21px;
-    }
 
+    /* CHAT HEADER */
 
-    /* REPRESENTANTE */
-
-    .representative {
-        gap: 12px;
+    .chatHeader {
+        gap: 13px;
 
         padding: 20px;
     }
 
     #representativeInitial {
-        width: 52px !important;
-        height: 52px !important;
+        width: 58px !important;
+        height: 58px !important;
 
-        min-width: 52px !important;
-        max-width: 52px !important;
+        min-width: 58px !important;
+        max-width: 58px !important;
 
-        min-height: 52px !important;
-        max-height: 52px !important;
+        min-height: 58px !important;
+        max-height: 58px !important;
 
-        flex: 0 0 52px !important;
+        flex: 0 0 58px !important;
 
         padding: 10px !important;
-
-        border-radius: 8px !important;
     }
 
     #representativeName {
         font-size: 18px;
     }
 
-    .representativeInfo p {
-        font-size: 11px;
+    .chatHeader small {
+        font-size: 10px;
     }
 
 
-    /* CHAT */
+    /* MESSAGES */
 
     .chatMessages {
-        min-height: 400px;
-        max-height: 520px;
+        min-height: 420px;
+        max-height: 540px;
 
         padding: 20px;
     }
 
     .message {
-        max-width: 92%;
+        max-width: 94%;
 
         padding: 18px;
 
@@ -1295,7 +1421,7 @@ img {
     }
 
 
-    /* AÇÕES */
+    /* QUICK ACTIONS */
 
     .quickActions {
         grid-template-columns:
@@ -1305,58 +1431,66 @@ img {
     }
 
     .quickActions button {
-        min-height: 55px;
+        min-height: 56px;
+    }
+
+    .quickActions .reject {
+        grid-column: 1 / -1;
     }
 
 
-    /* INPUT */
+    /* MESSAGE BOX */
 
-    .chatInput {
-        padding: 14px;
-
+    .messageBox {
         gap: 8px;
+
+        padding: 14px;
     }
 
-    .chatInput input {
+    .messageBox input {
         height: 54px;
 
-        padding: 0 14px;
+        padding: 0 13px;
 
         font-size: 14px;
     }
 
-    .chatInput button {
-        width: 54px;
+    .messageBox button {
+        min-width: 75px;
         height: 54px;
+
+        padding: 0 12px;
+
+        font-size: 10px;
     }
 
 }
 
 
 /* =========================================
-   TELAS MUITO PEQUENAS
+SMALL MOBILE
 ========================================= */
 
 @media (max-width: 380px) {
 
-    .heroTitle {
+    .hero h2 {
         font-size: 44px;
     }
 
-    .logoText h1 {
-        font-size: 19px;
+    .logo h1 {
+        font-size: 18px;
     }
 
     .brandCard {
-        padding: 24px 18px;
-    }
-
-    .brandLogo {
-        font-size: 20px;
+        padding: 23px 17px;
     }
 
     .quickActions {
         grid-template-columns: 1fr;
+    }
+
+    .quickActions .reject {
+        grid-column: auto;
     }
 
 }
