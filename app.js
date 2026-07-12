@@ -86,7 +86,7 @@ const brands = [
 
     {
         name: "MIZUNO",
-        logo: "https://commons.wikimedia.org/wiki/Special:Redirect/file/MIZUNO_logo.svg",
+        logo: `${ICON_CDN}/mizuno.svg`,
         representative: "Hiroshi Tanaka",
         tier: 3,
         multiplier: 0.95,
@@ -112,7 +112,7 @@ const brands = [
 
     {
         name: "SKECHERS",
-        logo: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Skechers.svg",
+        logo: `${ICON_CDN}/skechers.svg`,
         representative: "Daniel Brooks",
         tier: 2,
         multiplier: 0.88,
@@ -125,7 +125,7 @@ const brands = [
 
     {
         name: "UMBRO",
-        logo: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Umbro_logo.svg",
+        logo: `${ICON_CDN}/umbro.svg`,
         representative: "Oliver Bennett",
         tier: 1,
         multiplier: 0.72,
@@ -1174,6 +1174,113 @@ function negotiateBonus(text) {
     }
 
 
+    const lower =
+        text.toLowerCase();
+
+
+    const removeBonus =
+        lower.includes("sem bônus") ||
+        lower.includes("sem bonus") ||
+        lower.includes("não quero bônus") ||
+        lower.includes("nao quero bonus") ||
+        lower.includes("não quero o bônus") ||
+        lower.includes("nao quero o bonus") ||
+        lower.includes("tirar o bônus") ||
+        lower.includes("tirar o bonus") ||
+        lower.includes("remover o bônus") ||
+        lower.includes("remover o bonus") ||
+        lower.includes("retirar o bônus") ||
+        lower.includes("retirar o bonus") ||
+        lower.includes("bônus zero") ||
+        lower.includes("bonus zero") ||
+        lower.includes("bônus de 0") ||
+        lower.includes("bonus de 0") ||
+        lower.includes("zerar o bônus") ||
+        lower.includes("zerar o bonus");
+
+
+    if (removeBonus) {
+        if (currentOffer.bonus <= 0) {
+            addAIMessage(
+                "A proposta atual já não possui bônus de desempenho."
+            );
+
+            return;
+        }
+
+
+        const oldBonus =
+            currentOffer.bonus;
+
+
+        let conversionRate = 0.55;
+
+
+        if (currentBrand.tier === 5) {
+            conversionRate = 0.35;
+
+        } else if (
+            currentBrand.tier === 4
+        ) {
+            conversionRate = 0.45;
+        }
+
+
+        const weeklyIncrease =
+            (
+                oldBonus *
+                conversionRate
+            ) / 52;
+
+
+        const newWeeklyValue =
+            Math.round(
+                (
+                    currentOffer.value +
+                    weeklyIncrease
+                ) / 250
+            ) * 250;
+
+
+        if (increaseTension(7)) {
+            return;
+        }
+
+
+        currentOffer.bonus = 0;
+
+
+        currentOffer.value =
+            Math.max(
+                currentOffer.value,
+                newWeeklyValue
+            );
+
+
+        updateOfferUI();
+
+
+        addAIMessage(
+`Podemos reestruturar o contrato.
+
+Retiramos completamente o bônus de desempenho de € ${formatMoney(oldBonus)}.
+
+Em compensação, parte desse valor será incorporada ao pagamento fixo.
+
+NOVO VALOR SEMANAL
+€ ${formatMoney(currentOffer.value)}
+
+BÔNUS DE DESEMPENHO
+€ 0
+
+Isso garante uma remuneração fixa maior durante o vínculo.`
+        );
+
+
+        return;
+    }
+
+
     const requested =
         extractMoneyValue(text);
 
@@ -1185,7 +1292,7 @@ function negotiateBonus(text) {
 
 
     if (
-        requested &&
+        requested !== null &&
         requested > maximumBonus
     ) {
         if (increaseTension(20)) {
@@ -1199,11 +1306,15 @@ function negotiateBonus(text) {
 O máximo autorizado é € ${formatMoney(maximumBonus)}.`
         );
 
+
         return;
     }
 
 
-    if (requested) {
+    if (
+        requested !== null &&
+        requested > 0
+    ) {
         currentOffer.bonus =
             Math.round(
                 requested / 500
@@ -1221,6 +1332,7 @@ O máximo autorizado é € ${formatMoney(maximumBonus)}.`
         addAIMessage(
             `Podemos aceitar € ${formatMoney(currentOffer.bonus)} em bônus por metas.`
         );
+
 
         return;
     }
@@ -1659,16 +1771,13 @@ function quickAction(action) {
 
 
     if (action === "bonus") {
-        const requestedBonus =
-            Math.round(
-                currentOffer.bonus *
-                1.40 /
-                500
-            ) * 500;
-
-
-        input.value =
-            `Quero aumentar o bônus para € ${formatMoney(requestedBonus)}.`;
+        if (currentOffer.bonus > 0) {
+            input.value =
+                "Não quero bônus de desempenho. Prefiro um valor semanal maior.";
+        } else {
+            input.value =
+                "Quero adicionar um bônus de desempenho.";
+        }
     }
 
 
