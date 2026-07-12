@@ -4,6 +4,7 @@ let currentBrand = null;
 let currentOffer = {};
 
 let negotiationEnded = false;
+let brandTyping = false;
 
 let negotiationState = {
     tension: 0,
@@ -14,6 +15,10 @@ let negotiationState = {
 
 const ICON_CDN =
     "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons";
+
+const WIKI_FILE =
+    "https://commons.wikimedia.org/wiki/Special:Redirect/file/";
+
 
 const leagueReputation = {
     premier: 100,
@@ -29,6 +34,7 @@ const leagueReputation = {
     other: 45
 };
 
+
 const brands = [
     {
         name: "NIKE",
@@ -42,6 +48,7 @@ const brands = [
         tensionMultiplier: 1.45,
         negotiationFlexibility: 0.16
     },
+
     {
         name: "ADIDAS",
         logo: `${ICON_CDN}/adidas.svg`,
@@ -54,6 +61,7 @@ const brands = [
         tensionMultiplier: 1.35,
         negotiationFlexibility: 0.18
     },
+
     {
         name: "PUMA",
         logo: `${ICON_CDN}/puma.svg`,
@@ -66,6 +74,7 @@ const brands = [
         tensionMultiplier: 1.05,
         negotiationFlexibility: 0.28
     },
+
     {
         name: "NEW BALANCE",
         logo: `${ICON_CDN}/newbalance.svg`,
@@ -78,9 +87,10 @@ const brands = [
         tensionMultiplier: 0.90,
         negotiationFlexibility: 0.35
     },
+
     {
         name: "MIZUNO",
-        logo: `${ICON_CDN}/mizuno.svg`,
+        logo: `${WIKI_FILE}Mizuno_logo.jpg`,
         representative: "Hiroshi Tanaka",
         tier: 3,
         multiplier: 0.95,
@@ -90,6 +100,7 @@ const brands = [
         tensionMultiplier: 0.85,
         negotiationFlexibility: 0.32
     },
+
     {
         name: "UNDER ARMOUR",
         logo: `${ICON_CDN}/underarmour.svg`,
@@ -102,9 +113,10 @@ const brands = [
         tensionMultiplier: 0.80,
         negotiationFlexibility: 0.40
     },
+
     {
         name: "SKECHERS",
-        logo: `${ICON_CDN}/skechers.svg`,
+        logo: `${WIKI_FILE}Skechers.svg`,
         representative: "Daniel Brooks",
         tier: 2,
         multiplier: 0.88,
@@ -114,9 +126,10 @@ const brands = [
         tensionMultiplier: 0.75,
         negotiationFlexibility: 0.42
     },
+
     {
         name: "UMBRO",
-        logo: `${ICON_CDN}/umbro.svg`,
+        logo: `${WIKI_FILE}Umbro.svg`,
         representative: "Oliver Bennett",
         tier: 1,
         multiplier: 0.72,
@@ -127,6 +140,7 @@ const brands = [
         negotiationFlexibility: 0.45
     }
 ];
+
 
 function showScreen(id) {
     document.querySelectorAll(".screen").forEach(screen => {
@@ -145,6 +159,7 @@ function showScreen(id) {
     });
 }
 
+
 function analyzePlayer() {
     player = {
         name: document.getElementById("playerName").value.trim(),
@@ -153,7 +168,9 @@ function analyzePlayer() {
         overall: Number(document.getElementById("playerOverall").value),
         club: document.getElementById("playerClub").value.trim(),
         league: document.getElementById("playerLeague").value,
-        clubReputation: Number(document.getElementById("clubReputation").value),
+        clubReputation: Number(
+            document.getElementById("clubReputation").value
+        ),
         value: Number(document.getElementById("playerValue").value) || 0,
         goals: Number(document.getElementById("playerGoals").value) || 0,
         assists: Number(document.getElementById("playerAssists").value) || 0
@@ -196,6 +213,7 @@ function analyzePlayer() {
     showScreen("brandsScreen");
 }
 
+
 function calculateCommercialScore() {
     let score = 0;
 
@@ -209,16 +227,21 @@ function calculateCommercialScore() {
 
     score += player.clubReputation * 0.10;
     score += player.leagueReputation * 0.08;
-
     score += Math.min(player.goals * 0.35, 12);
     score += Math.min(player.assists * 0.25, 8);
     score += Math.min(player.value * 0.06, 8);
 
-    if (player.age <= 21 && player.overall >= 76) {
+    if (
+        player.age <= 21 &&
+        player.overall >= 76
+    ) {
         score += 5;
     }
 
-    if (player.age <= 19 && player.overall >= 80) {
+    if (
+        player.age <= 19 &&
+        player.overall >= 80
+    ) {
         score += 4;
     }
 
@@ -238,6 +261,7 @@ function calculateCommercialScore() {
         100
     );
 }
+
 
 function calculateBrandInterest(brand) {
     let interest =
@@ -290,6 +314,7 @@ function calculateBrandInterest(brand) {
     );
 }
 
+
 function calculateInitialOffer(brand) {
     let annualValue = 0;
 
@@ -323,6 +348,7 @@ function calculateInitialOffer(brand) {
         500
     );
 }
+
 
 function renderBrands() {
     const container =
@@ -367,17 +393,20 @@ function renderBrands() {
         card.innerHTML = `
             <div class="brandTop">
                 <div class="brandIdentity">
+
                     <div class="brandCardLogo">
                         <img
                             src="${brand.logo}"
                             alt="${brand.name}"
                             loading="lazy"
+                            onerror="handleLogoError(this, '${brand.name}')"
                         >
                     </div>
 
                     <div class="brandLogo">
                         ${brand.name}
                     </div>
+
                 </div>
 
                 <div class="interest ${interestClass}">
@@ -388,7 +417,8 @@ function renderBrands() {
             <div class="interestBar">
                 <div
                     class="interestProgress"
-                    style="width: ${interest}%"
+                    style="width: 0%"
+                    data-interest="${interest}"
                 ></div>
             </div>
 
@@ -423,19 +453,54 @@ function renderBrands() {
             card.querySelector(".negotiateButton");
 
         if (canNegotiate) {
-            button.addEventListener("click", () => {
-                startNegotiation(index);
-            });
+            button.addEventListener(
+                "click",
+                () => startNegotiation(index)
+            );
         }
 
         container.appendChild(card);
     });
+
+    requestAnimationFrame(() => {
+        document
+            .querySelectorAll(".interestProgress")
+            .forEach(progress => {
+                progress.style.width =
+                    progress.dataset.interest + "%";
+            });
+    });
 }
+
+
+function handleLogoError(image, brandName) {
+    image.onerror = null;
+
+    const container = image.parentElement;
+
+    image.remove();
+
+    const fallback =
+        document.createElement("strong");
+
+    fallback.className = "logoFallback";
+
+    fallback.innerText =
+        brandName
+            .split(" ")
+            .map(word => word[0])
+            .join("")
+            .slice(0, 2);
+
+    container.appendChild(fallback);
+}
+
 
 function startNegotiation(index) {
     currentBrand = brands[index];
 
     negotiationEnded = false;
+    brandTyping = false;
 
     negotiationState = {
         tension: 5,
@@ -448,13 +513,9 @@ function startNegotiation(index) {
         calculateInitialOffer(currentBrand);
 
     currentOffer = {
-        value: value,
-
+        value,
         duration:
-            currentBrand.tier >= 4
-                ? 3
-                : 2,
-
+            currentBrand.tier >= 4 ? 3 : 2,
         bonus:
             Math.max(
                 1000,
@@ -482,15 +543,20 @@ function startNegotiation(index) {
             src="${currentBrand.logo}"
             alt="${currentBrand.name}"
             class="representativeBrandImage"
+            onerror="handleLogoError(this, '${currentBrand.name}')"
         >
     `;
 
     document.getElementById("chatMessages").innerHTML = "";
 
+    showNegotiationControls();
+
     updateOfferUI();
     updateNegotiationUI();
 
-    addAIMessage(
+    showScreen("negotiationScreen");
+
+    sendBrandMessage(
 `Olá, ${player.name}.
 
 A ${currentBrand.name} analisou seu desempenho no ${player.club}.
@@ -499,11 +565,11 @@ Nossa proposta inicial é de € ${formatMoney(currentOffer.value)} por semana.
 
 O vínculo proposto é de ${currentOffer.duration} temporadas, além de € ${formatMoney(currentOffer.bonus)} em bônus de desempenho.
 
-Estamos abertos a discutir valor semanal, duração e bônus.`
+Estamos abertos a discutir valor semanal, duração e bônus.`,
+        1200
     );
-
-    showScreen("negotiationScreen");
 }
+
 
 function updateOfferUI() {
     document.getElementById("offerValue").innerText =
@@ -521,6 +587,7 @@ function updateOfferUI() {
         "€ " + formatMoney(currentOffer.bonus);
 }
 
+
 function updateNegotiationUI() {
     if (!currentBrand) return;
 
@@ -530,9 +597,11 @@ function updateNegotiationUI() {
     const progress =
         document.getElementById("tensionProgress");
 
-    progress.style.width = tension + "%";
+    progress.style.width =
+        tension + "%";
 
-    progress.className = "tensionProgress";
+    progress.className =
+        "tensionProgress";
 
     let text = "CALMA";
 
@@ -576,8 +645,11 @@ function updateNegotiationUI() {
         currentBrand.maxCounterOffers;
 }
 
+
 function increaseTension(amount) {
-    if (negotiationEnded) return true;
+    if (negotiationEnded) {
+        return true;
+    }
 
     negotiationState.tension +=
         amount *
@@ -602,21 +674,26 @@ function increaseTension(amount) {
     ) {
         negotiationState.ultimatum = true;
 
-        addAIMessage(
+        sendBrandMessage(
 `Precisamos ser claros.
 
 A negociação chegou a um ponto crítico.
 
 A proposta atual está muito próxima do nosso limite.
 
-Esperamos uma decisão ou uma contraproposta realista.`
+Esperamos uma decisão ou uma contraproposta realista.`,
+            1400,
+            () => {
+                addSystemMessage(
+                    "ULTIMATO DA MARCA"
+                );
+            }
         );
-
-        addSystemMessage("ULTIMATO DA MARCA");
     }
 
     return false;
 }
+
 
 function registerCounterOffer() {
     negotiationState.counterOffers++;
@@ -633,6 +710,7 @@ function registerCounterOffer() {
 
     return false;
 }
+
 
 function negotiateMoney(requestedValue) {
     if (registerCounterOffer()) return;
@@ -653,7 +731,7 @@ function negotiateMoney(requestedValue) {
     if (difference >= 1.75) {
         if (increaseTension(40)) return;
 
-        addAIMessage(
+        sendBrandMessage(
 `Essa exigência está completamente fora da avaliação comercial da ${currentBrand.name}.
 
 Não consideraremos € ${formatMoney(requestedValue)} por semana.
@@ -674,7 +752,7 @@ Esperamos uma proposta significativamente mais realista.`
 
         updateOfferUI();
 
-        addAIMessage(
+        sendBrandMessage(
 `Não podemos atingir o valor solicitado.
 
 Nossa diretoria autorizou € ${formatMoney(counter)} por semana.
@@ -693,7 +771,7 @@ Estamos próximos do limite financeiro desta negociação.`
 
         updateOfferUI();
 
-        addAIMessage(
+        sendBrandMessage(
 `O valor de € ${formatMoney(currentOffer.value)} por semana é aceitável para a ${currentBrand.name}.
 
 Atualizamos os termos.`
@@ -709,70 +787,19 @@ Atualizamos os termos.`
 
     updateOfferUI();
 
-    addAIMessage(
+    sendBrandMessage(
 `Podemos aceitar € ${formatMoney(currentOffer.value)} por semana.
 
 A proposta foi atualizada.`
     );
 }
 
-function removePerformanceBonus() {
-    if (currentOffer.bonus <= 0) {
-        addAIMessage(
-`A proposta atual já não possui bônus de desempenho.
-
-Seu pagamento está concentrado no valor semanal.`
-        );
-
-        return;
-    }
-
-    if (registerCounterOffer()) return;
-
-    const oldBonus =
-        currentOffer.bonus;
-
-    /*
-    Converte 70% do bônus em salário.
-    O valor é dividido pelas 52 semanas.
-    */
-
-    const annualConvertedValue =
-        oldBonus * 0.70;
-
-    const weeklyIncrease =
-        annualConvertedValue / 52;
-
-    const roundedIncrease =
-        Math.max(
-            250,
-            Math.round(weeklyIncrease / 250) * 250
-        );
-
-    currentOffer.value +=
-        roundedIncrease;
-
-    currentOffer.bonus = 0;
-
-    if (increaseTension(5)) return;
-
-    updateOfferUI();
-
-    addAIMessage(
-`Podemos retirar completamente o bônus de desempenho.
-
-Como parte desse valor deixa de depender de metas, redistribuímos o pacote financeiro no pagamento semanal.
-
-A nova proposta é de € ${formatMoney(currentOffer.value)} por semana.
-
-Bônus de desempenho: € 0.`
-    );
-}
 
 function negotiateDuration(text) {
     if (registerCounterOffer()) return;
 
-    const lower = text.toLowerCase();
+    const lower =
+        text.toLowerCase();
 
     const match =
         lower.match(
@@ -782,7 +809,8 @@ function negotiateDuration(text) {
     let requestedDuration = null;
 
     if (match) {
-        requestedDuration = Number(match[1]);
+        requestedDuration =
+            Number(match[1]);
 
     } else if (
         lower.includes("diminuir") ||
@@ -811,7 +839,7 @@ function negotiateDuration(text) {
     ) {
         increaseTension(8);
 
-        addAIMessage(
+        sendBrandMessage(
             "Precisamos de uma duração válida entre 1 e 5 temporadas."
         );
 
@@ -822,7 +850,7 @@ function negotiateDuration(text) {
         currentOffer.duration;
 
     if (requestedDuration === oldDuration) {
-        addAIMessage(
+        sendBrandMessage(
             `A proposta atual já possui ${oldDuration} temporada(s).`
         );
 
@@ -833,7 +861,9 @@ function negotiateDuration(text) {
         const reduction =
             oldDuration - requestedDuration;
 
-        if (increaseTension(8 * reduction)) {
+        if (
+            increaseTension(8 * reduction)
+        ) {
             return;
         }
 
@@ -850,7 +880,7 @@ function negotiateDuration(text) {
 
         updateOfferUI();
 
-        addAIMessage(
+        sendBrandMessage(
 `Aceitamos reduzir o vínculo para ${requestedDuration} temporada(s).
 
 Por se tratar de um compromisso comercial menor, o valor passa para € ${formatMoney(currentOffer.value)} por semana.`
@@ -876,53 +906,83 @@ Por se tratar de um compromisso comercial menor, o valor passa para € ${format
 
     updateOfferUI();
 
-    addAIMessage(
+    sendBrandMessage(
 `Um vínculo de ${requestedDuration} temporadas oferece maior estabilidade comercial.
 
 Podemos aceitar e atualizar o pagamento para € ${formatMoney(currentOffer.value)} por semana.`
     );
 }
 
+
+function wantsNoBonus(text) {
+    const lower =
+        text.toLowerCase();
+
+    return (
+        lower.includes("não quero bonus") ||
+        lower.includes("não quero bônus") ||
+        lower.includes("sem bonus") ||
+        lower.includes("sem bônus") ||
+        lower.includes("tirar o bonus") ||
+        lower.includes("tirar o bônus") ||
+        lower.includes("remover o bonus") ||
+        lower.includes("remover o bônus") ||
+        lower.includes("bonus 0") ||
+        lower.includes("bônus 0") ||
+        lower.includes("bonus zero") ||
+        lower.includes("bônus zero") ||
+        lower.includes("zerar o bonus") ||
+        lower.includes("zerar o bônus") ||
+        lower.includes("dispenso o bonus") ||
+        lower.includes("dispenso o bônus")
+    );
+}
+
+
 function negotiateBonus(text) {
-    const lower = text.toLowerCase();
+    if (registerCounterOffer()) return;
 
-    const removeBonusExpressions = [
-        "não quero bônus",
-        "nao quero bonus",
-        "não quero bonus",
-        "nao quero bônus",
-        "sem bônus",
-        "sem bonus",
-        "tirar bônus",
-        "tirar bonus",
-        "tira o bônus",
-        "tira o bonus",
-        "remover bônus",
-        "remover bonus",
-        "remove o bônus",
-        "remove o bonus",
-        "zerar bônus",
-        "zerar bonus",
-        "zera o bônus",
-        "zera o bonus",
-        "bônus 0",
-        "bonus 0",
-        "bônus zero",
-        "bonus zero"
-    ];
+    if (wantsNoBonus(text)) {
+        if (currentOffer.bonus === 0) {
+            sendBrandMessage(
+                "A proposta atual já não possui bônus de desempenho."
+            );
 
-    const wantsNoBonus =
-        removeBonusExpressions.some(expression =>
-            lower.includes(expression)
-        ) ||
-        /b[oô]nus\s*(?:de|em|para|=)?\s*€?\s*0\b/i.test(lower);
+            return;
+        }
 
-    if (wantsNoBonus) {
-        removePerformanceBonus();
+        const oldBonus =
+            currentOffer.bonus;
+
+        const weeklyIncrease =
+            Math.max(
+                250,
+                Math.round(
+                    (oldBonus / 52) * 0.65 / 250
+                ) * 250
+            );
+
+        currentOffer.bonus = 0;
+
+        currentOffer.value +=
+            weeklyIncrease;
+
+        if (increaseTension(6)) return;
+
+        updateOfferUI();
+
+        sendBrandMessage(
+`Podemos retirar completamente o bônus de desempenho.
+
+Em compensação, parte desse valor será convertida em pagamento fixo.
+
+O bônus passa para € 0 e o salário semanal aumenta para € ${formatMoney(currentOffer.value)}.
+
+Esses passam a ser os novos termos da proposta.`
+        );
+
         return;
     }
-
-    if (registerCounterOffer()) return;
 
     const requested =
         extractMoneyValue(text);
@@ -936,7 +996,7 @@ function negotiateBonus(text) {
     ) {
         if (increaseTension(20)) return;
 
-        addAIMessage(
+        sendBrandMessage(
 `O bônus solicitado supera nosso limite.
 
 O máximo autorizado é € ${formatMoney(maximumBonus)}.`
@@ -947,13 +1007,16 @@ O máximo autorizado é € ${formatMoney(maximumBonus)}.`
 
     if (requested !== null) {
         currentOffer.bonus =
-            Math.round(requested / 500) * 500;
+            Math.max(
+                0,
+                Math.round(requested / 500) * 500
+            );
 
         if (increaseTension(7)) return;
 
         updateOfferUI();
 
-        addAIMessage(
+        sendBrandMessage(
             `Podemos aceitar € ${formatMoney(currentOffer.bonus)} em bônus por metas.`
         );
 
@@ -969,10 +1032,11 @@ O máximo autorizado é € ${formatMoney(maximumBonus)}.`
 
     updateOfferUI();
 
-    addAIMessage(
+    sendBrandMessage(
         `Podemos aumentar o bônus para € ${formatMoney(currentOffer.bonus)}.`
     );
 }
+
 
 function generateSponsorGoals() {
     const goals = [];
@@ -998,6 +1062,7 @@ function generateSponsorGoals() {
         goals.push(
             `Marcar pelo menos ${goalTarget} gols em uma temporada`
         );
+
     } else {
         goals.push(
             "Participar de pelo menos 25 partidas na temporada"
@@ -1035,23 +1100,27 @@ function generateSponsorGoals() {
     return goals;
 }
 
+
 function acceptOffer() {
-    if (negotiationEnded) return;
+    if (
+        negotiationEnded ||
+        brandTyping
+    ) {
+        return;
+    }
 
     negotiationEnded = true;
 
-    addUserMessage("Aceito os termos atuais.");
+    addUserMessage(
+        "Aceito os termos atuais."
+    );
+
+    hideNegotiationControls();
 
     const goals =
         generateSponsorGoals();
 
-    const bonusText =
-        currentOffer.bonus > 0
-            ? `€ ${formatMoney(currentOffer.bonus)}`
-            : "SEM BÔNUS";
-
-    setTimeout(() => {
-        addAIMessage(
+    sendBrandMessage(
 `Temos um acordo, ${player.name}.
 
 VALOR SEMANAL
@@ -1061,21 +1130,27 @@ DURAÇÃO
 ${currentOffer.duration} temporada(s)
 
 BÔNUS
-${bonusText}
+€ ${formatMoney(currentOffer.bonus)}
 
 METAS DE PATROCÍNIO
 
-${goals.map(goal => "• " + goal).join("\n")}
+${goals
+    .map(goal => "• " + goal)
+    .join("\n")}
 
-Bem-vindo à ${currentBrand.name}.`
-        );
+O não cumprimento das metas poderá reduzir bônus ou afetar futuras renovações.
 
-        addSystemMessage(
-            "CONTRATO DE PATROCÍNIO ASSINADO ✓"
-        );
-
-    }, 600);
+Bem-vindo à ${currentBrand.name}.`,
+        1800,
+        () => {
+            addSystemMessage(
+                "CONTRATO DE PATROCÍNIO ASSINADO ✓"
+            );
+        },
+        true
+    );
 }
+
 
 function brandWalkAway() {
     if (negotiationEnded) return;
@@ -1086,21 +1161,28 @@ function brandWalkAway() {
 
     updateNegotiationUI();
 
-    addAIMessage(
+    hideNegotiationControls();
+
+    sendBrandMessage(
 `As posições ficaram muito distantes.
 
 A ${currentBrand.name} não acredita que seja possível chegar a um acordo neste momento.
 
-Estamos oficialmente encerrando as negociações.`
-    );
-
-    addSystemMessage(
-        "A MARCA ABANDONOU A NEGOCIAÇÃO"
+Nossa diretoria decidiu encerrar oficialmente as negociações.`,
+        1700,
+        () => {
+            addSystemMessage(
+                "NEGOCIAÇÃO FALHOU — A MARCA ABANDONOU AS NEGOCIAÇÕES"
+            );
+        },
+        true
     );
 }
 
+
 function generateAIResponse(text) {
-    const lower = text.toLowerCase();
+    const lower =
+        text.toLowerCase();
 
     if (
         lower.includes("aceito") ||
@@ -1114,13 +1196,10 @@ function generateAIResponse(text) {
 
     /*
     IMPORTANTE:
-    BÔNUS É VERIFICADO ANTES DOS NÚMEROS.
+    Detecta remoção de bônus antes das outras regras.
     */
 
-    if (
-        lower.includes("bônus") ||
-        lower.includes("bonus")
-    ) {
+    if (wantsNoBonus(text)) {
         negotiateBonus(text);
         return;
     }
@@ -1143,6 +1222,14 @@ function generateAIResponse(text) {
         return;
     }
 
+    if (
+        lower.includes("bônus") ||
+        lower.includes("bonus")
+    ) {
+        negotiateBonus(text);
+        return;
+    }
+
     const requestedValue =
         extractMoneyValue(text);
 
@@ -1153,15 +1240,17 @@ function generateAIResponse(text) {
 
     if (increaseTension(4)) return;
 
-    addAIMessage(
+    sendBrandMessage(
 `Precisamos discutir termos objetivos do contrato.
 
 Podemos negociar valor semanal, duração ou bônus.`
     );
 }
 
+
 function extractMoneyValue(text) {
-    const lower = text.toLowerCase();
+    const lower =
+        text.toLowerCase();
 
     const millionMatch =
         lower.match(
@@ -1174,7 +1263,9 @@ function extractMoneyValue(text) {
                 millionMatch[1].replace(",", ".")
             );
 
-        return Math.round(value * 1000000);
+        return Math.round(
+            value * 1000000
+        );
     }
 
     const thousandMatch =
@@ -1188,7 +1279,9 @@ function extractMoneyValue(text) {
                 thousandMatch[1].replace(",", ".")
             );
 
-        return Math.round(value * 1000);
+        return Math.round(
+            value * 1000
+        );
     }
 
     const currencyMatch =
@@ -1213,6 +1306,7 @@ function extractMoneyValue(text) {
         numberMatch[0]
     );
 }
+
 
 function parseCurrencyNumber(value) {
     let normalized =
@@ -1249,13 +1343,15 @@ function parseCurrencyNumber(value) {
         ) {
             normalized =
                 normalized.replace(/,/g, "");
+
         } else {
             normalized =
                 normalized.replace(",", ".");
         }
     }
 
-    const number = Number(normalized);
+    const number =
+        Number(normalized);
 
     if (
         !Number.isFinite(number) ||
@@ -1267,8 +1363,14 @@ function parseCurrencyNumber(value) {
     return Math.round(number);
 }
 
+
 function quickAction(action) {
-    if (negotiationEnded) return;
+    if (
+        negotiationEnded ||
+        brandTyping
+    ) {
+        return;
+    }
 
     const input =
         document.getElementById("messageInput");
@@ -1297,18 +1399,16 @@ function quickAction(action) {
     }
 
     if (action === "bonus") {
-        if (currentOffer.bonus === 0) {
-            input.value =
-                "Quero voltar a negociar um bônus de € 10.000.";
-        } else {
-            const requestedBonus =
-                Math.round(
-                    currentOffer.bonus * 1.40 / 500
-                ) * 500;
+        const requestedBonus =
+            Math.round(
+                Math.max(
+                    currentOffer.bonus,
+                    1000
+                ) * 1.40 / 500
+            ) * 500;
 
-            input.value =
-                `Quero aumentar o bônus para € ${formatMoney(requestedBonus)}.`;
-        }
+        input.value =
+            `Quero aumentar o bônus para € ${formatMoney(requestedBonus)}.`;
     }
 
     if (action === "reject") {
@@ -1318,15 +1418,18 @@ function quickAction(action) {
             "Não tenho interesse na proposta."
         );
 
-        setTimeout(() => {
-            addAIMessage(
-                "Entendemos. A negociação está encerrada."
-            );
+        hideNegotiationControls();
 
-            addSystemMessage(
-                "NEGOCIAÇÃO ENCERRADA"
-            );
-        }, 400);
+        sendBrandMessage(
+            "Entendemos. A negociação está encerrada.",
+            1100,
+            () => {
+                addSystemMessage(
+                    "NEGOCIAÇÃO ENCERRADA"
+                );
+            },
+            true
+        );
 
         return;
     }
@@ -1334,8 +1437,14 @@ function quickAction(action) {
     input.focus();
 }
 
+
 function sendMessage() {
-    if (negotiationEnded) return;
+    if (
+        negotiationEnded ||
+        brandTyping
+    ) {
+        return;
+    }
 
     const input =
         document.getElementById("messageInput");
@@ -1351,22 +1460,198 @@ function sendMessage() {
 
     negotiationState.rounds++;
 
+    disableNegotiationControls();
+
     setTimeout(() => {
         generateAIResponse(text);
-    }, 650);
+    }, 300);
 }
+
+
+function sendBrandMessage(
+    text,
+    customDelay = null,
+    callback = null,
+    allowEnded = false
+) {
+    if (
+        negotiationEnded &&
+        !allowEnded
+    ) {
+        return;
+    }
+
+    brandTyping = true;
+
+    disableNegotiationControls();
+
+    const typing =
+        addTypingIndicator();
+
+    const baseDelay =
+        850;
+
+    const textDelay =
+        Math.min(
+            text.length * 7,
+            1800
+        );
+
+    const randomDelay =
+        Math.floor(
+            Math.random() * 500
+        );
+
+    const delay =
+        customDelay ??
+        (
+            baseDelay +
+            textDelay +
+            randomDelay
+        );
+
+    setTimeout(() => {
+        if (typing && typing.parentElement) {
+            typing.remove();
+        }
+
+        addAIMessage(text);
+
+        brandTyping = false;
+
+        if (!negotiationEnded) {
+            enableNegotiationControls();
+        }
+
+        if (callback) {
+            callback();
+        }
+
+    }, delay);
+}
+
+
+function addTypingIndicator() {
+    const chat =
+        document.getElementById("chatMessages");
+
+    const typing =
+        document.createElement("div");
+
+    typing.className =
+        "message ai typingMessage";
+
+    typing.innerHTML = `
+        <span class="typingName">
+            ${currentBrand.representative} está digitando
+        </span>
+
+        <span class="typingDots">
+            <i></i>
+            <i></i>
+            <i></i>
+        </span>
+    `;
+
+    chat.appendChild(typing);
+
+    chat.scrollTop =
+        chat.scrollHeight;
+
+    return typing;
+}
+
+
+function disableNegotiationControls() {
+    const buttons =
+        document.querySelectorAll(
+            ".quickActions button, .messageBox button"
+        );
+
+    buttons.forEach(button => {
+        button.disabled = true;
+    });
+
+    const input =
+        document.getElementById("messageInput");
+
+    if (input) {
+        input.disabled = true;
+    }
+}
+
+
+function enableNegotiationControls() {
+    if (negotiationEnded) return;
+
+    const buttons =
+        document.querySelectorAll(
+            ".quickActions button, .messageBox button"
+        );
+
+    buttons.forEach(button => {
+        button.disabled = false;
+    });
+
+    const input =
+        document.getElementById("messageInput");
+
+    if (input) {
+        input.disabled = false;
+    }
+}
+
+
+function hideNegotiationControls() {
+    const quickActions =
+        document.querySelector(".quickActions");
+
+    const messageBox =
+        document.querySelector(".messageBox");
+
+    if (quickActions) {
+        quickActions.style.display = "none";
+    }
+
+    if (messageBox) {
+        messageBox.style.display = "none";
+    }
+}
+
+
+function showNegotiationControls() {
+    const quickActions =
+        document.querySelector(".quickActions");
+
+    const messageBox =
+        document.querySelector(".messageBox");
+
+    if (quickActions) {
+        quickActions.style.display = "";
+    }
+
+    if (messageBox) {
+        messageBox.style.display = "";
+    }
+
+    enableNegotiationControls();
+}
+
 
 function addAIMessage(text) {
     addMessage(text, "ai");
 }
 
+
 function addUserMessage(text) {
     addMessage(text, "user");
 }
 
+
 function addSystemMessage(text) {
     addMessage(text, "system");
 }
+
 
 function addMessage(text, type) {
     const chat =
@@ -1380,7 +1665,8 @@ function addMessage(text, type) {
     message.className =
         "message " + type;
 
-    message.innerText = text;
+    message.innerText =
+        text;
 
     chat.appendChild(message);
 
@@ -1388,21 +1674,26 @@ function addMessage(text, type) {
         chat.scrollHeight;
 }
 
+
 function handleEnter(event) {
     if (event.key === "Enter") {
         event.preventDefault();
+
         sendMessage();
     }
 }
+
 
 function formatMoney(value) {
     return Math.round(value)
         .toLocaleString("pt-BR");
 }
 
+
 function backToPlayer() {
     showScreen("playerScreen");
 }
+
 
 function backToBrands() {
     showScreen("brandsScreen");
