@@ -1,199 +1,136 @@
 :root {
-
     --bg: #080a0e;
-    --panel: #0d1016;
-    --panel-soft: #11151d;
+    --panel: #0e1117;
+    --panel2: #12161d;
+    --panel3: #171c24;
+
+    --text: #f4f7fb;
+    --muted: #7f8998;
+
+    --green: #b8ff2c;
+    --greenDark: #86c900;
+
+    --red: #ff3b4f;
+    --orange: #ff9d2e;
+    --yellow: #ffe14d;
+
     --border: rgba(255, 255, 255, 0.08);
 
-    --text: #ffffff;
-    --muted: #7d8490;
-
-    --green: #a7ff2f;
-    --green-dark: #73bd10;
-
-    --yellow: #ffd43b;
-    --orange: #ff8a24;
-    --red: #ff3b45;
-
+    --radius: 15px;
 }
 
-
 * {
-
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-
 }
-
 
 html {
-
     background: var(--bg);
-    color-scheme: dark;
-
 }
 
-
 body {
-
     min-height: 100vh;
-
-    background:
-        radial-gradient(
-            circle at 20% 0%,
-            rgba(167, 255, 47, 0.06),
-            transparent 28%
-        ),
-        var(--bg);
-
-    color: var(--text);
 
     font-family:
         Arial,
         Helvetica,
         sans-serif;
 
+    background:
+        radial-gradient(
+            circle at 15% 0%,
+            rgba(184, 255, 44, 0.07),
+            transparent 28%
+        ),
+        var(--bg);
+
+    color: var(--text);
+
     overflow-x: hidden;
-
 }
-
 
 button,
 input,
 select {
-
     font: inherit;
-
 }
-
 
 button {
-
     -webkit-tap-highlight-color: transparent;
-
 }
-
 
 .app {
-
     width: 100%;
     min-height: 100vh;
-
 }
 
-
 .header {
+    width: min(1280px, calc(100% - 40px));
 
-    min-height: 78px;
+    min-height: 84px;
 
-    padding:
-        16px
-        clamp(18px, 4vw, 60px);
-
-    border-bottom:
-        1px solid var(--border);
+    margin: 0 auto;
 
     display: flex;
-
     align-items: center;
     justify-content: space-between;
 
-    gap: 20px;
-
-    background:
-        rgba(8, 10, 14, 0.88);
-
-    backdrop-filter:
-        blur(14px);
-
-    position: sticky;
-
-    top: 0;
-
-    z-index: 50;
-
+    border-bottom: 1px solid var(--border);
 }
-
 
 .logo {
-
     display: flex;
-
     align-items: center;
-
-    gap: 12px;
-
+    gap: 13px;
 }
 
-
 .logoIcon {
+    width: 46px;
+    height: 46px;
 
-    width: 45px;
-    height: 45px;
+    border-radius: 11px;
 
     display: flex;
-
     align-items: center;
     justify-content: center;
 
-    border-radius: 10px;
-
     background: var(--green);
+    color: #080a0e;
 
-    color: #070a05;
-
-    font-size: 13px;
     font-weight: 900;
+    font-size: 14px;
 
     box-shadow:
-        0 0 24px
-        rgba(167, 255, 47, 0.16);
-
+        0 0 25px rgba(184, 255, 44, 0.16);
 }
-
 
 .logo h1 {
-
-    font-size: 16px;
-
-    letter-spacing: 1.6px;
-
+    font-size: 17px;
+    letter-spacing: 1.8px;
 }
 
-
 .logo p {
-
-    margin-top: 3px;
+    margin-top: 4px;
 
     color: var(--muted);
 
-    font-size: 8px;
-
+    font-size: 9px;
     letter-spacing: 1.5px;
-
 }
-
 
 .status {
-
     display: flex;
-
     align-items: center;
-
     gap: 8px;
 
-    color: #9299a5;
+    color: var(--muted);
 
     font-size: 9px;
-
-    letter-spacing: 1px;
-
+    letter-spacing: 1.3px;
 }
 
-
 .statusDot {
-
     width: 7px;
     height: 7px;
 
@@ -202,340 +139,215 @@ button {
     background: var(--green);
 
     box-shadow:
-        0 0 12px
-        var(--green);
+        0 0 12px var(--green);
 
     animation:
         statusPulse 1.8s infinite;
-
 }
-
-
-@keyframes statusPulse {
-
-    50% {
-
-        opacity: 0.4;
-
-        transform: scale(0.8);
-
-    }
-
-}
-
 
 main {
-
-    width: 100%;
-
-}
-
-
-.screen {
-
-    display: none;
-
-    width: 100%;
-
-    animation:
-        screenEnter 0.45s ease;
-
-}
-
-
-.screen.active {
-
-    display: block;
-
-}
-
-
-@keyframes screenEnter {
-
-    from {
-
-        opacity: 0;
-
-        transform:
-            translateY(10px);
-
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            translateY(0);
-
-    }
-
-}
-
-
-/* =====================
-   PLAYER
-===================== */
-
-#playerScreen {
-
-    max-width: 1120px;
+    width: min(1280px, calc(100% - 40px));
 
     margin: 0 auto;
 
-    padding:
-        65px
-        28px
-        80px;
-
+    padding: 52px 0 70px;
 }
 
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+
+    animation:
+        screenEnter 0.45s ease;
+}
 
 .hero {
-
-    max-width: 720px;
+    max-width: 730px;
 
     margin-bottom: 38px;
-
 }
 
-
-.tag {
-
+.tag,
+.sidebarLabel {
     display: inline-block;
 
     color: var(--green);
 
     font-size: 10px;
-
     font-weight: 800;
 
     letter-spacing: 2px;
 
-    margin-bottom: 14px;
-
+    margin-bottom: 17px;
 }
 
-
 .hero h2 {
+    max-width: 680px;
 
-    font-size:
-        clamp(38px, 7vw, 72px);
+    font-size: clamp(40px, 6vw, 76px);
 
-    line-height: 0.95;
+    line-height: 0.94;
 
     letter-spacing: -3px;
 
-    max-width: 700px;
-
+    font-weight: 900;
 }
-
 
 .hero h2 span {
-
     color: var(--green);
-
 }
 
-
 .hero p {
+    max-width: 610px;
 
-    max-width: 600px;
-
-    margin-top: 22px;
+    margin-top: 24px;
 
     color: var(--muted);
 
-    font-size: 14px;
+    font-size: 15px;
 
     line-height: 1.7;
-
 }
 
-
 .playerCard {
+    padding: 30px;
 
-    padding: 28px;
+    border: 1px solid var(--border);
 
-    border:
-        1px solid var(--border);
-
-    border-radius: 16px;
+    border-radius: var(--radius);
 
     background:
         linear-gradient(
             145deg,
-            rgba(255,255,255,0.025),
+            rgba(255, 255, 255, 0.025),
             transparent
         ),
         var(--panel);
 
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.22);
 }
-
 
 .playerCard h3 {
-
     margin-bottom: 24px;
 
-    font-size: 12px;
+    font-size: 13px;
 
-    letter-spacing: 1.5px;
-
+    letter-spacing: 1.6px;
 }
 
-
 .formGrid {
-
     display: grid;
 
     grid-template-columns:
-        repeat(2, 1fr);
+        repeat(2, minmax(0, 1fr));
 
     gap: 18px;
-
 }
-
 
 .inputGroup {
-
     display: flex;
-
     flex-direction: column;
-
     gap: 8px;
-
 }
-
 
 .inputGroup label {
-
-    color: #858c97;
+    color: var(--muted);
 
     font-size: 9px;
-
-    font-weight: 700;
+    font-weight: 800;
 
     letter-spacing: 1.2px;
-
 }
-
 
 .inputGroup input,
 .inputGroup select {
-
     width: 100%;
+    height: 49px;
 
-    height: 48px;
+    padding: 0 15px;
 
-    padding:
-        0 15px;
+    border: 1px solid var(--border);
 
-    border:
-        1px solid
-        rgba(255,255,255,0.09);
-
-    border-radius: 8px;
+    border-radius: 9px;
 
     outline: none;
 
     background: #090c11;
 
-    color: white;
-
-    font-size: 13px;
+    color: var(--text);
 
     transition:
         border-color 0.25s,
         box-shadow 0.25s,
         transform 0.25s;
-
 }
-
 
 .inputGroup input:focus,
 .inputGroup select:focus {
-
     border-color:
-        rgba(167,255,47,0.6);
+        rgba(184, 255, 44, 0.65);
 
     box-shadow:
-        0 0 0 3px
-        rgba(167,255,47,0.06);
-
+        0 0 0 3px rgba(184, 255, 44, 0.07);
 }
 
-
-.mainButton {
-
-    width: 100%;
-
-    min-height: 50px;
-
-    margin-top: 24px;
+.mainButton,
+.secondaryButton,
+.negotiateButton,
+.quickActions button,
+.messageBox button,
+.backButton {
+    cursor: pointer;
 
     border: 0;
 
-    border-radius: 8px;
+    font-weight: 900;
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        opacity 0.2s,
+        background 0.2s;
+}
+
+.mainButton {
+    width: 100%;
+    height: 54px;
+
+    margin-top: 24px;
+
+    border-radius: 9px;
 
     background: var(--green);
 
-    color: #090c06;
+    color: #080a0e;
 
     font-size: 11px;
 
-    font-weight: 900;
-
     letter-spacing: 1px;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.25s,
-        box-shadow 0.25s;
-
 }
 
-
-.mainButton:hover {
-
-    transform:
-        translateY(-2px);
+.mainButton:hover,
+.negotiateButton:hover,
+.messageBox button:hover {
+    transform: translateY(-2px);
 
     box-shadow:
-        0 12px 30px
-        rgba(167,255,47,0.16);
-
+        0 10px 30px rgba(184, 255, 44, 0.16);
 }
 
-
-.mainButton:active {
-
-    transform:
-        scale(0.98);
-
+.mainButton:active,
+.negotiateButton:active,
+.quickActions button:active,
+.messageBox button:active {
+    transform: scale(0.97);
 }
-
-
-/* =====================
-   BRANDS
-===================== */
-
-#brandsScreen {
-
-    max-width: 1180px;
-
-    margin: 0 auto;
-
-    padding:
-        55px
-        28px
-        80px;
-
-}
-
 
 .sectionHeader {
-
     display: flex;
 
     align-items: flex-end;
@@ -545,51 +357,37 @@ main {
     gap: 25px;
 
     margin-bottom: 34px;
-
 }
-
 
 .sectionHeader h2 {
-
-    font-size:
-        clamp(30px, 5vw, 52px);
+    font-size: clamp(34px, 5vw, 62px);
 
     letter-spacing: -2px;
-
 }
 
-
 .sectionHeader p {
-
-    margin-top: 9px;
+    margin-top: 12px;
 
     color: var(--muted);
 
-    font-size: 12px;
-
+    font-size: 13px;
 }
 
-
 .commercialScore {
+    min-width: 135px;
 
-    min-width: 130px;
+    padding: 19px;
 
-    padding: 17px;
+    border: 1px solid var(--border);
 
-    border:
-        1px solid var(--border);
-
-    border-radius: 12px;
+    border-radius: 13px;
 
     background: var(--panel);
 
     text-align: center;
-
 }
 
-
 .commercialScore span {
-
     display: block;
 
     color: var(--muted);
@@ -597,314 +395,63 @@ main {
     font-size: 8px;
 
     letter-spacing: 1px;
-
 }
-
 
 .commercialScore strong {
-
     color: var(--green);
 
-    font-size: 34px;
-
+    font-size: 37px;
 }
-
 
 .commercialScore small {
-
     color: var(--muted);
-
 }
 
-
 .brandsGrid {
-
     display: grid;
 
     grid-template-columns:
-        repeat(2, 1fr);
+        repeat(2, minmax(0, 1fr));
 
-    gap: 14px;
-
+    gap: 16px;
 }
 
-
 .brandCard {
+    position: relative;
 
-    padding: 20px;
+    padding: 22px;
 
-    border:
-        1px solid var(--border);
+    overflow: hidden;
 
-    border-radius: 13px;
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
 
     background:
         linear-gradient(
-            145deg,
-            rgba(255,255,255,0.025),
+            135deg,
+            rgba(255, 255, 255, 0.025),
             transparent
         ),
         var(--panel);
 
-    overflow: hidden;
-
     transition:
-        transform 0.3s,
-        border-color 0.3s,
-        box-shadow 0.3s;
-
+        transform 0.25s,
+        border-color 0.25s,
+        box-shadow 0.25s;
 }
-
 
 .brandCard:hover {
-
-    transform:
-        translateY(-3px);
+    transform: translateY(-3px);
 
     border-color:
-        rgba(167,255,47,0.22);
+        rgba(184, 255, 44, 0.22);
 
     box-shadow:
-        0 18px 40px
-        rgba(0,0,0,0.2);
-
+        0 18px 50px rgba(0, 0, 0, 0.25);
 }
-
 
 .brandTop {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 12px;
-
-}
-
-
-.brandIdentity {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    min-width: 0;
-
-}
-
-
-.brandCardLogo {
-
-    width: 50px;
-    height: 50px;
-
-    flex: 0 0 50px;
-
-    padding: 9px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    overflow: hidden;
-
-    border:
-        1px solid var(--border);
-
-    border-radius: 10px;
-
-    background: #07090d;
-
-}
-
-
-.brandCardLogo img {
-
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    max-width: 100%;
-    max-height: 100%;
-
-    object-fit: contain;
-
-    filter:
-        brightness(0)
-        invert(1);
-
-}
-
-
-.brandLogo {
-
-    font-size: 14px;
-
-    font-weight: 900;
-
-    letter-spacing: 0.5px;
-
-}
-
-
-.interest {
-
-    font-size: 8px;
-
-    font-weight: 800;
-
-    letter-spacing: 0.6px;
-
-    text-align: right;
-
-}
-
-
-.interest.high {
-
-    color: var(--green);
-
-}
-
-
-.interest.medium {
-
-    color: var(--yellow);
-
-}
-
-
-.interest.low {
-
-    color: #858b94;
-
-}
-
-
-/* BARRA DE INTERESSE */
-
-.interestBar {
-
-    width: 100%;
-
-    height: 5px;
-
-    margin:
-        17px
-        0;
-
-    border-radius: 999px;
-
-    background:
-        rgba(255,255,255,0.06);
-
-    overflow: hidden;
-
-    position: relative;
-
-}
-
-
-.interestProgress {
-
-    height: 100%;
-
-    border-radius: inherit;
-
-    background:
-        linear-gradient(
-            90deg,
-            var(--green-dark),
-            var(--green)
-        );
-
-    position: relative;
-
-    overflow: hidden;
-
-    transform-origin: left;
-
-    animation:
-        interestGrow 0.9s
-        cubic-bezier(.2,.8,.2,1);
-
-}
-
-
-.interestProgress::after {
-
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    bottom: 0;
-
-    width: 35px;
-
-    left: -40px;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255,255,255,0.7),
-            transparent
-        );
-
-    animation:
-        interestShine 2.4s
-        ease-in-out
-        infinite;
-
-}
-
-
-@keyframes interestGrow {
-
-    from {
-
-        transform:
-            scaleX(0);
-
-    }
-
-    to {
-
-        transform:
-            scaleX(1);
-
-    }
-
-}
-
-
-@keyframes interestShine {
-
-    0% {
-
-        left: -40px;
-
-    }
-
-    65%,
-    100% {
-
-        left: calc(100% + 40px);
-
-    }
-
-}
-
-
-.brandDetails {
-
     display: flex;
 
     align-items: center;
@@ -912,45 +459,59 @@ main {
     justify-content: space-between;
 
     gap: 14px;
-
 }
 
+.brandIdentity {
+    display: flex;
 
-.brandDetails span {
+    align-items: center;
 
+    gap: 13px;
+
+    min-width: 0;
+}
+
+.brandCardLogo {
+    width: 52px;
+    height: 52px;
+
+    flex: 0 0 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    padding: 9px;
+
+    border-radius: 11px;
+
+    background: #ffffff;
+}
+
+.brandCardImage {
     display: block;
 
-    margin-bottom: 5px;
+    width: 100%;
 
+    height: 100%;
+
+    object-fit: contain;
+}
+
+.brandLogo {
+    font-size: 16px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.6px;
+}
+
+.interest {
     color: var(--muted);
-
-    font-size: 8px;
-
-    letter-spacing: 0.8px;
-
-}
-
-
-.brandDetails strong {
-
-    font-size: 17px;
-
-}
-
-
-.negotiateButton,
-.secondaryButton {
-
-    border:
-        1px solid
-        rgba(167,255,47,0.28);
-
-    border-radius: 7px;
-
-    background:
-        rgba(167,255,47,0.06);
-
-    color: var(--green);
 
     font-size: 8px;
 
@@ -958,290 +519,269 @@ main {
 
     letter-spacing: 0.7px;
 
-    cursor: pointer;
-
-    transition:
-        transform 0.25s,
-        background 0.25s,
-        box-shadow 0.25s;
-
+    text-align: right;
 }
 
-
-.negotiateButton {
-
-    min-height: 38px;
-
-    padding:
-        0 15px;
-
+.interest.high {
+    color: var(--green);
 }
 
+.interest.medium {
+    color: var(--yellow);
+}
 
-.negotiateButton:hover,
-.secondaryButton:hover {
+.interestBar {
+    position: relative;
 
-    transform:
-        translateY(-2px);
+    width: 100%;
+    height: 6px;
+
+    margin: 20px 0;
+
+    overflow: hidden;
+
+    border-radius: 999px;
 
     background:
-        rgba(167,255,47,0.12);
-
-    box-shadow:
-        0 8px 24px
-        rgba(167,255,47,0.08);
-
+        rgba(255, 255, 255, 0.06);
 }
 
+.interestProgress {
+    position: relative;
 
-.negotiateButton:active,
-.secondaryButton:active {
+    height: 100%;
 
-    transform:
-        scale(0.97);
+    overflow: hidden;
 
+    border-radius: inherit;
+
+    background: var(--green);
+
+    animation:
+        interestGrow 0.8s ease both;
 }
 
+.interestProgress::after {
+    content: "";
 
-.negotiateButton:disabled {
+    position: absolute;
 
-    opacity: 0.35;
+    top: 0;
+    left: -45%;
 
-    cursor: not-allowed;
+    width: 35%;
+    height: 100%;
 
-    transform: none;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.8),
+            transparent
+        );
 
+    animation:
+        interestShine 2.3s infinite;
 }
 
+.brandDetails {
+    display: flex;
 
-.secondaryButton {
+    align-items: flex-end;
 
-    margin-top: 22px;
+    justify-content: space-between;
 
-    padding:
-        13px 18px;
-
+    gap: 15px;
 }
 
-
-/* =====================
-   NEGOTIATION
-===================== */
-
-#negotiationScreen {
-
-    min-height:
-        calc(100vh - 78px);
-
-}
-
-
-.negotiationLayout {
-
-    min-height:
-        calc(100vh - 78px);
-
-    display: grid;
-
-    grid-template-columns:
-        300px
-        minmax(0, 1fr);
-
-}
-
-
-.dealSidebar {
-
-    padding: 25px;
-
-    border-right:
-        1px solid var(--border);
-
-    background: #090c11;
-
-}
-
-
-.backButton {
-
-    width: 37px;
-    height: 37px;
-
-    margin-bottom: 30px;
-
-    border:
-        1px solid var(--border);
-
-    border-radius: 8px;
-
-    background: var(--panel);
-
-    color: white;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.25s,
-        border-color 0.25s;
-
-}
-
-
-.backButton:hover {
-
-    transform:
-        translateX(-3px);
-
-    border-color:
-        rgba(167,255,47,0.4);
-
-}
-
-
-.sidebarLabel {
-
-    color: var(--green);
-
-    font-size: 8px;
-
-    letter-spacing: 1.7px;
-
-}
-
-
-.dealSidebar h2 {
-
-    margin:
-        7px
-        0
-        24px;
-
-    font-size: 28px;
-
-    letter-spacing: -1px;
-
-}
-
-
-.playerMini {
-
-    padding:
-        15px
-        0;
-
-    border-top:
-        1px solid var(--border);
-
-    border-bottom:
-        1px solid var(--border);
-
-}
-
-
-.playerMini span,
-.playerMini small {
-
+.brandDetails span {
     display: block;
+
+    margin-bottom: 7px;
 
     color: var(--muted);
 
     font-size: 8px;
 
     letter-spacing: 1px;
-
 }
 
-
-.playerMini strong {
-
-    display: block;
-
-    margin:
-        6px
-        0
-        3px;
-
-    font-size: 13px;
-
+.brandDetails strong {
+    font-size: 17px;
 }
 
+.negotiateButton {
+    min-height: 40px;
 
-.dealInfo {
+    padding: 0 15px;
 
-    padding:
-        10px
-        0;
+    border-radius: 8px;
 
-}
+    background: var(--green);
 
-
-.dealInfo > div {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 10px;
-
-    padding:
-        11px
-        0;
-
-    border-bottom:
-        1px solid
-        rgba(255,255,255,0.05);
-
-}
-
-
-.dealInfo span {
-
-    color: var(--muted);
+    color: #080a0e;
 
     font-size: 8px;
 
-    letter-spacing: 0.8px;
-
+    letter-spacing: 0.6px;
 }
 
+.negotiateButton:disabled {
+    cursor: not-allowed;
 
-.dealInfo strong {
-
-    color: var(--green);
-
-    font-size: 12px;
-
-    text-align: right;
-
+    opacity: 0.3;
 }
 
+.secondaryButton {
+    margin-top: 25px;
 
-/* =====================
-   TENSION
-===================== */
+    padding: 13px 18px;
 
-.tensionPanel {
+    border: 1px solid var(--border);
 
-    margin-top: 18px;
+    border-radius: 8px;
+
+    background: var(--panel);
+
+    color: var(--text);
+
+    font-size: 9px;
+}
+
+.negotiationLayout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(275px, 340px)
+        minmax(0, 1fr);
+
+    min-height: 690px;
+
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    background: var(--panel);
+}
+
+.dealSidebar {
+    position: relative;
+
+    padding: 27px;
+
+    border-right: 1px solid var(--border);
+
+    background:
+        radial-gradient(
+            circle at 0 0,
+            rgba(184, 255, 44, 0.08),
+            transparent 30%
+        ),
+        #0b0e13;
+}
+
+.backButton {
+    width: 38px;
+    height: 38px;
+
+    margin-bottom: 32px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
+
+    background: var(--panel2);
+
+    color: var(--text);
+
+    font-size: 18px;
+}
+
+.dealSidebar h2 {
+    margin-bottom: 26px;
+
+    font-size: 31px;
+
+    letter-spacing: -1px;
+}
+
+.playerMini {
+    display: flex;
+
+    flex-direction: column;
 
     padding: 15px;
 
-    border:
-        1px solid
-        rgba(255,255,255,0.08);
+    margin-bottom: 20px;
+
+    border: 1px solid var(--border);
 
     border-radius: 10px;
 
-    background:
-        rgba(255,255,255,0.025);
-
+    background: rgba(255, 255, 255, 0.025);
 }
 
+.playerMini span,
+.dealInfo span,
+.counterPanel span {
+    color: var(--muted);
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+}
+
+.playerMini strong {
+    margin: 7px 0 4px;
+
+    font-size: 14px;
+}
+
+.playerMini small {
+    color: var(--muted);
+}
+
+.dealInfo {
+    display: grid;
+
+    gap: 8px;
+}
+
+.dealInfo > div {
+    padding: 14px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
+
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.dealInfo strong {
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--green);
+
+    font-size: 16px;
+}
+
+.tensionPanel {
+    margin-top: 20px;
+
+    padding: 15px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 11px;
+
+    background: var(--panel2);
+}
 
 .tensionHeader {
-
     display: flex;
 
     align-items: center;
@@ -1249,81 +789,76 @@ main {
     justify-content: space-between;
 
     gap: 10px;
-
 }
 
-
 .tensionHeader span {
-
     color: var(--muted);
 
     font-size: 8px;
 
     letter-spacing: 0.8px;
-
 }
 
-
 .tensionHeader strong {
-
     color: var(--green);
 
     font-size: 9px;
 
+    letter-spacing: 1px;
 }
 
-
 .tensionBar {
+    position: relative;
 
     width: 100%;
+    height: 8px;
 
-    height: 7px;
+    margin: 13px 0;
 
-    margin:
-        12px
-        0;
+    overflow: hidden;
 
     border-radius: 999px;
 
     background:
-        rgba(255,255,255,0.07);
-
-    overflow: hidden;
-
-    position: relative;
-
+        rgba(255, 255, 255, 0.07);
 }
 
-
 .tensionProgress {
+    position: relative;
 
     width: 0;
-
     height: 100%;
+
+    overflow: hidden;
 
     border-radius: inherit;
 
-    background:
-        linear-gradient(
-            90deg,
-            var(--green-dark),
-            var(--green)
-        );
-
-    position: relative;
-
-    overflow: hidden;
+    background: var(--green);
 
     transition:
-        width 0.7s
-        cubic-bezier(.2,.8,.2,1),
-        background 0.4s;
-
+        width 0.65s cubic-bezier(.2, .8, .2, 1),
+        background 0.35s;
 }
 
+.tensionProgress.medium {
+    background: var(--yellow);
+}
 
-.tensionProgress::after {
+.tensionProgress.high {
+    background: var(--orange);
+}
 
+.tensionProgress.critical {
+    background: var(--red);
+
+    box-shadow:
+        0 0 15px rgba(255, 59, 79, 0.65);
+
+    animation:
+        tensionPulse 0.6s infinite alternate;
+}
+
+.tensionProgress::before {
     content: "";
 
     position: absolute;
@@ -1331,181 +866,84 @@ main {
     inset: 0;
 
     background:
-        linear-gradient(
-            110deg,
-            transparent 20%,
-            rgba(255,255,255,0.75) 45%,
-            transparent 70%
-        );
-
-    transform:
-        translateX(-100%);
-
-    animation:
-        tensionEnergy 1.2s
-        linear
-        infinite;
-
-}
-
-
-.tensionProgress.medium {
-
-    background:
-        linear-gradient(
-            90deg,
-            #d9a900,
-            var(--yellow)
-        );
-
-}
-
-
-.tensionProgress.high {
-
-    background:
-        linear-gradient(
-            90deg,
-            #e95c12,
-            var(--orange)
-        );
-
-}
-
-
-.tensionProgress.critical {
-
-    background:
-        linear-gradient(
-            90deg,
-            #b90919,
-            var(--red),
-            #ff9b24
+        repeating-linear-gradient(
+            115deg,
+            transparent 0,
+            transparent 8px,
+            rgba(255, 255, 255, 0.5) 10px,
+            transparent 13px
         );
 
     animation:
-        criticalPulse 0.55s
-        ease-in-out
-        infinite alternate;
-
+        electricMove 0.7s linear infinite;
 }
 
+.tensionProgress::after {
+    content: "";
 
-@keyframes tensionEnergy {
+    position: absolute;
 
-    to {
+    top: -5px;
+    right: -5px;
 
-        transform:
-            translateX(100%);
+    width: 15px;
+    height: 18px;
 
-    }
+    border-radius: 50%;
 
+    background:
+        rgba(255, 255, 255, 0.8);
+
+    filter: blur(5px);
+
+    animation:
+        tensionFire 0.5s infinite alternate;
 }
-
-
-@keyframes criticalPulse {
-
-    from {
-
-        filter:
-            brightness(0.85);
-
-        box-shadow:
-            0 0 4px
-            rgba(255,59,69,0.2);
-
-    }
-
-    to {
-
-        filter:
-            brightness(1.4);
-
-        box-shadow:
-            0 0 15px
-            rgba(255,59,69,0.7);
-
-    }
-
-}
-
 
 .tensionPanel p {
-
     color: var(--muted);
 
-    font-size: 9px;
+    font-size: 10px;
 
     line-height: 1.5;
-
 }
 
-
 .counterPanel {
-
-    margin-top: 12px;
-
-    padding: 13px 15px;
-
-    border:
-        1px solid var(--border);
-
-    border-radius: 9px;
-
     display: flex;
 
     align-items: center;
 
     justify-content: space-between;
 
+    margin-top: 11px;
+
+    padding: 13px 15px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
 }
-
-
-.counterPanel span {
-
-    color: var(--muted);
-
-    font-size: 8px;
-
-    letter-spacing: 0.8px;
-
-}
-
 
 .counterPanel strong {
+    color: var(--green);
 
-    font-size: 11px;
-
+    font-size: 12px;
 }
 
-
-/* =====================
-   CHAT
-===================== */
-
 .chatArea {
-
     min-width: 0;
 
     display: flex;
 
     flex-direction: column;
 
-    background: var(--bg);
-
+    background: var(--panel);
 }
 
-
 .chatHeader {
+    min-height: 76px;
 
-    min-height: 70px;
-
-    padding:
-        13px
-        24px;
-
-    border-bottom:
-        1px solid var(--border);
+    padding: 15px 22px;
 
     display: flex;
 
@@ -1513,112 +951,92 @@ main {
 
     gap: 12px;
 
+    border-bottom: 1px solid var(--border);
 }
 
-
 #representativeInitial {
+    width: 44px;
+    height: 44px;
 
-    width: 43px;
-    height: 43px;
+    flex: 0 0 44px;
 
-    flex:
-        0 0 43px;
-
-    padding: 8px;
-
-    border:
-        1px solid var(--border);
-
-    border-radius: 9px;
+    padding: 7px;
 
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     overflow: hidden;
 
-    background: #090c11;
+    border-radius: 10px;
 
+    background: #ffffff;
 }
-
 
 .representativeBrandImage {
+    display: block;
 
     width: 100%;
+
     height: 100%;
 
-    max-width: 100%;
-    max-height: 100%;
-
     object-fit: contain;
-
-    filter:
-        brightness(0)
-        invert(1);
-
 }
 
-
 .chatHeader section {
-
     display: flex;
 
     flex-direction: column;
 
     gap: 4px;
-
 }
-
 
 .chatHeader strong {
-
-    font-size: 12px;
-
+    font-size: 13px;
 }
 
-
 .chatHeader small {
-
     color: var(--muted);
 
     font-size: 8px;
 
     letter-spacing: 1px;
-
 }
 
-
 .chatMessages {
-
     flex: 1;
 
-    height:
-        calc(100vh - 290px);
+    min-height: 430px;
+    max-height: 500px;
 
-    min-height: 360px;
-
-    padding:
-        24px;
+    padding: 24px;
 
     overflow-y: auto;
 
     scroll-behavior: smooth;
-
 }
 
+.chatMessages::-webkit-scrollbar {
+    width: 4px;
+}
+
+.chatMessages::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+
+    background:
+        rgba(255, 255, 255, 0.12);
+}
 
 .message {
-
     width: fit-content;
 
-    max-width: 70%;
+    max-width: 72%;
 
-    margin-bottom: 14px;
+    margin-bottom: 13px;
 
-    padding:
-        13px
-        15px;
+    padding: 13px 15px;
 
     border-radius: 12px;
 
@@ -1635,1023 +1053,707 @@ main {
         scale(0.98);
 
     transition:
-        opacity 0.35s,
-        transform 0.35s;
-
+        opacity 0.35s ease,
+        transform 0.35s ease;
 }
 
-
 .messageVisible {
-
     opacity: 1;
 
     transform:
         translateY(0)
         scale(1);
-
 }
 
-
 .message.ai {
-
-    border:
-        1px solid var(--border);
+    border: 1px solid var(--border);
 
     border-bottom-left-radius: 3px;
 
-    background: var(--panel-soft);
+    background: var(--panel3);
 
+    color: #dce2ea;
 }
 
-
 .message.user {
-
     margin-left: auto;
 
     border-bottom-right-radius: 3px;
 
     background: var(--green);
 
-    color: #080b05;
+    color: #080a0e;
 
-    font-weight: 600;
-
+    font-weight: 700;
 }
 
-
 .message.system {
-
     max-width: 100%;
 
-    margin:
-        18px
-        auto;
+    margin: 18px auto;
 
-    padding:
-        9px
-        15px;
+    padding: 9px 14px;
 
-    border:
-        1px solid
-        rgba(167,255,47,0.18);
+    border: 1px solid rgba(184, 255, 44, 0.22);
 
-    background:
-        rgba(167,255,47,0.04);
+    border-radius: 999px;
+
+    background: rgba(184, 255, 44, 0.05);
 
     color: var(--green);
+
+    text-align: center;
 
     font-size: 8px;
 
     font-weight: 900;
 
-    letter-spacing: 1.3px;
-
-    text-align: center;
-
+    letter-spacing: 1px;
 }
 
-
-/* =====================
-   TYPING
-===================== */
-
-.typingIndicator {
-
-    width: fit-content;
-
-    margin:
-        2px
-        0
-        14px;
-
+.typingRow {
     display: flex;
 
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    gap: 5px;
+    margin-bottom: 13px;
 
     animation:
-        typingEnter 0.3s ease;
-
+        typingEnter 0.25s ease;
 }
 
+.typingRow.typingLeaving {
+    opacity: 0;
 
-.typingName {
+    transform:
+        translateY(-4px);
 
-    margin-left: 5px;
-
-    color: #656c77;
-
-    font-size: 8px;
-
-    letter-spacing: 0.3px;
-
+    transition:
+        opacity 0.18s,
+        transform 0.18s;
 }
-
 
 .typingBubble {
+    width: fit-content;
 
-    width: 48px;
-    height: 28px;
+    min-width: 104px;
 
-    padding:
-        0 11px;
+    padding: 9px 12px;
 
-    border:
-        1px solid var(--border);
+    border: 1px solid var(--border);
 
-    border-radius:
-        10px
-        10px
-        10px
-        3px;
+    border-radius: 11px;
 
-    background: var(--panel-soft);
+    border-bottom-left-radius: 3px;
+
+    background: var(--panel3);
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.typingName {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--muted);
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+}
+
+.typingDots {
+    height: 9px;
 
     display: flex;
 
     align-items: center;
 
-    justify-content: center;
-
     gap: 4px;
-
-    box-shadow:
-        0 6px 18px
-        rgba(0,0,0,0.15);
-
 }
 
-
-.typingBubble i {
-
-    width: 4px;
-    height: 4px;
+.typingDots i {
+    width: 5px;
+    height: 5px;
 
     border-radius: 50%;
 
     background: var(--green);
 
     animation:
-        typingDot 1.1s
-        infinite ease-in-out;
-
+        typingDot 1.15s infinite ease-in-out;
 }
 
-
-.typingBubble i:nth-child(2) {
-
-    animation-delay:
-        0.15s;
-
+.typingDots i:nth-child(2) {
+    animation-delay: 0.16s;
 }
 
-
-.typingBubble i:nth-child(3) {
-
-    animation-delay:
-        0.3s;
-
+.typingDots i:nth-child(3) {
+    animation-delay: 0.32s;
 }
-
-
-@keyframes typingEnter {
-
-    from {
-
-        opacity: 0;
-
-        transform:
-            translateY(5px);
-
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            translateY(0);
-
-    }
-
-}
-
-
-@keyframes typingDot {
-
-    0%,
-    60%,
-    100% {
-
-        opacity: 0.25;
-
-        transform:
-            translateY(0);
-
-    }
-
-    30% {
-
-        opacity: 1;
-
-        transform:
-            translateY(-4px);
-
-    }
-
-}
-
-
-/* =====================
-   CONTROLS
-===================== */
 
 .quickActions {
-
-    padding:
-        10px
-        20px;
+    padding: 12px 20px;
 
     display: flex;
+
+    flex-wrap: wrap;
 
     gap: 7px;
 
-    overflow-x: auto;
-
-    border-top:
-        1px solid var(--border);
+    border-top: 1px solid var(--border);
 
     transition:
-        opacity 0.3s,
-        transform 0.3s;
-
+        opacity 0.25s,
+        transform 0.25s;
 }
 
-
 .quickActions button {
+    min-height: 35px;
 
-    flex-shrink: 0;
+    padding: 0 12px;
 
-    min-height: 34px;
-
-    padding:
-        0 13px;
-
-    border:
-        1px solid var(--border);
+    border: 1px solid var(--border);
 
     border-radius: 7px;
 
-    background: var(--panel);
+    background: var(--panel3);
 
-    color: #b7bdc7;
+    color: var(--text);
 
     font-size: 8px;
 
-    font-weight: 800;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.2s,
-        color 0.2s,
-        border-color 0.2s,
-        background 0.2s;
-
+    letter-spacing: 0.6px;
 }
-
 
 .quickActions button:hover {
+    transform: translateY(-2px);
 
-    transform:
-        translateY(-2px);
+    border-color:
+        rgba(184, 255, 44, 0.4);
 
     color: var(--green);
-
-    border-color:
-        rgba(167,255,47,0.35);
-
-    background:
-        rgba(167,255,47,0.06);
-
 }
-
-
-.quickActions button:active {
-
-    transform:
-        scale(0.96);
-
-}
-
 
 .quickActions .reject:hover {
+    border-color:
+        rgba(255, 59, 79, 0.45);
 
     color: var(--red);
-
-    border-color:
-        rgba(255,59,69,0.4);
-
-    background:
-        rgba(255,59,69,0.05);
-
 }
 
-
 .messageBox {
-
-    padding:
-        12px
-        20px
-        calc(
-            12px +
-            env(safe-area-inset-bottom)
-        );
+    padding: 14px 20px 20px;
 
     display: flex;
 
-    gap: 8px;
-
-    border-top:
-        1px solid var(--border);
+    gap: 9px;
 
     transition:
-        opacity 0.3s,
-        transform 0.3s;
-
+        opacity 0.25s,
+        transform 0.25s;
 }
 
-
 .messageBox input {
-
     flex: 1;
 
     min-width: 0;
+    height: 47px;
 
-    height: 44px;
+    padding: 0 15px;
 
-    padding:
-        0 14px;
-
-    border:
-        1px solid var(--border);
+    border: 1px solid var(--border);
 
     border-radius: 8px;
 
     outline: none;
 
-    background: var(--panel);
+    background: #090c11;
 
-    color: white;
+    color: var(--text);
 
-    font-size: 12px;
-
+    transition:
+        border-color 0.25s,
+        box-shadow 0.25s;
 }
-
 
 .messageBox input:focus {
-
     border-color:
-        rgba(167,255,47,0.45);
+        rgba(184, 255, 44, 0.55);
 
+    box-shadow:
+        0 0 0 3px rgba(184, 255, 44, 0.06);
 }
 
-
 .messageBox button {
-
-    min-width: 90px;
-
-    border: 0;
+    min-width: 95px;
 
     border-radius: 8px;
 
     background: var(--green);
 
-    color: #080b05;
+    color: #080a0e;
 
     font-size: 9px;
 
-    font-weight: 900;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.2s,
-        box-shadow 0.2s;
-
+    letter-spacing: 0.7px;
 }
-
-
-.messageBox button:hover {
-
-    transform:
-        translateY(-2px);
-
-    box-shadow:
-        0 8px 24px
-        rgba(167,255,47,0.15);
-
-}
-
-
-.messageBox button:active {
-
-    transform:
-        scale(0.96);
-
-}
-
 
 .controlsHidden {
-
     display: none !important;
-
 }
 
+@keyframes screenEnter {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
 
-/* =====================
-   MOBILE
-===================== */
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-@media (
-    max-width: 760px
-) {
+@keyframes statusPulse {
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 
+    50% {
+        opacity: 0.45;
+        transform: scale(0.8);
+    }
+}
+
+@keyframes interestGrow {
+    from {
+        max-width: 0;
+    }
+
+    to {
+        max-width: 100%;
+    }
+}
+
+@keyframes interestShine {
+    0% {
+        left: -45%;
+    }
+
+    55%,
+    100% {
+        left: 120%;
+    }
+}
+
+@keyframes electricMove {
+    from {
+        transform: translateX(-14px);
+    }
+
+    to {
+        transform: translateX(14px);
+    }
+}
+
+@keyframes tensionPulse {
+    from {
+        filter: brightness(0.9);
+    }
+
+    to {
+        filter: brightness(1.5);
+    }
+}
+
+@keyframes tensionFire {
+    from {
+        transform: scale(0.7);
+        opacity: 0.45;
+    }
+
+    to {
+        transform: scale(1.25);
+        opacity: 1;
+    }
+}
+
+@keyframes typingEnter {
+    from {
+        opacity: 0;
+        transform: translateY(7px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes typingDot {
+    0%,
+    60%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.35;
+    }
+
+    30% {
+        transform: translateY(-4px);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 850px) {
     .header {
+        width: calc(100% - 28px);
 
-        min-height: 62px;
-
-        padding:
-            10px
-            14px;
-
+        min-height: 76px;
     }
-
-
-    .logoIcon {
-
-        width: 37px;
-        height: 37px;
-
-        font-size: 10px;
-
-        border-radius: 8px;
-
-    }
-
-
-    .logo {
-
-        gap: 9px;
-
-    }
-
-
-    .logo h1 {
-
-        font-size: 12px;
-
-    }
-
-
-    .logo p {
-
-        font-size: 6px;
-
-        letter-spacing: 0.8px;
-
-    }
-
 
     .status {
-
         display: none;
-
     }
 
+    main {
+        width: calc(100% - 28px);
 
-    #playerScreen {
-
-        padding:
-            40px
-            15px
-            55px;
-
+        padding-top: 38px;
     }
-
-
-    .hero {
-
-        margin-bottom: 25px;
-
-    }
-
 
     .hero h2 {
-
-        font-size: 39px;
+        font-size: 45px;
 
         letter-spacing: -2px;
-
     }
-
 
     .hero p {
-
-        margin-top: 16px;
-
-        font-size: 12px;
-
+        font-size: 14px;
     }
-
 
     .playerCard {
-
-        padding: 17px;
-
-        border-radius: 12px;
-
+        padding: 22px;
     }
-
-
-    .formGrid {
-
-        grid-template-columns: 1fr;
-
-        gap: 13px;
-
-    }
-
-
-    .inputGroup input,
-    .inputGroup select {
-
-        height: 44px;
-
-        font-size: 12px;
-
-    }
-
-
-    .mainButton {
-
-        min-height: 46px;
-
-        font-size: 9px;
-
-    }
-
-
-    #brandsScreen {
-
-        padding:
-            35px
-            14px
-            55px;
-
-    }
-
-
-    .sectionHeader {
-
-        align-items: center;
-
-        margin-bottom: 24px;
-
-    }
-
-
-    .sectionHeader h2 {
-
-        font-size: 29px;
-
-    }
-
-
-    .commercialScore {
-
-        min-width: 85px;
-
-        padding: 11px;
-
-    }
-
-
-    .commercialScore strong {
-
-        font-size: 25px;
-
-    }
-
 
     .brandsGrid {
-
         grid-template-columns: 1fr;
-
-        gap: 10px;
-
     }
-
-
-    .brandCard {
-
-        padding: 15px;
-
-        border-radius: 10px;
-
-    }
-
-
-    .brandCardLogo {
-
-        width: 42px;
-        height: 42px;
-
-        flex-basis: 42px;
-
-        padding: 8px;
-
-    }
-
-
-    .brandLogo {
-
-        font-size: 12px;
-
-    }
-
-
-    .interest {
-
-        font-size: 7px;
-
-    }
-
-
-    .interestBar {
-
-        margin:
-            13px
-            0;
-
-    }
-
-
-    .brandDetails strong {
-
-        font-size: 14px;
-
-    }
-
-
-    .negotiateButton {
-
-        min-height: 34px;
-
-        padding:
-            0 10px;
-
-        font-size: 7px;
-
-    }
-
 
     .negotiationLayout {
+        grid-template-columns: 1fr;
 
-        min-height:
-            calc(100vh - 62px);
-
-        display: flex;
-
-        flex-direction: column;
-
+        min-height: auto;
     }
 
-
     .dealSidebar {
-
-        padding:
-            13px
-            15px
-            14px;
+        padding: 21px;
 
         border-right: 0;
 
-        border-bottom:
-            1px solid var(--border);
-
+        border-bottom: 1px solid var(--border);
     }
-
 
     .backButton {
-
-        width: 32px;
-        height: 32px;
-
-        margin-bottom: 12px;
-
+        margin-bottom: 22px;
     }
-
 
     .dealSidebar h2 {
+        margin-bottom: 19px;
 
-        margin:
-            4px
-            0
-            12px;
-
-        font-size: 22px;
-
+        font-size: 27px;
     }
-
-
-    .playerMini {
-
-        padding:
-            9px
-            0;
-
-    }
-
 
     .dealInfo {
-
-        display: grid;
-
         grid-template-columns:
-            repeat(3, 1fr);
-
-        gap: 6px;
-
-        padding:
-            9px
-            0;
-
+            repeat(3, minmax(0, 1fr));
     }
-
 
     .dealInfo > div {
-
-        min-width: 0;
-
-        padding: 9px;
-
-        border:
-            1px solid var(--border);
-
-        border-radius: 7px;
-
-        display: block;
-
+        padding: 12px 10px;
     }
-
-
-    .dealInfo span {
-
-        display: block;
-
-        font-size: 6px;
-
-        margin-bottom: 5px;
-
-    }
-
 
     .dealInfo strong {
-
-        display: block;
-
-        font-size: 9px;
-
-        text-align: left;
-
-        overflow-wrap: anywhere;
-
+        font-size: 13px;
     }
-
-
-    .tensionPanel {
-
-        margin-top: 5px;
-
-        padding: 11px;
-
-    }
-
-
-    .tensionBar {
-
-        margin:
-            9px
-            0;
-
-    }
-
-
-    .counterPanel {
-
-        margin-top: 8px;
-
-        padding:
-            9px
-            11px;
-
-    }
-
-
-    .chatArea {
-
-        min-height: 500px;
-
-    }
-
-
-    .chatHeader {
-
-        min-height: 57px;
-
-        padding:
-            9px
-            14px;
-
-    }
-
-
-    #representativeInitial {
-
-        width: 37px;
-        height: 37px;
-
-        flex-basis: 37px;
-
-        padding: 7px;
-
-    }
-
 
     .chatMessages {
+        min-height: 400px;
 
-        height: 390px;
+        max-height: 470px;
 
-        min-height: 390px;
-
-        padding:
-            15px
-            13px;
-
+        padding: 20px;
     }
-
 
     .message {
+        max-width: 84%;
 
-        max-width: 86%;
-
-        margin-bottom: 11px;
-
-        padding:
-            10px
-            12px;
-
-        border-radius: 10px;
-
-        font-size: 11px;
-
-        line-height: 1.55;
-
+        font-size: 12px;
     }
-
-
-    .message.system {
-
-        max-width: 96%;
-
-        font-size: 7px;
-
-    }
-
-
-    .typingIndicator {
-
-        margin-bottom: 10px;
-
-    }
-
-
-    .typingBubble {
-
-        width: 44px;
-        height: 25px;
-
-    }
-
-
-    .quickActions {
-
-        padding:
-            8px
-            12px;
-
-    }
-
-
-    .quickActions button {
-
-        min-height: 31px;
-
-        padding:
-            0 10px;
-
-        font-size: 7px;
-
-    }
-
-
-    .messageBox {
-
-        padding:
-            9px
-            12px
-            calc(
-                9px +
-                env(safe-area-inset-bottom)
-            );
-
-    }
-
-
-    .messageBox input {
-
-        height: 40px;
-
-        font-size: 11px;
-
-    }
-
-
-    .messageBox button {
-
-        min-width: 70px;
-
-        font-size: 8px;
-
-    }
-
 }
 
+@media (max-width: 560px) {
+    .header {
+        width: calc(100% - 24px);
 
-@media (
-    max-width: 390px
-) {
+        min-height: 72px;
+    }
+
+    .logoIcon {
+        width: 42px;
+        height: 42px;
+
+        font-size: 13px;
+    }
+
+    .logo h1 {
+        font-size: 14px;
+    }
+
+    .logo p {
+        font-size: 7px;
+    }
+
+    main {
+        width: calc(100% - 24px);
+
+        padding: 31px 0 45px;
+    }
+
+    .hero {
+        margin-bottom: 28px;
+    }
 
     .hero h2 {
+        font-size: 39px;
 
-        font-size: 35px;
-
+        line-height: 0.97;
     }
 
+    .hero p {
+        margin-top: 19px;
+
+        font-size: 13px;
+
+        line-height: 1.6;
+    }
+
+    .playerCard {
+        padding: 18px;
+
+        border-radius: 13px;
+    }
+
+    .formGrid {
+        grid-template-columns: 1fr;
+
+        gap: 14px;
+    }
+
+    .inputGroup input,
+    .inputGroup select {
+        height: 47px;
+    }
+
+    .mainButton {
+        height: 50px;
+    }
+
+    .sectionHeader {
+        align-items: flex-start;
+    }
 
     .sectionHeader h2 {
-
-        font-size: 25px;
-
+        font-size: 34px;
     }
-
 
     .commercialScore {
+        min-width: 91px;
 
-        min-width: 72px;
-
+        padding: 13px 10px;
     }
 
-
-    .brandTop {
-
-        align-items: flex-start;
-
+    .commercialScore strong {
+        font-size: 29px;
     }
 
+    .brandCard {
+        padding: 18px;
+    }
+
+    .brandCardLogo {
+        width: 48px;
+        height: 48px;
+
+        flex-basis: 48px;
+    }
+
+    .brandLogo {
+        font-size: 14px;
+    }
+
+    .interest {
+        font-size: 7px;
+    }
 
     .brandDetails {
-
-        gap: 8px;
-
+        align-items: center;
     }
 
+    .brandDetails strong {
+        font-size: 15px;
+    }
 
     .negotiateButton {
+        padding: 0 11px;
 
-        max-width: 125px;
-
+        font-size: 7px;
     }
 
+    .negotiationLayout {
+        width: 100%;
+
+        border-radius: 13px;
+    }
+
+    .dealSidebar {
+        padding: 18px;
+    }
+
+    .sidebarLabel {
+        margin-bottom: 12px;
+    }
+
+    .dealSidebar h2 {
+        font-size: 25px;
+    }
+
+    .playerMini {
+        padding: 13px;
+    }
+
+    .dealInfo {
+        gap: 6px;
+    }
+
+    .dealInfo > div {
+        min-width: 0;
+
+        padding: 10px 8px;
+    }
+
+    .dealInfo span {
+        font-size: 6px;
+    }
 
     .dealInfo strong {
+        overflow-wrap: anywhere;
 
-        font-size: 8px;
-
+        font-size: 11px;
     }
 
+    .tensionPanel {
+        margin-top: 15px;
+
+        padding: 13px;
+    }
+
+    .tensionBar {
+        height: 7px;
+    }
+
+    .chatHeader {
+        min-height: 68px;
+
+        padding: 12px 16px;
+    }
+
+    #representativeInitial {
+        width: 41px;
+        height: 41px;
+
+        flex-basis: 41px;
+    }
+
+    .chatMessages {
+        min-height: 390px;
+
+        max-height: 460px;
+
+        padding: 17px 14px;
+    }
+
+    .message {
+        max-width: 88%;
+
+        padding: 12px 13px;
+
+        font-size: 11.5px;
+    }
+
+    .typingBubble {
+        min-width: 96px;
+
+        padding: 8px 11px;
+    }
+
+    .quickActions {
+        padding: 11px 13px;
+
+        gap: 6px;
+    }
+
+    .quickActions button {
+        min-height: 34px;
+
+        padding: 0 10px;
+
+        font-size: 7px;
+    }
+
+    .messageBox {
+        padding: 11px 13px 15px;
+
+        gap: 7px;
+    }
+
+    .messageBox input {
+        height: 45px;
+
+        padding: 0 12px;
+
+        font-size: 12px;
+    }
+
+    .messageBox button {
+        min-width: 76px;
+
+        font-size: 8px;
+    }
+}
+
+@media (max-width: 370px) {
+    .hero h2 {
+        font-size: 35px;
+    }
+
+    .dealInfo {
+        grid-template-columns: 1fr;
+    }
+
+    .brandDetails {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .negotiateButton {
+        width: 100%;
+
+        height: 40px;
+    }
 }
