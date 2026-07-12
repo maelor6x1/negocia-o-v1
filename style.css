@@ -1,22 +1,19 @@
 :root {
-    --bg: #080a0e;
-    --panel: #0e1117;
-    --panel2: #12161d;
-    --panel3: #171c24;
+    --green: #b6ff22;
+    --green-soft: #caff66;
+    --green-dark: #7ebd12;
 
-    --text: #f4f7fb;
-    --muted: #7f8998;
+    --bg: #080b0d;
+    --panel: #10141a;
+    --panel-soft: #151a22;
 
-    --green: #b8ff2c;
-    --greenDark: #86c900;
+    --border: #272d36;
 
-    --red: #ff3b4f;
-    --orange: #ff9d2e;
-    --yellow: #ffe14d;
+    --text: #f5f7fa;
+    --muted: #858e9f;
 
-    --border: rgba(255, 255, 255, 0.08);
-
-    --radius: 15px;
+    --danger: #ff414d;
+    --warning: #ff9d24;
 }
 
 * {
@@ -27,25 +24,26 @@
 
 html {
     background: var(--bg);
+    scroll-behavior: smooth;
 }
 
 body {
     min-height: 100vh;
 
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
     background:
         radial-gradient(
-            circle at 15% 0%,
-            rgba(184, 255, 44, 0.07),
-            transparent 28%
+            circle at 50% -20%,
+            rgba(182, 255, 34, 0.07),
+            transparent 35%
         ),
         var(--bg);
 
     color: var(--text);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
     overflow-x: hidden;
 }
@@ -66,73 +64,97 @@ button {
 }
 
 .header {
-    width: min(1280px, calc(100% - 40px));
+    width: 100%;
 
-    min-height: 84px;
+    min-height: 128px;
 
-    margin: 0 auto;
+    padding:
+        max(24px, env(safe-area-inset-top))
+        34px
+        24px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    border-bottom: 1px solid var(--border);
+    gap: 24px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+
+    background: rgba(8, 11, 13, 0.92);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    position: relative;
+    z-index: 20;
 }
 
 .logo {
     display: flex;
     align-items: center;
-    gap: 13px;
+    gap: 20px;
 }
 
 .logoIcon {
-    width: 46px;
-    height: 46px;
+    width: 96px;
+    height: 96px;
 
-    border-radius: 11px;
+    border-radius: 30px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    background: var(--green);
-    color: #080a0e;
+    background:
+        linear-gradient(
+            135deg,
+            var(--green),
+            var(--green-soft)
+        );
 
+    color: #050704;
+
+    font-size: 28px;
     font-weight: 900;
-    font-size: 14px;
 
     box-shadow:
-        0 0 25px rgba(184, 255, 44, 0.16);
+        0 0 35px rgba(182, 255, 34, 0.15);
 }
 
 .logo h1 {
-    font-size: 17px;
-    letter-spacing: 1.8px;
+    font-size: 30px;
+    letter-spacing: 5px;
+    font-weight: 900;
 }
 
 .logo p {
-    margin-top: 4px;
+    margin-top: 12px;
 
     color: var(--muted);
 
-    font-size: 9px;
-    letter-spacing: 1.5px;
+    font-size: 14px;
+    font-weight: 700;
+
+    letter-spacing: 4px;
 }
 
 .status {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 
     color: var(--muted);
 
-    font-size: 9px;
-    letter-spacing: 1.3px;
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
 }
 
 .statusDot {
-    width: 7px;
-    height: 7px;
+    width: 9px;
+    height: 9px;
 
     border-radius: 50%;
 
@@ -141,59 +163,85 @@ button {
     box-shadow:
         0 0 12px var(--green);
 
-    animation:
-        statusPulse 1.8s infinite;
+    animation: statusPulse 1.7s infinite;
+}
+
+@keyframes statusPulse {
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.4;
+        transform: scale(0.7);
+    }
 }
 
 main {
-    width: min(1280px, calc(100% - 40px));
-
-    margin: 0 auto;
-
-    padding: 52px 0 70px;
+    width: 100%;
 }
 
 .screen {
     display: none;
+
+    width: 100%;
+
+    padding: 56px 32px 80px;
+
+    animation: screenEnter 0.5s ease;
 }
 
 .screen.active {
     display: block;
-
-    animation:
-        screenEnter 0.45s ease;
 }
+
+@keyframes screenEnter {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* HERO */
 
 .hero {
-    max-width: 730px;
+    max-width: 850px;
 
-    margin-bottom: 38px;
+    margin:
+        0 auto
+        42px;
+
+    text-align: center;
 }
 
-.tag,
-.sidebarLabel {
+.tag {
     display: inline-block;
 
     color: var(--green);
 
-    font-size: 10px;
-    font-weight: 800;
+    font-size: 13px;
+    font-weight: 900;
 
-    letter-spacing: 2px;
-
-    margin-bottom: 17px;
+    letter-spacing: 3px;
 }
 
 .hero h2 {
-    max-width: 680px;
+    margin-top: 22px;
 
-    font-size: clamp(40px, 6vw, 76px);
+    font-size: clamp(46px, 7vw, 82px);
 
-    line-height: 0.94;
-
-    letter-spacing: -3px;
+    line-height: 0.95;
 
     font-weight: 900;
+
+    letter-spacing: -4px;
 }
 
 .hero h2 span {
@@ -201,23 +249,31 @@ main {
 }
 
 .hero p {
-    max-width: 610px;
+    max-width: 680px;
 
-    margin-top: 24px;
+    margin:
+        28px auto
+        0;
 
     color: var(--muted);
 
-    font-size: 15px;
+    font-size: 18px;
 
     line-height: 1.7;
 }
 
+/* PLAYER CARD */
+
 .playerCard {
-    padding: 30px;
+    width: 100%;
+    max-width: 980px;
+
+    margin: 0 auto;
+
+    padding: 34px;
 
     border: 1px solid var(--border);
-
-    border-radius: var(--radius);
+    border-radius: 28px;
 
     background:
         linear-gradient(
@@ -228,15 +284,15 @@ main {
         var(--panel);
 
     box-shadow:
-        0 25px 70px rgba(0, 0, 0, 0.22);
+        0 30px 80px rgba(0, 0, 0, 0.25);
 }
 
 .playerCard h3 {
-    margin-bottom: 24px;
+    margin-bottom: 28px;
 
-    font-size: 13px;
+    font-size: 17px;
 
-    letter-spacing: 1.6px;
+    letter-spacing: 3px;
 }
 
 .formGrid {
@@ -245,142 +301,179 @@ main {
     grid-template-columns:
         repeat(2, minmax(0, 1fr));
 
-    gap: 18px;
+    gap: 22px;
 }
 
 .inputGroup {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+
+    gap: 10px;
 }
 
 .inputGroup label {
     color: var(--muted);
 
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 800;
 
-    letter-spacing: 1.2px;
+    letter-spacing: 2px;
 }
 
 .inputGroup input,
 .inputGroup select {
     width: 100%;
-    height: 49px;
+    height: 58px;
 
-    padding: 0 15px;
+    padding: 0 18px;
 
     border: 1px solid var(--border);
-
-    border-radius: 9px;
+    border-radius: 15px;
 
     outline: none;
 
-    background: #090c11;
+    background: #0c1015;
 
     color: var(--text);
 
     transition:
-        border-color 0.25s,
-        box-shadow 0.25s,
-        transform 0.25s;
+        border 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
 }
 
 .inputGroup input:focus,
 .inputGroup select:focus {
-    border-color:
-        rgba(184, 255, 44, 0.65);
+    border-color: var(--green);
 
     box-shadow:
-        0 0 0 3px rgba(184, 255, 44, 0.07);
+        0 0 0 4px rgba(182, 255, 34, 0.08);
+
+    transform: translateY(-1px);
 }
 
 .mainButton,
 .secondaryButton,
 .negotiateButton,
 .quickActions button,
-.messageBox button,
-.backButton {
+.messageBox button {
+    position: relative;
+
+    overflow: hidden;
+
     cursor: pointer;
 
-    border: 0;
-
-    font-weight: 900;
-
     transition:
-        transform 0.2s,
-        box-shadow 0.2s,
-        opacity 0.2s,
-        background 0.2s;
+        transform 0.2s ease,
+        box-shadow 0.25s ease,
+        opacity 0.25s ease;
+}
+
+.mainButton::after,
+.negotiateButton::after,
+.messageBox button::after {
+    content: "";
+
+    position: absolute;
+
+    top: -100%;
+    left: -60%;
+
+    width: 40%;
+    height: 300%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.4),
+            transparent
+        );
+
+    transform: rotate(25deg);
+
+    transition: left 0.55s ease;
+}
+
+.mainButton:hover::after,
+.negotiateButton:hover::after,
+.messageBox button:hover::after {
+    left: 130%;
+}
+
+.mainButton:active,
+.secondaryButton:active,
+.negotiateButton:active,
+.quickActions button:active,
+.messageBox button:active {
+    transform: scale(0.96);
 }
 
 .mainButton {
     width: 100%;
-    height: 54px;
+    height: 62px;
 
-    margin-top: 24px;
+    margin-top: 30px;
 
-    border-radius: 9px;
+    border: 0;
+    border-radius: 17px;
 
     background: var(--green);
 
-    color: #080a0e;
+    color: #070a05;
 
-    font-size: 11px;
+    font-weight: 900;
 
-    letter-spacing: 1px;
-}
-
-.mainButton:hover,
-.negotiateButton:hover,
-.messageBox button:hover {
-    transform: translateY(-2px);
+    letter-spacing: 1.5px;
 
     box-shadow:
-        0 10px 30px rgba(184, 255, 44, 0.16);
+        0 0 28px rgba(182, 255, 34, 0.12);
 }
 
-.mainButton:active,
-.negotiateButton:active,
-.quickActions button:active,
-.messageBox button:active {
-    transform: scale(0.97);
-}
+/* BRANDS */
 
 .sectionHeader {
+    width: 100%;
+    max-width: 1100px;
+
+    margin:
+        0 auto
+        42px;
+
     display: flex;
-
     align-items: flex-end;
-
     justify-content: space-between;
 
-    gap: 25px;
-
-    margin-bottom: 34px;
+    gap: 30px;
 }
 
 .sectionHeader h2 {
-    font-size: clamp(34px, 5vw, 62px);
+    margin-top: 16px;
 
-    letter-spacing: -2px;
+    font-size: clamp(46px, 6vw, 76px);
+
+    line-height: 0.95;
+
+    letter-spacing: -3px;
+
+    font-weight: 900;
 }
 
 .sectionHeader p {
-    margin-top: 12px;
+    margin-top: 22px;
 
     color: var(--muted);
 
-    font-size: 13px;
+    font-size: 18px;
 }
 
 .commercialScore {
-    min-width: 135px;
+    min-width: 190px;
 
-    padding: 19px;
+    padding: 22px;
 
     border: 1px solid var(--border);
-
-    border-radius: 13px;
+    border-radius: 22px;
 
     background: var(--panel);
 
@@ -392,132 +485,136 @@ main {
 
     color: var(--muted);
 
-    font-size: 8px;
+    font-size: 11px;
+    font-weight: 800;
 
-    letter-spacing: 1px;
+    letter-spacing: 2px;
 }
 
 .commercialScore strong {
     color: var(--green);
 
-    font-size: 37px;
+    font-size: 54px;
 }
 
 .commercialScore small {
     color: var(--muted);
+
+    font-size: 17px;
 }
 
 .brandsGrid {
+    width: 100%;
+    max-width: 1100px;
+
+    margin: 0 auto;
+
     display: grid;
 
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap: 16px;
+    gap: 28px;
 }
 
 .brandCard {
-    position: relative;
+    width: 100%;
 
-    padding: 22px;
-
-    overflow: hidden;
+    padding: 32px;
 
     border: 1px solid var(--border);
-
-    border-radius: 14px;
+    border-radius: 28px;
 
     background:
         linear-gradient(
-            135deg,
+            145deg,
             rgba(255, 255, 255, 0.025),
             transparent
         ),
         var(--panel);
 
     transition:
-        transform 0.25s,
-        border-color 0.25s,
-        box-shadow 0.25s;
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+
+    animation: brandCardEnter 0.55s ease both;
 }
 
 .brandCard:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
 
     border-color:
-        rgba(184, 255, 44, 0.22);
+        rgba(182, 255, 34, 0.35);
 
     box-shadow:
-        0 18px 50px rgba(0, 0, 0, 0.25);
+        0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+@keyframes brandCardEnter {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .brandTop {
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 
-    gap: 14px;
+    gap: 20px;
 }
 
 .brandIdentity {
     display: flex;
-
     align-items: center;
 
-    gap: 13px;
-
-    min-width: 0;
+    gap: 24px;
 }
 
 .brandCardLogo {
-    width: 52px;
-    height: 52px;
+    width: 102px;
+    height: 102px;
 
-    flex: 0 0 52px;
+    flex-shrink: 0;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
+
+    border-radius: 24px;
 
     overflow: hidden;
 
-    padding: 9px;
-
-    border-radius: 11px;
-
-    background: #ffffff;
+    background: #fff;
 }
 
-.brandCardImage {
-    display: block;
-
-    width: 100%;
-
-    height: 100%;
+.brandCardLogo img {
+    width: 76%;
+    height: 76%;
 
     object-fit: contain;
+
+    display: block;
 }
 
 .brandLogo {
-    font-size: 16px;
-
+    font-size: 28px;
     font-weight: 900;
 
-    letter-spacing: 0.6px;
+    letter-spacing: 1px;
 }
 
 .interest {
     color: var(--muted);
 
-    font-size: 8px;
-
+    font-size: 13px;
     font-weight: 900;
 
-    letter-spacing: 0.7px;
+    letter-spacing: 2px;
 
     text-align: right;
 }
@@ -527,38 +624,51 @@ main {
 }
 
 .interest.medium {
-    color: var(--yellow);
+    color: var(--warning);
 }
 
+/* INTEREST BAR FIX */
+
 .interestBar {
-    position: relative;
-
     width: 100%;
-    height: 6px;
+    height: 13px;
 
-    margin: 20px 0;
+    margin: 32px 0;
+
+    position: relative;
 
     overflow: hidden;
 
     border-radius: 999px;
 
-    background:
-        rgba(255, 255, 255, 0.06);
+    background: #252b32;
 }
 
 .interestProgress {
-    position: relative;
-
+    width: 0;
     height: 100%;
+
+    max-width: 100%;
+
+    position: relative;
 
     overflow: hidden;
 
     border-radius: inherit;
 
-    background: var(--green);
+    background:
+        linear-gradient(
+            90deg,
+            var(--green-dark),
+            var(--green),
+            var(--green-soft)
+        );
+
+    box-shadow:
+        0 0 14px rgba(182, 255, 34, 0.45);
 
     animation:
-        interestGrow 0.8s ease both;
+        interestGrow 0.9s cubic-bezier(.22, 1, .36, 1);
 }
 
 .interestProgress::after {
@@ -567,225 +677,268 @@ main {
     position: absolute;
 
     top: 0;
-    left: -45%;
+    left: -70%;
 
-    width: 35%;
+    width: 55%;
     height: 100%;
 
     background:
         linear-gradient(
             90deg,
             transparent,
-            rgba(255, 255, 255, 0.8),
+            rgba(255, 255, 255, 0.75),
             transparent
         );
 
     animation:
-        interestShine 2.3s infinite;
+        interestShine 2.4s ease-in-out infinite;
+}
+
+@keyframes interestGrow {
+    from {
+        transform: scaleX(0);
+        transform-origin: left;
+    }
+
+    to {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+}
+
+@keyframes interestShine {
+    0% {
+        left: -70%;
+    }
+
+    55%,
+    100% {
+        left: 130%;
+    }
 }
 
 .brandDetails {
     display: flex;
-
     align-items: flex-end;
-
     justify-content: space-between;
 
-    gap: 15px;
+    gap: 24px;
 }
 
 .brandDetails span {
     display: block;
 
-    margin-bottom: 7px;
+    margin-bottom: 12px;
 
     color: var(--muted);
 
-    font-size: 8px;
+    font-size: 13px;
+    font-weight: 700;
 
-    letter-spacing: 1px;
+    letter-spacing: 2px;
 }
 
 .brandDetails strong {
-    font-size: 17px;
+    font-size: 28px;
 }
 
 .negotiateButton {
-    min-height: 40px;
+    min-width: 230px;
+    height: 62px;
 
-    padding: 0 15px;
+    padding: 0 24px;
 
-    border-radius: 8px;
+    border: 0;
+    border-radius: 18px;
 
     background: var(--green);
 
-    color: #080a0e;
+    color: #080b05;
 
-    font-size: 8px;
+    font-size: 13px;
+    font-weight: 900;
 
-    letter-spacing: 0.6px;
+    letter-spacing: 1.5px;
+}
+
+.negotiateButton:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 30px rgba(182, 255, 34, 0.2);
 }
 
 .negotiateButton:disabled {
-    cursor: not-allowed;
+    cursor: default;
 
-    opacity: 0.3;
+    opacity: 0.35;
+
+    box-shadow: none;
 }
 
 .secondaryButton {
-    margin-top: 25px;
+    display: block;
 
-    padding: 13px 18px;
+    margin:
+        34px auto
+        0;
+
+    padding: 18px 26px;
 
     border: 1px solid var(--border);
-
-    border-radius: 8px;
+    border-radius: 15px;
 
     background: var(--panel);
 
     color: var(--text);
 
-    font-size: 9px;
+    font-weight: 800;
+}
+
+/* NEGOTIATION */
+
+#negotiationScreen {
+    padding: 0;
 }
 
 .negotiationLayout {
+    min-height:
+        calc(
+            100vh - 128px
+        );
+
     display: grid;
 
     grid-template-columns:
-        minmax(275px, 340px)
-        minmax(0, 1fr);
-
-    min-height: 690px;
-
-    overflow: hidden;
-
-    border: 1px solid var(--border);
-
-    border-radius: 16px;
-
-    background: var(--panel);
+        340px minmax(0, 1fr);
 }
 
 .dealSidebar {
-    position: relative;
+    padding: 34px 28px;
 
-    padding: 27px;
+    border-right:
+        1px solid var(--border);
 
-    border-right: 1px solid var(--border);
-
-    background:
-        radial-gradient(
-            circle at 0 0,
-            rgba(184, 255, 44, 0.08),
-            transparent 30%
-        ),
-        #0b0e13;
+    background: #0b0f12;
 }
 
 .backButton {
-    width: 38px;
-    height: 38px;
+    width: 48px;
+    height: 48px;
 
-    margin-bottom: 32px;
+    margin-bottom: 30px;
 
     border: 1px solid var(--border);
+    border-radius: 14px;
 
-    border-radius: 9px;
-
-    background: var(--panel2);
+    background: var(--panel);
 
     color: var(--text);
 
-    font-size: 18px;
+    cursor: pointer;
+
+    font-size: 21px;
+}
+
+.sidebarLabel {
+    color: var(--green);
+
+    font-size: 11px;
+    font-weight: 900;
+
+    letter-spacing: 3px;
 }
 
 .dealSidebar h2 {
-    margin-bottom: 26px;
+    margin-top: 10px;
 
-    font-size: 31px;
-
-    letter-spacing: -1px;
+    font-size: 37px;
+    font-weight: 900;
 }
 
 .playerMini {
-    display: flex;
+    margin-top: 30px;
 
-    flex-direction: column;
-
-    padding: 15px;
-
-    margin-bottom: 20px;
+    padding: 20px;
 
     border: 1px solid var(--border);
+    border-radius: 18px;
 
-    border-radius: 10px;
-
-    background: rgba(255, 255, 255, 0.025);
+    background: var(--panel);
 }
 
 .playerMini span,
 .dealInfo span,
 .counterPanel span {
+    display: block;
+
     color: var(--muted);
 
-    font-size: 8px;
+    font-size: 10px;
+    font-weight: 800;
 
-    letter-spacing: 1px;
+    letter-spacing: 2px;
 }
 
 .playerMini strong {
-    margin: 7px 0 4px;
+    display: block;
 
-    font-size: 14px;
+    margin-top: 9px;
+
+    font-size: 18px;
 }
 
 .playerMini small {
+    display: block;
+
+    margin-top: 6px;
+
     color: var(--muted);
 }
 
 .dealInfo {
+    margin-top: 22px;
+
     display: grid;
 
-    gap: 8px;
+    gap: 12px;
 }
 
 .dealInfo > div {
-    padding: 14px;
+    padding: 18px;
 
     border: 1px solid var(--border);
+    border-radius: 17px;
 
-    border-radius: 9px;
-
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--panel);
 }
 
 .dealInfo strong {
     display: block;
 
-    margin-top: 7px;
+    margin-top: 8px;
 
-    color: var(--green);
-
-    font-size: 16px;
+    font-size: 20px;
 }
 
-.tensionPanel {
-    margin-top: 20px;
+/* TENSION */
 
-    padding: 15px;
+.tensionPanel {
+    margin-top: 22px;
+
+    padding: 20px;
 
     border: 1px solid var(--border);
+    border-radius: 19px;
 
-    border-radius: 11px;
+    background: var(--panel);
 
-    background: var(--panel2);
+    overflow: hidden;
 }
 
 .tensionHeader {
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 
     gap: 10px;
@@ -794,88 +947,54 @@ main {
 .tensionHeader span {
     color: var(--muted);
 
-    font-size: 8px;
+    font-size: 10px;
+    font-weight: 800;
 
-    letter-spacing: 0.8px;
+    letter-spacing: 1.4px;
 }
 
 .tensionHeader strong {
     color: var(--green);
 
-    font-size: 9px;
+    font-size: 11px;
 
     letter-spacing: 1px;
 }
 
 .tensionBar {
-    position: relative;
-
     width: 100%;
-    height: 8px;
+    height: 11px;
 
-    margin: 13px 0;
+    margin: 16px 0;
 
     overflow: hidden;
 
     border-radius: 999px;
 
-    background:
-        rgba(255, 255, 255, 0.07);
+    background: #272d34;
 }
 
 .tensionProgress {
-    position: relative;
-
     width: 0;
     height: 100%;
+
+    max-width: 100%;
+
+    position: relative;
 
     overflow: hidden;
 
     border-radius: inherit;
 
-    background: var(--green);
-
-    transition:
-        width 0.65s cubic-bezier(.2, .8, .2, 1),
-        background 0.35s;
-}
-
-.tensionProgress.medium {
-    background: var(--yellow);
-}
-
-.tensionProgress.high {
-    background: var(--orange);
-}
-
-.tensionProgress.critical {
-    background: var(--red);
-
-    box-shadow:
-        0 0 15px rgba(255, 59, 79, 0.65);
-
-    animation:
-        tensionPulse 0.6s infinite alternate;
-}
-
-.tensionProgress::before {
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
     background:
-        repeating-linear-gradient(
-            115deg,
-            transparent 0,
-            transparent 8px,
-            rgba(255, 255, 255, 0.5) 10px,
-            transparent 13px
+        linear-gradient(
+            90deg,
+            #b6ff22,
+            #dcff65
         );
 
-    animation:
-        electricMove 0.7s linear infinite;
+    transition:
+        width 0.6s cubic-bezier(.22, 1, .36, 1);
 }
 
 .tensionProgress::after {
@@ -883,290 +1002,334 @@ main {
 
     position: absolute;
 
-    top: -5px;
-    right: -5px;
+    inset: 0;
 
-    width: 15px;
-    height: 18px;
-
-    border-radius: 50%;
+    width: 45%;
 
     background:
-        rgba(255, 255, 255, 0.8);
-
-    filter: blur(5px);
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.95),
+            transparent
+        );
 
     animation:
-        tensionFire 0.5s infinite alternate;
+        tensionEnergy 1.1s linear infinite;
+}
+
+.tensionProgress.medium {
+    background:
+        linear-gradient(
+            90deg,
+            #ffbf24,
+            #ffe068
+        );
+
+    box-shadow:
+        0 0 16px rgba(255, 191, 36, 0.5);
+}
+
+.tensionProgress.high {
+    background:
+        linear-gradient(
+            90deg,
+            #ff7a22,
+            #ffb126
+        );
+
+    box-shadow:
+        0 0 18px rgba(255, 122, 34, 0.6);
+}
+
+.tensionProgress.critical {
+    background:
+        linear-gradient(
+            90deg,
+            #ff2738,
+            #ff6b32,
+            #ff2738
+        );
+
+    box-shadow:
+        0 0 22px rgba(255, 39, 56, 0.7);
+
+    animation:
+        criticalFire 0.55s ease-in-out infinite alternate;
+}
+
+@keyframes tensionEnergy {
+    from {
+        transform: translateX(-150%);
+    }
+
+    to {
+        transform: translateX(350%);
+    }
+}
+
+@keyframes criticalFire {
+    from {
+        filter: brightness(1);
+    }
+
+    to {
+        filter: brightness(1.6);
+    }
 }
 
 .tensionPanel p {
     color: var(--muted);
 
-    font-size: 10px;
+    font-size: 12px;
 
     line-height: 1.5;
 }
 
 .counterPanel {
+    margin-top: 14px;
+
+    padding: 17px;
+
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 
-    margin-top: 11px;
-
-    padding: 13px 15px;
-
     border: 1px solid var(--border);
+    border-radius: 16px;
 
-    border-radius: 9px;
+    background: var(--panel);
 }
 
-.counterPanel strong {
-    color: var(--green);
-
-    font-size: 12px;
-}
+/* CHAT */
 
 .chatArea {
     min-width: 0;
 
     display: flex;
-
     flex-direction: column;
 
-    background: var(--panel);
+    background: var(--bg);
 }
 
 .chatHeader {
-    min-height: 76px;
+    min-height: 112px;
 
-    padding: 15px 22px;
+    padding: 20px 32px;
 
     display: flex;
-
     align-items: center;
 
-    gap: 12px;
+    gap: 18px;
 
-    border-bottom: 1px solid var(--border);
+    border-bottom:
+        1px solid var(--border);
+
+    background:
+        rgba(11, 15, 18, 0.92);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 }
 
 #representativeInitial {
-    width: 44px;
-    height: 44px;
+    width: 70px;
+    height: 70px;
 
-    flex: 0 0 44px;
-
-    padding: 7px;
+    flex-shrink: 0;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     overflow: hidden;
 
-    border-radius: 10px;
+    border-radius: 20px;
 
-    background: #ffffff;
+    background: #fff;
+
+    color: #000;
+
+    font-size: 25px;
+    font-weight: 900;
 }
 
 .representativeBrandImage {
-    display: block;
-
-    width: 100%;
-
-    height: 100%;
+    width: 74%;
+    height: 74%;
 
     object-fit: contain;
 }
 
-.chatHeader section {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 4px;
-}
-
 .chatHeader strong {
-    font-size: 13px;
+    display: block;
+
+    font-size: 20px;
 }
 
 .chatHeader small {
+    display: block;
+
+    margin-top: 7px;
+
     color: var(--muted);
 
-    font-size: 8px;
+    font-size: 12px;
+    font-weight: 700;
 
-    letter-spacing: 1px;
+    letter-spacing: 2px;
 }
 
 .chatMessages {
     flex: 1;
 
-    min-height: 430px;
-    max-height: 500px;
+    min-height: 420px;
+    max-height:
+        calc(
+            100vh - 330px
+        );
 
-    padding: 24px;
+    padding: 34px;
 
     overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 22px;
 
     scroll-behavior: smooth;
 }
 
-.chatMessages::-webkit-scrollbar {
-    width: 4px;
-}
-
-.chatMessages::-webkit-scrollbar-thumb {
-    border-radius: 999px;
-
-    background:
-        rgba(255, 255, 255, 0.12);
-}
-
 .message {
-    width: fit-content;
+    max-width: 74%;
 
-    max-width: 72%;
+    padding: 21px 25px;
 
-    margin-bottom: 13px;
-
-    padding: 13px 15px;
-
-    border-radius: 12px;
+    border-radius: 24px;
 
     white-space: pre-line;
 
-    font-size: 12px;
+    font-size: 16px;
 
-    line-height: 1.6;
+    line-height: 1.65;
 
-    opacity: 0;
-
-    transform:
-        translateY(10px)
-        scale(0.98);
-
-    transition:
-        opacity 0.35s ease,
-        transform 0.35s ease;
+    animation:
+        messageEnter 0.45s cubic-bezier(.22, 1, .36, 1);
 }
 
-.messageVisible {
-    opacity: 1;
+@keyframes messageEnter {
+    from {
+        opacity: 0;
 
-    transform:
-        translateY(0)
-        scale(1);
+        transform:
+            translateY(14px)
+            scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
 }
 
 .message.ai {
+    align-self: flex-start;
+
     border: 1px solid var(--border);
 
-    border-bottom-left-radius: 3px;
+    border-bottom-left-radius: 7px;
 
-    background: var(--panel3);
+    background: var(--panel-soft);
 
-    color: #dce2ea;
+    color: var(--text);
 }
 
 .message.user {
-    margin-left: auto;
+    align-self: flex-end;
 
-    border-bottom-right-radius: 3px;
+    border-bottom-right-radius: 7px;
 
-    background: var(--green);
+    background:
+        linear-gradient(
+            135deg,
+            var(--green),
+            var(--green-soft)
+        );
 
-    color: #080a0e;
+    color: #080b05;
 
     font-weight: 700;
+
+    box-shadow:
+        0 8px 30px rgba(182, 255, 34, 0.08);
 }
 
 .message.system {
-    max-width: 100%;
+    align-self: center;
 
-    margin: 18px auto;
+    max-width: 90%;
 
-    padding: 9px 14px;
+    padding: 12px 20px;
 
-    border: 1px solid rgba(184, 255, 44, 0.22);
+    border: 1px solid
+        rgba(182, 255, 34, 0.3);
 
     border-radius: 999px;
 
-    background: rgba(184, 255, 44, 0.05);
+    background:
+        rgba(182, 255, 34, 0.06);
 
     color: var(--green);
 
-    text-align: center;
-
-    font-size: 8px;
-
+    font-size: 11px;
     font-weight: 900;
 
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+
+    text-align: center;
 }
 
-.typingRow {
-    display: flex;
+/* TYPING */
 
-    margin-bottom: 13px;
+.message.typing {
+    width: auto;
+    max-width: 280px;
 
-    animation:
-        typingEnter 0.25s ease;
-}
+    padding: 14px 18px;
 
-.typingRow.typingLeaving {
-    opacity: 0;
+    display: inline-flex;
+    align-items: center;
 
-    transform:
-        translateY(-4px);
+    gap: 12px;
 
-    transition:
-        opacity 0.18s,
-        transform 0.18s;
-}
+    border-radius: 18px;
+    border-bottom-left-radius: 6px;
 
-.typingBubble {
-    width: fit-content;
-
-    min-width: 104px;
-
-    padding: 9px 12px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 11px;
-
-    border-bottom-left-radius: 3px;
-
-    background: var(--panel3);
+    background:
+        linear-gradient(
+            145deg,
+            #171c24,
+            #11161d
+        );
 
     box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.typingName {
-    display: block;
-
-    margin-bottom: 7px;
+        0 10px 35px rgba(0, 0, 0, 0.22);
 
     color: var(--muted);
+}
 
-    font-size: 7px;
+.typingText {
+    font-size: 12px;
+    font-weight: 600;
 
-    font-weight: 800;
-
-    letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .typingDots {
-    height: 9px;
-
     display: flex;
 
     align-items: center;
@@ -1174,9 +1337,9 @@ main {
     gap: 4px;
 }
 
-.typingDots i {
-    width: 5px;
-    height: 5px;
+.typingDots span {
+    width: 6px;
+    height: 6px;
 
     border-radius: 50%;
 
@@ -1186,286 +1349,319 @@ main {
         typingDot 1.15s infinite ease-in-out;
 }
 
-.typingDots i:nth-child(2) {
-    animation-delay: 0.16s;
+.typingDots span:nth-child(2) {
+    animation-delay: 0.15s;
 }
 
-.typingDots i:nth-child(3) {
-    animation-delay: 0.32s;
-}
-
-.quickActions {
-    padding: 12px 20px;
-
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap: 7px;
-
-    border-top: 1px solid var(--border);
-
-    transition:
-        opacity 0.25s,
-        transform 0.25s;
-}
-
-.quickActions button {
-    min-height: 35px;
-
-    padding: 0 12px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 7px;
-
-    background: var(--panel3);
-
-    color: var(--text);
-
-    font-size: 8px;
-
-    letter-spacing: 0.6px;
-}
-
-.quickActions button:hover {
-    transform: translateY(-2px);
-
-    border-color:
-        rgba(184, 255, 44, 0.4);
-
-    color: var(--green);
-}
-
-.quickActions .reject:hover {
-    border-color:
-        rgba(255, 59, 79, 0.45);
-
-    color: var(--red);
-}
-
-.messageBox {
-    padding: 14px 20px 20px;
-
-    display: flex;
-
-    gap: 9px;
-
-    transition:
-        opacity 0.25s,
-        transform 0.25s;
-}
-
-.messageBox input {
-    flex: 1;
-
-    min-width: 0;
-    height: 47px;
-
-    padding: 0 15px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 8px;
-
-    outline: none;
-
-    background: #090c11;
-
-    color: var(--text);
-
-    transition:
-        border-color 0.25s,
-        box-shadow 0.25s;
-}
-
-.messageBox input:focus {
-    border-color:
-        rgba(184, 255, 44, 0.55);
-
-    box-shadow:
-        0 0 0 3px rgba(184, 255, 44, 0.06);
-}
-
-.messageBox button {
-    min-width: 95px;
-
-    border-radius: 8px;
-
-    background: var(--green);
-
-    color: #080a0e;
-
-    font-size: 9px;
-
-    letter-spacing: 0.7px;
-}
-
-.controlsHidden {
-    display: none !important;
-}
-
-@keyframes screenEnter {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes statusPulse {
-    0%,
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: 0.45;
-        transform: scale(0.8);
-    }
-}
-
-@keyframes interestGrow {
-    from {
-        max-width: 0;
-    }
-
-    to {
-        max-width: 100%;
-    }
-}
-
-@keyframes interestShine {
-    0% {
-        left: -45%;
-    }
-
-    55%,
-    100% {
-        left: 120%;
-    }
-}
-
-@keyframes electricMove {
-    from {
-        transform: translateX(-14px);
-    }
-
-    to {
-        transform: translateX(14px);
-    }
-}
-
-@keyframes tensionPulse {
-    from {
-        filter: brightness(0.9);
-    }
-
-    to {
-        filter: brightness(1.5);
-    }
-}
-
-@keyframes tensionFire {
-    from {
-        transform: scale(0.7);
-        opacity: 0.45;
-    }
-
-    to {
-        transform: scale(1.25);
-        opacity: 1;
-    }
-}
-
-@keyframes typingEnter {
-    from {
-        opacity: 0;
-        transform: translateY(7px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.typingDots span:nth-child(3) {
+    animation-delay: 0.3s;
 }
 
 @keyframes typingDot {
     0%,
     60%,
     100% {
-        transform: translateY(0);
-        opacity: 0.35;
+        opacity: 0.3;
+
+        transform:
+            translateY(0)
+            scale(0.8);
     }
 
     30% {
-        transform: translateY(-4px);
         opacity: 1;
+
+        transform:
+            translateY(-4px)
+            scale(1);
     }
 }
 
-@media (max-width: 850px) {
-    .header {
-        width: calc(100% - 28px);
+/* ACTIONS */
 
-        min-height: 76px;
+.quickActions {
+    padding: 18px 28px;
+
+    display: flex;
+
+    gap: 12px;
+
+    overflow-x: auto;
+
+    border-top:
+        1px solid var(--border);
+
+    scrollbar-width: none;
+}
+
+.quickActions::-webkit-scrollbar {
+    display: none;
+}
+
+.quickActions button {
+    min-width: max-content;
+
+    height: 54px;
+
+    padding: 0 24px;
+
+    border: 1px solid var(--border);
+    border-radius: 15px;
+
+    background: var(--panel);
+
+    color: var(--text);
+
+    font-size: 12px;
+    font-weight: 900;
+
+    letter-spacing: 1.3px;
+}
+
+.quickActions button:hover {
+    border-color: var(--green);
+
+    transform: translateY(-2px);
+}
+
+.quickActions .reject:hover {
+    border-color: var(--danger);
+
+    color: var(--danger);
+}
+
+.messageBox {
+    padding:
+        18px
+        28px
+        max(
+            22px,
+            env(safe-area-inset-bottom)
+        );
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        150px;
+
+    gap: 16px;
+
+    border-top:
+        1px solid rgba(255, 255, 255, 0.04);
+}
+
+.messageBox input {
+    width: 100%;
+    height: 64px;
+
+    padding: 0 22px;
+
+    border: 1px solid var(--border);
+    border-radius: 18px;
+
+    outline: none;
+
+    background: var(--panel);
+
+    color: var(--text);
+
+    font-size: 16px;
+
+    transition:
+        border 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.messageBox input:focus {
+    border-color: var(--green);
+
+    box-shadow:
+        0 0 0 4px rgba(182, 255, 34, 0.07);
+}
+
+.messageBox button {
+    border: 0;
+    border-radius: 18px;
+
+    background: var(--green);
+
+    color: #080b05;
+
+    font-size: 13px;
+    font-weight: 900;
+}
+
+/* MOBILE */
+
+@media (max-width: 760px) {
+
+    .header {
+        min-height: 112px;
+
+        padding:
+            max(
+                20px,
+                env(safe-area-inset-top)
+            )
+            24px
+            20px;
+    }
+
+    .logo {
+        gap: 16px;
+    }
+
+    .logoIcon {
+        width: 76px;
+        height: 76px;
+
+        border-radius: 23px;
+
+        font-size: 23px;
+    }
+
+    .logo h1 {
+        font-size: 21px;
+
+        letter-spacing: 3px;
+    }
+
+    .logo p {
+        margin-top: 8px;
+
+        font-size: 10px;
+
+        letter-spacing: 2.5px;
     }
 
     .status {
         display: none;
     }
 
-    main {
-        width: calc(100% - 28px);
+    .screen {
+        padding:
+            42px
+            24px
+            65px;
+    }
 
-        padding-top: 38px;
+    .hero {
+        margin-bottom: 32px;
+
+        text-align: left;
     }
 
     .hero h2 {
-        font-size: 45px;
+        font-size: 52px;
 
-        letter-spacing: -2px;
+        letter-spacing: -3px;
     }
 
     .hero p {
-        font-size: 14px;
+        margin-top: 22px;
+
+        font-size: 16px;
     }
 
     .playerCard {
-        padding: 22px;
+        padding: 25px;
+
+        border-radius: 24px;
+    }
+
+    .formGrid {
+        grid-template-columns: 1fr;
+
+        gap: 18px;
+    }
+
+    .sectionHeader {
+        align-items: flex-start;
+    }
+
+    .sectionHeader h2 {
+        font-size: 48px;
+    }
+
+    .commercialScore {
+        min-width: 130px;
+
+        padding: 17px;
+    }
+
+    .commercialScore strong {
+        font-size: 43px;
     }
 
     .brandsGrid {
-        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .brandCard {
+        padding: 28px;
+
+        border-radius: 25px;
+    }
+
+    .brandCardLogo {
+        width: 82px;
+        height: 82px;
+
+        border-radius: 21px;
+    }
+
+    .brandIdentity {
+        gap: 18px;
+    }
+
+    .brandLogo {
+        font-size: 23px;
+    }
+
+    .interest {
+        font-size: 11px;
+
+        letter-spacing: 1.4px;
+    }
+
+    .interestBar {
+        height: 11px;
+
+        margin: 28px 0;
+    }
+
+    .brandDetails strong {
+        font-size: 25px;
+    }
+
+    .negotiateButton {
+        min-width: 190px;
+
+        height: 58px;
+
+        padding: 0 20px;
+
+        font-size: 11px;
     }
 
     .negotiationLayout {
-        grid-template-columns: 1fr;
+        display: block;
 
         min-height: auto;
     }
 
     .dealSidebar {
-        padding: 21px;
+        padding: 24px;
 
         border-right: 0;
 
-        border-bottom: 1px solid var(--border);
-    }
-
-    .backButton {
-        margin-bottom: 22px;
+        border-bottom:
+            1px solid var(--border);
     }
 
     .dealSidebar h2 {
-        margin-bottom: 19px;
-
-        font-size: 27px;
+        font-size: 32px;
     }
 
     .dealInfo {
@@ -1474,286 +1670,310 @@ main {
     }
 
     .dealInfo > div {
-        padding: 12px 10px;
+        padding: 15px;
     }
 
     .dealInfo strong {
-        font-size: 13px;
-    }
-
-    .chatMessages {
-        min-height: 400px;
-
-        max-height: 470px;
-
-        padding: 20px;
-    }
-
-    .message {
-        max-width: 84%;
-
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 560px) {
-    .header {
-        width: calc(100% - 24px);
-
-        min-height: 72px;
-    }
-
-    .logoIcon {
-        width: 42px;
-        height: 42px;
-
-        font-size: 13px;
-    }
-
-    .logo h1 {
-        font-size: 14px;
-    }
-
-    .logo p {
-        font-size: 7px;
-    }
-
-    main {
-        width: calc(100% - 24px);
-
-        padding: 31px 0 45px;
-    }
-
-    .hero {
-        margin-bottom: 28px;
-    }
-
-    .hero h2 {
-        font-size: 39px;
-
-        line-height: 0.97;
-    }
-
-    .hero p {
-        margin-top: 19px;
-
-        font-size: 13px;
-
-        line-height: 1.6;
-    }
-
-    .playerCard {
-        padding: 18px;
-
-        border-radius: 13px;
-    }
-
-    .formGrid {
-        grid-template-columns: 1fr;
-
-        gap: 14px;
-    }
-
-    .inputGroup input,
-    .inputGroup select {
-        height: 47px;
-    }
-
-    .mainButton {
-        height: 50px;
-    }
-
-    .sectionHeader {
-        align-items: flex-start;
-    }
-
-    .sectionHeader h2 {
-        font-size: 34px;
-    }
-
-    .commercialScore {
-        min-width: 91px;
-
-        padding: 13px 10px;
-    }
-
-    .commercialScore strong {
-        font-size: 29px;
-    }
-
-    .brandCard {
-        padding: 18px;
-    }
-
-    .brandCardLogo {
-        width: 48px;
-        height: 48px;
-
-        flex-basis: 48px;
-    }
-
-    .brandLogo {
-        font-size: 14px;
-    }
-
-    .interest {
-        font-size: 7px;
-    }
-
-    .brandDetails {
-        align-items: center;
-    }
-
-    .brandDetails strong {
-        font-size: 15px;
-    }
-
-    .negotiateButton {
-        padding: 0 11px;
-
-        font-size: 7px;
-    }
-
-    .negotiationLayout {
-        width: 100%;
-
-        border-radius: 13px;
-    }
-
-    .dealSidebar {
-        padding: 18px;
-    }
-
-    .sidebarLabel {
-        margin-bottom: 12px;
-    }
-
-    .dealSidebar h2 {
-        font-size: 25px;
-    }
-
-    .playerMini {
-        padding: 13px;
-    }
-
-    .dealInfo {
-        gap: 6px;
-    }
-
-    .dealInfo > div {
-        min-width: 0;
-
-        padding: 10px 8px;
-    }
-
-    .dealInfo span {
-        font-size: 6px;
-    }
-
-    .dealInfo strong {
-        overflow-wrap: anywhere;
-
-        font-size: 11px;
+        font-size: 16px;
     }
 
     .tensionPanel {
-        margin-top: 15px;
-
-        padding: 13px;
-    }
-
-    .tensionBar {
-        height: 7px;
+        padding: 18px;
     }
 
     .chatHeader {
-        min-height: 68px;
+        min-height: 100px;
 
-        padding: 12px 16px;
+        padding: 17px 24px;
     }
 
     #representativeInitial {
-        width: 41px;
-        height: 41px;
+        width: 64px;
+        height: 64px;
 
-        flex-basis: 41px;
+        border-radius: 18px;
     }
 
     .chatMessages {
-        min-height: 390px;
+        min-height: 480px;
 
-        max-height: 460px;
+        max-height: 620px;
 
-        padding: 17px 14px;
+        padding: 28px 24px;
+
+        gap: 20px;
     }
 
     .message {
         max-width: 88%;
 
-        padding: 12px 13px;
+        padding: 19px 22px;
 
-        font-size: 11.5px;
+        font-size: 16px;
     }
 
-    .typingBubble {
-        min-width: 96px;
+    .message.typing {
+        max-width: 260px;
 
-        padding: 8px 11px;
+        padding: 13px 17px;
     }
 
     .quickActions {
-        padding: 11px 13px;
-
-        gap: 6px;
-    }
-
-    .quickActions button {
-        min-height: 34px;
-
-        padding: 0 10px;
-
-        font-size: 7px;
+        padding: 17px 24px;
     }
 
     .messageBox {
-        padding: 11px 13px 15px;
+        padding:
+            18px
+            24px
+            max(
+                24px,
+                env(safe-area-inset-bottom)
+            );
 
-        gap: 7px;
-    }
-
-    .messageBox input {
-        height: 45px;
-
-        padding: 0 12px;
-
-        font-size: 12px;
-    }
-
-    .messageBox button {
-        min-width: 76px;
-
-        font-size: 8px;
+        grid-template-columns:
+            minmax(0, 1fr)
+            128px;
     }
 }
 
-@media (max-width: 370px) {
+@media (max-width: 540px) {
+
+    .header {
+        padding-left: 17px;
+        padding-right: 17px;
+    }
+
+    .logoIcon {
+        width: 66px;
+        height: 66px;
+
+        border-radius: 20px;
+    }
+
+    .logo h1 {
+        font-size: 18px;
+
+        letter-spacing: 2.6px;
+    }
+
+    .logo p {
+        font-size: 8px;
+
+        letter-spacing: 2px;
+    }
+
+    .screen {
+        padding:
+            36px
+            17px
+            55px;
+    }
+
     .hero h2 {
-        font-size: 35px;
+        font-size: 45px;
+    }
+
+    .playerCard {
+        padding: 21px;
+    }
+
+    .sectionHeader {
+        gap: 15px;
+    }
+
+    .sectionHeader h2 {
+        font-size: 42px;
+    }
+
+    .sectionHeader p {
+        font-size: 15px;
+    }
+
+    .commercialScore {
+        min-width: 96px;
+
+        padding: 13px;
+    }
+
+    .commercialScore span {
+        font-size: 8px;
+
+        letter-spacing: 1px;
+    }
+
+    .commercialScore strong {
+        font-size: 36px;
+    }
+
+    .brandCard {
+        padding: 20px;
+
+        border-radius: 22px;
+    }
+
+    .brandTop {
+        align-items: center;
+    }
+
+    .brandIdentity {
+        gap: 14px;
+    }
+
+    .brandCardLogo {
+        width: 66px;
+        height: 66px;
+
+        border-radius: 18px;
+    }
+
+    .brandLogo {
+        font-size: 19px;
+    }
+
+    .interest {
+        font-size: 9px;
+
+        letter-spacing: 1px;
+    }
+
+    .interestBar {
+        margin: 23px 0;
+
+        height: 10px;
+    }
+
+    .brandDetails {
+        align-items: center;
+
+        gap: 12px;
+    }
+
+    .brandDetails span {
+        font-size: 10px;
+
+        letter-spacing: 1.4px;
+    }
+
+    .brandDetails strong {
+        font-size: 22px;
+    }
+
+    .negotiateButton {
+        min-width: 154px;
+
+        height: 54px;
+
+        padding: 0 14px;
+
+        border-radius: 16px;
+
+        font-size: 9px;
+
+        letter-spacing: 1px;
+    }
+
+    .dealSidebar {
+        padding: 20px 17px;
     }
 
     .dealInfo {
         grid-template-columns: 1fr;
     }
 
-    .brandDetails {
-        flex-direction: column;
-
-        align-items: stretch;
+    .chatHeader {
+        padding: 15px 17px;
     }
 
-    .negotiateButton {
-        width: 100%;
+    #representativeInitial {
+        width: 58px;
+        height: 58px;
+    }
 
-        height: 40px;
+    .chatHeader strong {
+        font-size: 18px;
+    }
+
+    .chatMessages {
+        min-height: 430px;
+
+        max-height: 590px;
+
+        padding: 24px 17px;
+    }
+
+    .message {
+        max-width: 91%;
+
+        padding: 17px 19px;
+
+        border-radius: 21px;
+
+        font-size: 15px;
+    }
+
+    .message.typing {
+        width: auto;
+
+        max-width: 230px;
+
+        padding: 12px 15px;
+
+        border-radius: 16px;
+
+        border-bottom-left-radius: 5px;
+    }
+
+    .typingText {
+        font-size: 11px;
+    }
+
+    .typingDots span {
+        width: 5px;
+        height: 5px;
+    }
+
+    .quickActions {
+        padding: 15px 17px;
+
+        gap: 10px;
+    }
+
+    .quickActions button {
+        height: 51px;
+
+        padding: 0 20px;
+
+        font-size: 10px;
+    }
+
+    .messageBox {
+        padding:
+            16px
+            17px
+            max(
+                22px,
+                env(safe-area-inset-bottom)
+            );
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            105px;
+
+        gap: 11px;
+    }
+
+    .messageBox input {
+        height: 59px;
+
+        padding: 0 17px;
+
+        font-size: 14px;
+    }
+
+    .messageBox button {
+        border-radius: 16px;
+
+        font-size: 11px;
     }
 }
