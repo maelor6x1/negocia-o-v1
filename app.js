@@ -12,6 +12,9 @@ let negotiationState = {
     ultimatum: false
 };
 
+const ICON_CDN =
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons";
+
 
 const leagueReputation = {
     premier: 100,
@@ -31,6 +34,7 @@ const leagueReputation = {
 const brands = [
     {
         name: "NIKE",
+        logo: `${ICON_CDN}/nike.svg`,
         representative: "Alex Morgan",
         tier: 5,
         multiplier: 1.30,
@@ -43,6 +47,7 @@ const brands = [
 
     {
         name: "ADIDAS",
+        logo: `${ICON_CDN}/adidas.svg`,
         representative: "Thomas Weber",
         tier: 5,
         multiplier: 1.25,
@@ -55,6 +60,7 @@ const brands = [
 
     {
         name: "PUMA",
+        logo: `${ICON_CDN}/puma.svg`,
         representative: "Lena Fischer",
         tier: 4,
         multiplier: 1.12,
@@ -67,6 +73,7 @@ const brands = [
 
     {
         name: "NEW BALANCE",
+        logo: `${ICON_CDN}/newbalance.svg`,
         representative: "James Miller",
         tier: 3,
         multiplier: 1.05,
@@ -79,6 +86,7 @@ const brands = [
 
     {
         name: "MIZUNO",
+        logo: `${ICON_CDN}/mizuno.svg`,
         representative: "Hiroshi Tanaka",
         tier: 3,
         multiplier: 0.95,
@@ -91,6 +99,7 @@ const brands = [
 
     {
         name: "UNDER ARMOUR",
+        logo: `${ICON_CDN}/underarmour.svg`,
         representative: "Michael Reed",
         tier: 2,
         multiplier: 0.90,
@@ -103,6 +112,7 @@ const brands = [
 
     {
         name: "SKECHERS",
+        logo: `${ICON_CDN}/skechers.svg`,
         representative: "Daniel Brooks",
         tier: 2,
         multiplier: 0.88,
@@ -115,6 +125,7 @@ const brands = [
 
     {
         name: "UMBRO",
+        logo: `${ICON_CDN}/umbro.svg`,
         representative: "Oliver Bennett",
         tier: 1,
         multiplier: 0.72,
@@ -128,11 +139,9 @@ const brands = [
 
 
 function showScreen(id) {
-    document
-        .querySelectorAll(".screen")
-        .forEach((screen) => {
-            screen.classList.remove("active");
-        });
+    document.querySelectorAll(".screen").forEach((screen) => {
+        screen.classList.remove("active");
+    });
 
     const target = document.getElementById(id);
 
@@ -152,58 +161,36 @@ function showScreen(id) {
 
 function analyzePlayer() {
     player = {
-        name: document
-            .getElementById("playerName")
-            .value
-            .trim(),
+        name: document.getElementById("playerName").value.trim(),
 
         age: Number(
-            document
-                .getElementById("playerAge")
-                .value
+            document.getElementById("playerAge").value
         ),
 
-        position: document
-            .getElementById("playerPosition")
-            .value,
+        position: document.getElementById("playerPosition").value,
 
         overall: Number(
-            document
-                .getElementById("playerOverall")
-                .value
+            document.getElementById("playerOverall").value
         ),
 
-        club: document
-            .getElementById("playerClub")
-            .value
-            .trim(),
+        club: document.getElementById("playerClub").value.trim(),
 
-        league: document
-            .getElementById("playerLeague")
-            .value,
+        league: document.getElementById("playerLeague").value,
 
         clubReputation: Number(
-            document
-                .getElementById("clubReputation")
-                .value
+            document.getElementById("clubReputation").value
         ),
 
         value: Number(
-            document
-                .getElementById("playerValue")
-                .value
+            document.getElementById("playerValue").value
         ) || 0,
 
         goals: Number(
-            document
-                .getElementById("playerGoals")
-                .value
+            document.getElementById("playerGoals").value
         ) || 0,
 
         assists: Number(
-            document
-                .getElementById("playerAssists")
-                .value
+            document.getElementById("playerAssists").value
         ) || 0
     };
 
@@ -227,7 +214,6 @@ function analyzePlayer() {
         player.age > 50
     ) {
         alert("Digite uma idade válida.");
-
         return;
     }
 
@@ -237,7 +223,6 @@ function analyzePlayer() {
         player.overall > 99
     ) {
         alert("O overall deve estar entre 40 e 99.");
-
         return;
     }
 
@@ -250,15 +235,11 @@ function analyzePlayer() {
         calculateCommercialScore();
 
 
-    document
-        .getElementById("commercialScore")
-        .innerText =
+    document.getElementById("commercialScore").innerText =
         player.commercialScore;
 
 
-    document
-        .getElementById("playerSummary")
-        .innerText =
+    document.getElementById("playerSummary").innerText =
         `${player.name} • ${player.club} • ${player.position} • OVR ${player.overall}`;
 
 
@@ -293,18 +274,15 @@ function calculateCommercialScore() {
 
     score += player.leagueReputation * 0.08;
 
-
     score += Math.min(
         player.goals * 0.35,
         12
     );
 
-
     score += Math.min(
         player.assists * 0.25,
         8
     );
-
 
     score += Math.min(
         player.value * 0.06,
@@ -467,9 +445,7 @@ function calculateInitialOffer(brand) {
 
 function renderBrands() {
     const container =
-        document.getElementById(
-            "brandsContainer"
-        );
+        document.getElementById("brandsContainer");
 
 
     container.innerHTML = "";
@@ -493,24 +469,28 @@ function renderBrands() {
 
             interestClass =
                 "high";
+
         } else if (interest >= 70) {
             interestText =
                 "MUITO ALTO";
 
             interestClass =
                 "high";
+
         } else if (interest >= 55) {
             interestText =
                 "ALTO";
 
             interestClass =
                 "high";
+
         } else if (interest >= 40) {
             interestText =
                 "MÉDIO";
 
             interestClass =
                 "medium";
+
         } else if (interest >= 25) {
             interestText =
                 "BAIXO";
@@ -536,9 +516,24 @@ function renderBrands() {
         card.innerHTML = `
             <div class="brandTop">
 
-                <div class="brandLogo">
-                    ${brand.name}
+                <div class="brandIdentity">
+
+                    <div class="brandCardLogo">
+
+                        <img
+                            src="${brand.logo}"
+                            alt="${brand.name}"
+                            loading="lazy"
+                        >
+
+                    </div>
+
+                    <div class="brandLogo">
+                        ${brand.name}
+                    </div>
+
                 </div>
+
 
                 <div class="interest ${interestClass}">
                     ${interestText} • ${interest}%
@@ -647,39 +642,39 @@ function startNegotiation(index) {
     };
 
 
-    document
-        .getElementById("brandName")
-        .innerText =
+    document.getElementById("brandName").innerText =
         currentBrand.name;
 
 
-    document
-        .getElementById("miniPlayerName")
-        .innerText =
+    document.getElementById("miniPlayerName").innerText =
         player.name;
 
 
-    document
-        .getElementById("miniPlayerClub")
-        .innerText =
+    document.getElementById("miniPlayerClub").innerText =
         player.club;
 
 
-    document
-        .getElementById("representativeName")
-        .innerText =
+    document.getElementById("representativeName").innerText =
         currentBrand.representative;
 
 
-    document
-        .getElementById("representativeInitial")
-        .innerText =
-        currentBrand.name.charAt(0);
+    const logoContainer =
+        document.getElementById(
+            "representativeInitial"
+        );
 
 
-    document
-        .getElementById("chatMessages")
-        .innerHTML = "";
+    logoContainer.innerHTML = `
+        <img
+            src="${currentBrand.logo}"
+            alt="${currentBrand.name}"
+            class="representativeBrandImage"
+        >
+    `;
+
+
+    document.getElementById("chatMessages").innerHTML =
+        "";
 
 
     updateOfferUI();
@@ -705,16 +700,12 @@ Estamos abertos a discutir valor semanal, duração e bônus.`
 
 
 function updateOfferUI() {
-    document
-        .getElementById("offerValue")
-        .innerText =
+    document.getElementById("offerValue").innerText =
         "€ " +
         formatMoney(currentOffer.value);
 
 
-    document
-        .getElementById("offerDuration")
-        .innerText =
+    document.getElementById("offerDuration").innerText =
         currentOffer.duration +
         (
             currentOffer.duration === 1
@@ -723,9 +714,7 @@ function updateOfferUI() {
         );
 
 
-    document
-        .getElementById("offerBonus")
-        .innerText =
+    document.getElementById("offerBonus").innerText =
         "€ " +
         formatMoney(currentOffer.bonus);
 }
@@ -775,6 +764,7 @@ function updateNegotiationUI() {
         progress.classList.add(
             "critical"
         );
+
     } else if (tension >= 50) {
         text =
             "ALTA";
@@ -785,6 +775,7 @@ function updateNegotiationUI() {
         progress.classList.add(
             "high"
         );
+
     } else if (tension >= 25) {
         text =
             "MODERADA";
@@ -798,23 +789,17 @@ function updateNegotiationUI() {
     }
 
 
-    document
-        .getElementById("tensionText")
-        .innerText =
+    document.getElementById("tensionText").innerText =
         text;
 
 
-    document
-        .getElementById(
-            "tensionDescription"
-        )
-        .innerText =
+    document.getElementById(
+        "tensionDescription"
+    ).innerText =
         description;
 
 
-    document
-        .getElementById("counterOffers")
-        .innerText =
+    document.getElementById("counterOffers").innerText =
         negotiationState.counterOffers +
         " / " +
         currentBrand.maxCounterOffers;
@@ -1049,6 +1034,7 @@ function negotiateDuration(text) {
     if (match) {
         requestedDuration =
             Number(match[1]);
+
     } else if (
         lower.includes("diminuir") ||
         lower.includes("reduzir") ||
@@ -1058,6 +1044,7 @@ function negotiateDuration(text) {
     ) {
         requestedDuration =
             currentOffer.duration - 1;
+
     } else if (
         lower.includes("aumentar") ||
         lower.includes("maior") ||
@@ -1291,6 +1278,7 @@ function generateSponsorGoals() {
         goals.push(
             `Marcar pelo menos ${goalTarget} gols em uma temporada`
         );
+
     } else {
         goals.push(
             "Participar de pelo menos 25 partidas na temporada"
@@ -1384,6 +1372,7 @@ Bem-vindo à ${currentBrand.name}.`
         addSystemMessage(
             "CONTRATO DE PATROCÍNIO ASSINADO ✓"
         );
+
     }, 600);
 }
 
@@ -1429,7 +1418,6 @@ function generateAIResponse(text) {
         lower.includes("temos um acordo")
     ) {
         acceptOffer();
-
         return;
     }
 
@@ -1449,7 +1437,6 @@ function generateAIResponse(text) {
         lower.includes("mais longo")
     ) {
         negotiateDuration(text);
-
         return;
     }
 
@@ -1459,7 +1446,6 @@ function generateAIResponse(text) {
         lower.includes("bonus")
     ) {
         negotiateBonus(text);
-
         return;
     }
 
@@ -1567,8 +1553,7 @@ function extractMoneyValue(text) {
 
 function parseCurrencyNumber(value) {
     let normalized =
-        String(value)
-            .trim();
+        String(value).trim();
 
 
     if (
@@ -1579,6 +1564,7 @@ function parseCurrencyNumber(value) {
             normalized
                 .replace(/\./g, "")
                 .replace(",", ".");
+
     } else if (
         normalized.includes(".")
     ) {
@@ -1593,6 +1579,7 @@ function parseCurrencyNumber(value) {
             normalized =
                 normalized.replace(/\./g, "");
         }
+
     } else if (
         normalized.includes(",")
     ) {
@@ -1606,6 +1593,7 @@ function parseCurrencyNumber(value) {
         ) {
             normalized =
                 normalized.replace(/,/g, "");
+
         } else {
             normalized =
                 normalized.replace(",", ".");
@@ -1643,7 +1631,6 @@ function quickAction(action) {
 
     if (action === "accept") {
         acceptOffer();
-
         return;
     }
 
@@ -1703,6 +1690,7 @@ function quickAction(action) {
             addSystemMessage(
                 "NEGOCIAÇÃO ENCERRADA"
             );
+
         }, 400);
 
 
