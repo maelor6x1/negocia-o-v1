@@ -13,10 +13,11 @@ let negotiationState = {
     ultimatum: false
 };
 
-
 const ICON_CDN =
     "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons";
 
+const WIKIMEDIA_FILE =
+    "https://commons.wikimedia.org/wiki/Special:FilePath/";
 
 const leagueReputation = {
     premier: 100,
@@ -32,12 +33,11 @@ const leagueReputation = {
     other: 45
 };
 
-
 const brands = [
     {
         name: "NIKE",
         logo: `${ICON_CDN}/nike.svg`,
-        fallbackLogo: "https://cdn.simpleicons.org/nike",
+        fallbackLogo: "",
         representative: "Alex Morgan",
         tier: 5,
         multiplier: 1.30,
@@ -51,7 +51,7 @@ const brands = [
     {
         name: "ADIDAS",
         logo: `${ICON_CDN}/adidas.svg`,
-        fallbackLogo: "https://cdn.simpleicons.org/adidas",
+        fallbackLogo: "",
         representative: "Thomas Weber",
         tier: 5,
         multiplier: 1.25,
@@ -65,7 +65,7 @@ const brands = [
     {
         name: "PUMA",
         logo: `${ICON_CDN}/puma.svg`,
-        fallbackLogo: "https://cdn.simpleicons.org/puma",
+        fallbackLogo: "",
         representative: "Lena Fischer",
         tier: 4,
         multiplier: 1.12,
@@ -79,7 +79,7 @@ const brands = [
     {
         name: "NEW BALANCE",
         logo: `${ICON_CDN}/newbalance.svg`,
-        fallbackLogo: "https://cdn.simpleicons.org/newbalance",
+        fallbackLogo: "",
         representative: "James Miller",
         tier: 3,
         multiplier: 1.05,
@@ -92,8 +92,8 @@ const brands = [
 
     {
         name: "MIZUNO",
-        logo: "https://cdn.simpleicons.org/mizuno",
-        fallbackLogo: "https://logo.clearbit.com/mizuno.com",
+        logo: `${WIKIMEDIA_FILE}Mizuno logo.svg`,
+        fallbackLogo: `${ICON_CDN}/mizuno.svg`,
         representative: "Hiroshi Tanaka",
         tier: 3,
         multiplier: 0.95,
@@ -107,7 +107,7 @@ const brands = [
     {
         name: "UNDER ARMOUR",
         logo: `${ICON_CDN}/underarmour.svg`,
-        fallbackLogo: "https://cdn.simpleicons.org/underarmour",
+        fallbackLogo: "",
         representative: "Michael Reed",
         tier: 2,
         multiplier: 0.90,
@@ -120,8 +120,8 @@ const brands = [
 
     {
         name: "SKECHERS",
-        logo: "https://cdn.simpleicons.org/skechers",
-        fallbackLogo: "https://logo.clearbit.com/skechers.com",
+        logo: `${WIKIMEDIA_FILE}Skechers logo.svg`,
+        fallbackLogo: `${ICON_CDN}/skechers.svg`,
         representative: "Daniel Brooks",
         tier: 2,
         multiplier: 0.88,
@@ -134,8 +134,8 @@ const brands = [
 
     {
         name: "UMBRO",
-        logo: "https://cdn.simpleicons.org/umbro",
-        fallbackLogo: "https://logo.clearbit.com/umbro.com",
+        logo: `${WIKIMEDIA_FILE}Umbro logo.svg`,
+        fallbackLogo: `${ICON_CDN}/umbro.svg`,
         representative: "Oliver Bennett",
         tier: 1,
         multiplier: 0.72,
@@ -147,20 +147,16 @@ const brands = [
     }
 ];
 
-
 function showScreen(id) {
     document.querySelectorAll(".screen").forEach(screen => {
         screen.classList.remove("active");
     });
 
-    const screen = document.getElementById(id);
+    const target = document.getElementById(id);
 
-    if (!screen) {
-        console.error("Tela não encontrada:", id);
-        return;
-    }
+    if (!target) return;
 
-    screen.classList.add("active");
+    target.classList.add("active");
 
     window.scrollTo({
         top: 0,
@@ -168,6 +164,44 @@ function showScreen(id) {
     });
 }
 
+function createBrandImage(brand, className = "") {
+    const fallback = brand.fallbackLogo || "";
+
+    return `
+        <img
+            src="${brand.logo}"
+            alt="${brand.name}"
+            class="${className}"
+            loading="lazy"
+            data-fallback="${fallback}"
+            onerror="handleLogoError(this)"
+        >
+    `;
+}
+
+function handleLogoError(image) {
+    const fallback = image.dataset.fallback;
+
+    if (
+        fallback &&
+        image.src !== fallback &&
+        image.dataset.fallbackUsed !== "true"
+    ) {
+        image.dataset.fallbackUsed = "true";
+        image.src = fallback;
+        return;
+    }
+
+    image.style.display = "none";
+
+    const parent = image.parentElement;
+
+    if (parent) {
+        parent.classList.add("logoFallback");
+        parent.dataset.logoText =
+            image.alt.substring(0, 2).toUpperCase();
+    }
+}
 
 function analyzePlayer() {
     player = {
@@ -180,11 +214,16 @@ function analyzePlayer() {
         clubReputation: Number(
             document.getElementById("clubReputation").value
         ),
-        value: Number(document.getElementById("playerValue").value) || 0,
-        goals: Number(document.getElementById("playerGoals").value) || 0,
-        assists: Number(document.getElementById("playerAssists").value) || 0
+        value: Number(
+            document.getElementById("playerValue").value
+        ) || 0,
+        goals: Number(
+            document.getElementById("playerGoals").value
+        ) || 0,
+        assists: Number(
+            document.getElementById("playerAssists").value
+        ) || 0
     };
-
 
     if (
         !player.name ||
@@ -196,61 +235,42 @@ function analyzePlayer() {
         return;
     }
 
-
     if (player.age < 16 || player.age > 50) {
         alert("Digite uma idade válida.");
         return;
     }
-
 
     if (player.overall < 40 || player.overall > 99) {
         alert("O overall deve estar entre 40 e 99.");
         return;
     }
 
-
     player.leagueReputation =
         leagueReputation[player.league] || 45;
-
 
     player.commercialScore =
         calculateCommercialScore();
 
-
     document.getElementById("commercialScore").innerText =
         player.commercialScore;
-
 
     document.getElementById("playerSummary").innerText =
         `${player.name} • ${player.club} • ${player.position} • OVR ${player.overall}`;
 
-
     renderBrands();
-
     showScreen("brandsScreen");
 }
-
 
 function calculateCommercialScore() {
     let score = 0;
 
-
-    if (player.overall < 65) {
-        score += 5;
-    } else if (player.overall < 70) {
-        score += 12;
-    } else if (player.overall < 75) {
-        score += 22;
-    } else if (player.overall < 80) {
-        score += 36;
-    } else if (player.overall < 85) {
-        score += 52;
-    } else if (player.overall < 90) {
-        score += 68;
-    } else {
-        score += 80;
-    }
-
+    if (player.overall < 65) score += 5;
+    else if (player.overall < 70) score += 12;
+    else if (player.overall < 75) score += 22;
+    else if (player.overall < 80) score += 36;
+    else if (player.overall < 85) score += 52;
+    else if (player.overall < 90) score += 68;
+    else score += 80;
 
     score += player.clubReputation * 0.10;
     score += player.leagueReputation * 0.08;
@@ -259,14 +279,12 @@ function calculateCommercialScore() {
     score += Math.min(player.assists * 0.25, 8);
     score += Math.min(player.value * 0.06, 8);
 
-
     if (
         player.age <= 21 &&
         player.overall >= 76
     ) {
         score += 5;
     }
-
 
     if (
         player.age <= 19 &&
@@ -275,11 +293,9 @@ function calculateCommercialScore() {
         score += 4;
     }
 
-
     if (player.overall < 70) {
         score -= 15;
     }
-
 
     if (
         player.clubReputation <= 35 &&
@@ -288,31 +304,29 @@ function calculateCommercialScore() {
         score -= 8;
     }
 
-
     return Math.min(
         Math.max(Math.round(score), 5),
         100
     );
 }
 
-
 function calculateBrandInterest(brand) {
     let interest =
         player.commercialScore +
         brand.baseInterest;
 
-
-    const difference =
+    const overallDifference =
         player.overall -
         brand.minOverall;
 
-
-    if (difference < 0) {
-        interest += difference * 7;
+    if (overallDifference < 0) {
+        interest += overallDifference * 7;
     } else {
-        interest += Math.min(difference * 1.5, 10);
+        interest += Math.min(
+            overallDifference * 1.5,
+            10
+        );
     }
-
 
     if (
         brand.tier === 5 &&
@@ -321,14 +335,12 @@ function calculateBrandInterest(brand) {
         interest -= 20;
     }
 
-
     if (
         brand.tier >= 4 &&
         player.leagueReputation < 65
     ) {
         interest -= 12;
     }
-
 
     if (
         brand.tier === 5 &&
@@ -337,7 +349,6 @@ function calculateBrandInterest(brand) {
         interest -= 10;
     }
 
-
     if (
         player.age <= 21 &&
         player.overall >= brand.minOverall - 2
@@ -345,13 +356,11 @@ function calculateBrandInterest(brand) {
         interest += 5;
     }
 
-
     return Math.min(
         Math.max(Math.round(interest), 1),
         99
     );
 }
-
 
 function calculateInitialOffer(brand) {
     let annualValue = 0;
@@ -370,7 +379,6 @@ function calculateInitialOffer(brand) {
         0.70 +
         player.leagueReputation / 330;
 
-
     if (player.overall < 65) {
         annualValue *= 0.30;
     } else if (player.overall < 70) {
@@ -379,10 +387,8 @@ function calculateInitialOffer(brand) {
         annualValue *= 0.65;
     }
 
-
     const weeklyValue =
         annualValue / 52;
-
 
     return Math.max(
         Math.round(weeklyValue / 250) * 250,
@@ -390,44 +396,18 @@ function calculateInitialOffer(brand) {
     );
 }
 
-
-function createBrandImage(brand, className) {
-    return `
-        <img
-            src="${brand.logo}"
-            alt="${brand.name}"
-            class="${className}"
-            loading="lazy"
-            onerror="
-                if(this.dataset.fallback !== 'true'){
-                    this.dataset.fallback='true';
-                    this.src='${brand.fallbackLogo}';
-                }else{
-                    this.style.display='none';
-                    this.parentElement.classList.add('logoFallback');
-                    this.parentElement.dataset.brand='${brand.name.charAt(0)}';
-                }
-            "
-        >
-    `;
-}
-
-
 function renderBrands() {
     const container =
         document.getElementById("brandsContainer");
 
     container.innerHTML = "";
 
-
     brands.forEach((brand, index) => {
         const interest =
             calculateBrandInterest(brand);
 
-
         let interestText = "SEM INTERESSE";
         let interestClass = "low";
-
 
         if (interest >= 85) {
             interestText = "PRIORIDADE MÁXIMA 🔥";
@@ -445,54 +425,45 @@ function renderBrands() {
             interestText = "BAIXO";
         }
 
-
         const offer =
             calculateInitialOffer(brand);
 
-
         const canNegotiate =
             interest >= 25;
-
 
         const card =
             document.createElement("div");
 
         card.className = "brandCard";
 
-
         card.innerHTML = `
             <div class="brandTop">
-
                 <div class="brandIdentity">
-
                     <div class="brandCardLogo">
                         ${createBrandImage(
                             brand,
-                            "brandCardImage"
+                            "brandLogoImage"
                         )}
                     </div>
 
                     <div class="brandLogo">
                         ${brand.name}
                     </div>
-
                 </div>
 
                 <div class="interest ${interestClass}">
                     ${interestText} • ${interest}%
                 </div>
-
             </div>
 
             <div class="interestBar">
                 <div
-                    class="interestProgress"
-                    style="width:${interest}%"
+                    class="interestProgress ${interestClass}"
+                    style="--interest-width:${interest}%"
                 ></div>
             </div>
 
             <div class="brandDetails">
-
                 <div>
                     <span>
                         VALOR SEMANAL ESTIMADO
@@ -518,33 +489,36 @@ function renderBrands() {
                             : "SEM INTERESSE"
                     }
                 </button>
-
             </div>
         `;
-
 
         const button =
             card.querySelector(".negotiateButton");
 
-
         if (canNegotiate) {
-            button.addEventListener("click", () => {
-                startNegotiation(index);
-            });
+            button.addEventListener(
+                "click",
+                () => startNegotiation(index)
+            );
         }
-
 
         container.appendChild(card);
     });
-}
 
+    requestAnimationFrame(() => {
+        document
+            .querySelectorAll(".interestProgress")
+            .forEach(progress => {
+                progress.classList.add("animateInterest");
+            });
+    });
+}
 
 function startNegotiation(index) {
     currentBrand = brands[index];
 
     negotiationEnded = false;
     aiIsTyping = false;
-
 
     negotiationState = {
         tension: 5,
@@ -553,26 +527,19 @@ function startNegotiation(index) {
         ultimatum: false
     };
 
-
     const value =
         calculateInitialOffer(currentBrand);
 
-
     currentOffer = {
-        value: value,
-
+        value,
         duration:
-            currentBrand.tier >= 4
-                ? 3
-                : 2,
-
+            currentBrand.tier >= 4 ? 3 : 2,
         bonus:
             Math.max(
                 1000,
                 Math.round(value * 8 / 500) * 500
             )
     };
-
 
     document.getElementById("brandName").innerText =
         currentBrand.name;
@@ -586,29 +553,24 @@ function startNegotiation(index) {
     document.getElementById("representativeName").innerText =
         currentBrand.representative;
 
-
     const logoContainer =
         document.getElementById("representativeInitial");
 
-
+    logoContainer.classList.remove("logoFallback");
     logoContainer.innerHTML =
         createBrandImage(
             currentBrand,
             "representativeBrandImage"
         );
 
-
     document.getElementById("chatMessages").innerHTML = "";
 
-
-    showNegotiationControls();
+    setNegotiationControls(true);
 
     updateOfferUI();
     updateNegotiationUI();
 
-
     showScreen("negotiationScreen");
-
 
     queueAIMessage(
 `Olá, ${player.name}.
@@ -620,15 +582,13 @@ Nossa proposta inicial é de € ${formatMoney(currentOffer.value)} por semana.
 O vínculo proposto é de ${currentOffer.duration} temporadas, além de € ${formatMoney(currentOffer.bonus)} em bônus de desempenho.
 
 Estamos abertos a discutir valor semanal, duração e bônus.`,
-        1200
+        1000
     );
 }
-
 
 function updateOfferUI() {
     document.getElementById("offerValue").innerText =
         "€ " + formatMoney(currentOffer.value);
-
 
     document.getElementById("offerDuration").innerText =
         currentOffer.duration +
@@ -638,19 +598,12 @@ function updateOfferUI() {
                 : " TEMPORADAS"
         );
 
-
     document.getElementById("offerBonus").innerText =
-        currentOffer.bonus > 0
-            ? "€ " + formatMoney(currentOffer.bonus)
-            : "SEM BÔNUS";
+        "€ " + formatMoney(currentOffer.bonus);
 }
 
-
 function updateNegotiationUI() {
-    if (!currentBrand) {
-        return;
-    }
-
+    if (!currentBrand) return;
 
     const tension =
         Math.min(
@@ -658,29 +611,28 @@ function updateNegotiationUI() {
             100
         );
 
-
     const progress =
         document.getElementById("tensionProgress");
 
-
-    if (!progress) {
-        return;
-    }
-
+    const panel =
+        document.querySelector(".tensionPanel");
 
     progress.style.width =
         tension + "%";
 
-
     progress.className =
         "tensionProgress";
 
+    panel?.classList.remove(
+        "medium",
+        "high",
+        "critical"
+    );
 
     let text = "CALMA";
 
     let description =
         "A marca está aberta à negociação.";
-
 
     if (tension >= 75) {
         text = "CRÍTICA";
@@ -689,6 +641,7 @@ function updateNegotiationUI() {
             "A marca está próxima de abandonar a negociação.";
 
         progress.classList.add("critical");
+        panel?.classList.add("critical");
 
     } else if (tension >= 50) {
         text = "ALTA";
@@ -697,6 +650,7 @@ function updateNegotiationUI() {
             "A diretoria está perdendo a paciência.";
 
         progress.classList.add("high");
+        panel?.classList.add("high");
 
     } else if (tension >= 25) {
         text = "MODERADA";
@@ -705,32 +659,29 @@ function updateNegotiationUI() {
             "As exigências estão aumentando a tensão.";
 
         progress.classList.add("medium");
+        panel?.classList.add("medium");
     }
-
 
     document.getElementById("tensionText").innerText =
         text;
 
-
-    document.getElementById("tensionDescription").innerText =
+    document.getElementById(
+        "tensionDescription"
+    ).innerText =
         description;
 
-
     document.getElementById("counterOffers").innerText =
-        `${negotiationState.counterOffers} / ${currentBrand.maxCounterOffers}`;
+        negotiationState.counterOffers +
+        " / " +
+        currentBrand.maxCounterOffers;
 }
 
-
 function increaseTension(amount) {
-    if (negotiationEnded) {
-        return true;
-    }
-
+    if (negotiationEnded) return true;
 
     negotiationState.tension +=
         amount *
         currentBrand.tensionMultiplier;
-
 
     negotiationState.tension =
         Math.min(
@@ -738,22 +689,18 @@ function increaseTension(amount) {
             100
         );
 
-
     updateNegotiationUI();
 
-
-    if (negotiationState.tension >= 100) {
+    if (negotiationState.tension >= 92) {
         brandWalkAway();
         return true;
     }
 
-
     if (
-        negotiationState.tension >= 78 &&
+        negotiationState.tension >= 72 &&
         !negotiationState.ultimatum
     ) {
         negotiationState.ultimatum = true;
-
 
         queueAIMessage(
 `Precisamos ser claros.
@@ -763,27 +710,22 @@ A negociação chegou a um ponto crítico.
 A proposta atual está muito próxima do nosso limite.
 
 Esperamos uma decisão ou uma contraproposta realista.`,
-            900
-        );
-
-
-        setTimeout(() => {
-            if (!negotiationEnded) {
-                addSystemMessage("ULTIMATO DA MARCA");
+            900,
+            () => {
+                addSystemMessage(
+                    "ULTIMATO DA MARCA"
+                );
             }
-        }, 2600);
+        );
     }
-
 
     return false;
 }
-
 
 function registerCounterOffer() {
     negotiationState.counterOffers++;
 
     updateNegotiationUI();
-
 
     if (
         negotiationState.counterOffers >
@@ -793,44 +735,28 @@ function registerCounterOffer() {
         return true;
     }
 
-
     return false;
 }
 
-
 function negotiateMoney(requestedValue) {
-    if (registerCounterOffer()) {
-        return;
-    }
-
+    if (registerCounterOffer()) return;
 
     const initialOffer =
         calculateInitialOffer(currentBrand);
 
-
-    let maximumOffer =
+    const maximumOffer =
         initialOffer *
         (
             1 +
             currentBrand.negotiationFlexibility
         );
 
-
-    if (currentOffer.bonus === 0) {
-        maximumOffer *= 1.15;
-    }
-
-
     const difference =
         requestedValue /
         currentOffer.value;
 
-
     if (difference >= 1.75) {
-        if (increaseTension(40)) {
-            return;
-        }
-
+        if (increaseTension(40)) return;
 
         queueAIMessage(
 `Essa exigência está completamente fora da avaliação comercial da ${currentBrand.name}.
@@ -843,21 +769,15 @@ Esperamos uma proposta significativamente mais realista.`
         return;
     }
 
-
     if (requestedValue > maximumOffer) {
-        if (increaseTension(22)) {
-            return;
-        }
-
+        if (increaseTension(22)) return;
 
         const counter =
             Math.round(maximumOffer / 250) * 250;
 
-
         currentOffer.value = counter;
 
         updateOfferUI();
-
 
         queueAIMessage(
 `Não podemos atingir o valor solicitado.
@@ -870,18 +790,32 @@ Estamos próximos do limite financeiro desta negociação.`
         return;
     }
 
+    if (requestedValue <= currentOffer.value) {
+        increaseTension(2);
+
+        currentOffer.value =
+            Math.max(
+                500,
+                Math.round(requestedValue / 250) * 250
+            );
+
+        updateOfferUI();
+
+        queueAIMessage(
+`O valor de € ${formatMoney(currentOffer.value)} por semana é aceitável para a ${currentBrand.name}.
+
+Atualizamos os termos.`
+        );
+
+        return;
+    }
 
     currentOffer.value =
         Math.round(requestedValue / 250) * 250;
 
-
-    if (increaseTension(8)) {
-        return;
-    }
-
+    if (increaseTension(8)) return;
 
     updateOfferUI();
-
 
     queueAIMessage(
 `Podemos aceitar € ${formatMoney(currentOffer.value)} por semana.
@@ -890,29 +824,20 @@ A proposta foi atualizada.`
     );
 }
 
-
 function negotiateDuration(text) {
-    if (registerCounterOffer()) {
-        return;
-    }
+    if (registerCounterOffer()) return;
 
-
-    const lower =
-        text.toLowerCase();
-
+    const lower = text.toLowerCase();
 
     const match =
         lower.match(
             /(\d+)\s*(temporada|temporadas|ano|anos)/
         );
 
-
     let requestedDuration = null;
 
-
     if (match) {
-        requestedDuration =
-            Number(match[1]);
+        requestedDuration = Number(match[1]);
 
     } else if (
         lower.includes("diminuir") ||
@@ -934,7 +859,6 @@ function negotiateDuration(text) {
             currentOffer.duration + 1;
     }
 
-
     if (
         !requestedDuration ||
         requestedDuration < 1 ||
@@ -949,10 +873,8 @@ function negotiateDuration(text) {
         return;
     }
 
-
     const oldDuration =
         currentOffer.duration;
-
 
     if (requestedDuration === oldDuration) {
         queueAIMessage(
@@ -962,21 +884,18 @@ function negotiateDuration(text) {
         return;
     }
 
-
     if (requestedDuration < oldDuration) {
         const reduction =
-            oldDuration -
-            requestedDuration;
+            oldDuration - requestedDuration;
 
-
-        if (increaseTension(8 * reduction)) {
+        if (
+            increaseTension(8 * reduction)
+        ) {
             return;
         }
 
-
         currentOffer.duration =
             requestedDuration;
-
 
         currentOffer.value =
             Math.max(
@@ -988,9 +907,7 @@ function negotiateDuration(text) {
                 ) * 250
             );
 
-
         updateOfferUI();
-
 
         queueAIMessage(
 `Aceitamos reduzir o vínculo para ${requestedDuration} temporada(s).
@@ -1001,15 +918,11 @@ Por se tratar de um compromisso comercial menor, o valor passa para € ${format
         return;
     }
 
-
     const increase =
-        requestedDuration -
-        oldDuration;
-
+        requestedDuration - oldDuration;
 
     currentOffer.duration =
         requestedDuration;
-
 
     currentOffer.value =
         Math.round(
@@ -1018,14 +931,9 @@ Por se tratar de um compromisso comercial menor, o valor passa para € ${format
             250
         ) * 250;
 
-
-    if (increaseTension(3)) {
-        return;
-    }
-
+    if (increaseTension(3)) return;
 
     updateOfferUI();
-
 
     queueAIMessage(
 `Um vínculo de ${requestedDuration} temporadas oferece maior estabilidade comercial.
@@ -1034,117 +942,78 @@ Podemos aceitar e atualizar o pagamento para € ${formatMoney(currentOffer.valu
     );
 }
 
+function wantsNoBonus(text) {
+    const lower = text.toLowerCase();
 
-function removeBonus() {
-    if (registerCounterOffer()) {
-        return;
-    }
+    return (
+        lower.includes("sem bônus") ||
+        lower.includes("sem bonus") ||
+        lower.includes("não quero bônus") ||
+        lower.includes("nao quero bonus") ||
+        lower.includes("tirar o bônus") ||
+        lower.includes("tirar o bonus") ||
+        lower.includes("remover o bônus") ||
+        lower.includes("remover o bonus") ||
+        lower.includes("zerar o bônus") ||
+        lower.includes("zerar o bonus") ||
+        lower.includes("bônus zero") ||
+        lower.includes("bonus zero")
+    );
+}
 
+function negotiateBonus(text) {
+    if (registerCounterOffer()) return;
 
-    if (currentOffer.bonus === 0) {
+    if (wantsNoBonus(text)) {
+        if (currentOffer.bonus <= 0) {
+            queueAIMessage(
+                "A proposta atual já não possui bônus de desempenho."
+            );
+
+            return;
+        }
+
+        const salaryIncrease =
+            Math.round(
+                (
+                    currentOffer.bonus /
+                    52 *
+                    0.55
+                ) /
+                250
+            ) * 250;
+
+        currentOffer.value +=
+            Math.max(salaryIncrease, 250);
+
+        currentOffer.bonus = 0;
+
+        if (increaseTension(5)) return;
+
+        updateOfferUI();
+
         queueAIMessage(
-            "A proposta atual já não possui bônus de desempenho."
+`Podemos remover completamente o bônus de desempenho.
+
+Em compensação, parte desse valor será incorporada ao pagamento semanal.
+
+A nova proposta é de € ${formatMoney(currentOffer.value)} por semana, sem bônus de desempenho.`
         );
 
         return;
     }
 
-
-    const removedBonus =
-        currentOffer.bonus;
-
-
-    const weeklyIncrease =
-        Math.round(
-            (
-                removedBonus /
-                Math.max(currentOffer.duration * 52, 52)
-            ) *
-            0.70 /
-            250
-        ) * 250;
-
-
-    currentOffer.bonus = 0;
-
-
-    currentOffer.value +=
-        Math.max(weeklyIncrease, 250);
-
-
-    increaseTension(5);
-
-    updateOfferUI();
-
-
-    queueAIMessage(
-`Podemos retirar completamente o bônus de desempenho.
-
-Em compensação, parte desse valor será incorporada ao pagamento semanal.
-
-O novo valor será de € ${formatMoney(currentOffer.value)} por semana, sem bônus por metas.`
-    );
-}
-
-
-function negotiateBonus(text) {
-    const lower =
-        text.toLowerCase();
-
-
-    const removeBonusTerms = [
-        "sem bonus",
-        "sem bônus",
-        "não quero bonus",
-        "não quero bônus",
-        "nao quero bonus",
-        "nao quero bônus",
-        "tirar o bonus",
-        "tirar o bônus",
-        "remover o bonus",
-        "remover o bônus",
-        "retirar o bonus",
-        "retirar o bônus",
-        "zerar o bonus",
-        "zerar o bônus",
-        "bonus zero",
-        "bônus zero",
-        "0 de bonus",
-        "0 de bônus"
-    ];
-
-
-    if (
-        removeBonusTerms.some(term =>
-            lower.includes(term)
-        )
-    ) {
-        removeBonus();
-        return;
-    }
-
-
-    if (registerCounterOffer()) {
-        return;
-    }
-
-
     const requested =
         extractMoneyValue(text);
 
-
     const maximumBonus =
         calculateInitialOffer(currentBrand) * 20;
-
 
     if (
         requested &&
         requested > maximumBonus
     ) {
-        if (increaseTension(20)) {
-            return;
-        }
-
+        if (increaseTension(20)) return;
 
         queueAIMessage(
 `O bônus solicitado supera nosso limite.
@@ -1155,19 +1024,13 @@ O máximo autorizado é € ${formatMoney(maximumBonus)}.`
         return;
     }
 
-
-    if (requested !== null) {
+    if (requested) {
         currentOffer.bonus =
             Math.round(requested / 500) * 500;
 
-
-        if (increaseTension(7)) {
-            return;
-        }
-
+        if (increaseTension(7)) return;
 
         updateOfferUI();
-
 
         queueAIMessage(
             `Podemos aceitar € ${formatMoney(currentOffer.bonus)} em bônus por metas.`
@@ -1176,7 +1039,6 @@ O máximo autorizado é € ${formatMoney(maximumBonus)}.`
         return;
     }
 
-
     currentOffer.bonus =
         Math.round(
             currentOffer.bonus *
@@ -1184,24 +1046,17 @@ O máximo autorizado é € ${formatMoney(maximumBonus)}.`
             500
         ) * 500;
 
-
-    if (increaseTension(6)) {
-        return;
-    }
-
+    if (increaseTension(6)) return;
 
     updateOfferUI();
-
 
     queueAIMessage(
         `Podemos aumentar o bônus para € ${formatMoney(currentOffer.bonus)}.`
     );
 }
 
-
 function generateSponsorGoals() {
     const goals = [];
-
 
     const attackingPlayer = [
         "ATA",
@@ -1210,7 +1065,6 @@ function generateSponsorGoals() {
         "MEI"
     ].includes(player.position);
 
-
     if (attackingPlayer) {
         let goalTarget =
             Math.max(
@@ -1218,22 +1072,18 @@ function generateSponsorGoals() {
                 Math.round(player.overall / 4)
             );
 
-
         if (currentBrand.tier === 5) {
             goalTarget += 5;
         }
 
-
         goals.push(
             `Marcar pelo menos ${goalTarget} gols em uma temporada`
         );
-
     } else {
         goals.push(
             "Participar de pelo menos 25 partidas na temporada"
         );
     }
-
 
     if (currentBrand.tier >= 4) {
         goals.push(
@@ -1241,20 +1091,14 @@ function generateSponsorGoals() {
         );
     }
 
-
     if (currentBrand.tier === 5) {
         const requiredOverall =
-            Math.max(
-                82,
-                player.overall
-            );
-
+            Math.max(82, player.overall);
 
         goals.push(
             `Manter overall igual ou superior a ${requiredOverall}`
         );
     }
-
 
     if (
         player.position === "MEI" ||
@@ -1265,38 +1109,26 @@ function generateSponsorGoals() {
         );
     }
 
-
     goals.push(
         `Utilizar exclusivamente chuteiras ${currentBrand.name} durante partidas oficiais`
     );
 
-
     return goals;
 }
 
-
 function acceptOffer() {
-    if (
-        negotiationEnded ||
-        aiIsTyping
-    ) {
-        return;
-    }
-
+    if (negotiationEnded || aiIsTyping) return;
 
     negotiationEnded = true;
+
+    setNegotiationControls(false);
 
     addUserMessage(
         "Aceito os termos atuais."
     );
 
-
-    hideNegotiationControls();
-
-
     const goals =
         generateSponsorGoals();
-
 
     queueAIMessage(
 `Temos um acordo, ${player.name}.
@@ -1308,44 +1140,34 @@ DURAÇÃO
 ${currentOffer.duration} temporada(s)
 
 BÔNUS
-${
-    currentOffer.bonus > 0
-        ? "€ " + formatMoney(currentOffer.bonus)
-        : "SEM BÔNUS DE DESEMPENHO"
-}
+€ ${formatMoney(currentOffer.bonus)}
 
 METAS DE PATROCÍNIO
 
-${goals.map(goal => "• " + goal).join("\n")}
+${goals
+    .map(goal => "• " + goal)
+    .join("\n")}
 
-O não cumprimento das metas poderá afetar futuras renovações.
+O não cumprimento das metas poderá reduzir bônus ou afetar futuras renovações.
 
 Bem-vindo à ${currentBrand.name}.`,
-        1500,
+        1100,
         () => {
             addSystemMessage(
                 "CONTRATO DE PATROCÍNIO ASSINADO ✓"
             );
-        },
-        true
+        }
     );
 }
 
-
 function brandWalkAway() {
-    if (negotiationEnded) {
-        return;
-    }
-
+    if (negotiationEnded) return;
 
     negotiationEnded = true;
-
     negotiationState.tension = 100;
 
     updateNegotiationUI();
-
-    hideNegotiationControls();
-
+    setNegotiationControls(false);
 
     queueAIMessage(
 `As posições ficaram muito distantes.
@@ -1353,21 +1175,39 @@ function brandWalkAway() {
 A ${currentBrand.name} não acredita que seja possível chegar a um acordo neste momento.
 
 Estamos oficialmente encerrando as negociações.`,
-        1300,
+        1000,
         () => {
             addSystemMessage(
-                "A MARCA ABANDONOU A NEGOCIAÇÃO"
+                "NEGOCIAÇÃO FALHOU — A MARCA ABANDONOU AS CONVERSAS"
             );
-        },
-        true
+        }
     );
 }
 
+function setNegotiationControls(visible) {
+    const quickActions =
+        document.querySelector(".quickActions");
+
+    const messageBox =
+        document.querySelector(".messageBox");
+
+    if (quickActions) {
+        quickActions.classList.toggle(
+            "controlsHidden",
+            !visible
+        );
+    }
+
+    if (messageBox) {
+        messageBox.classList.toggle(
+            "controlsHidden",
+            !visible
+        );
+    }
+}
 
 function generateAIResponse(text) {
-    const lower =
-        text.toLowerCase();
-
+    const lower = text.toLowerCase();
 
     if (
         lower.includes("aceito") ||
@@ -1379,25 +1219,14 @@ function generateAIResponse(text) {
         return;
     }
 
-
     if (
-        lower.includes("sem bonus") ||
-        lower.includes("sem bônus") ||
-        lower.includes("não quero bonus") ||
-        lower.includes("não quero bônus") ||
-        lower.includes("nao quero bonus") ||
-        lower.includes("nao quero bônus") ||
-        lower.includes("tirar o bonus") ||
-        lower.includes("tirar o bônus") ||
-        lower.includes("remover o bonus") ||
-        lower.includes("remover o bônus") ||
-        lower.includes("zerar o bonus") ||
-        lower.includes("zerar o bônus")
+        wantsNoBonus(text) ||
+        lower.includes("bônus") ||
+        lower.includes("bonus")
     ) {
         negotiateBonus(text);
         return;
     }
-
 
     if (
         lower.includes("temporada") ||
@@ -1417,30 +1246,15 @@ function generateAIResponse(text) {
         return;
     }
 
-
-    if (
-        lower.includes("bônus") ||
-        lower.includes("bonus")
-    ) {
-        negotiateBonus(text);
-        return;
-    }
-
-
     const requestedValue =
         extractMoneyValue(text);
-
 
     if (requestedValue) {
         negotiateMoney(requestedValue);
         return;
     }
 
-
-    if (increaseTension(4)) {
-        return;
-    }
-
+    if (increaseTension(4)) return;
 
     queueAIMessage(
 `Precisamos discutir termos objetivos do contrato.
@@ -1449,47 +1263,45 @@ Podemos negociar valor semanal, duração ou bônus.`
     );
 }
 
-
 function extractMoneyValue(text) {
-    const lower =
-        text.toLowerCase();
-
+    const lower = text.toLowerCase();
 
     const millionMatch =
         lower.match(
             /(\d+(?:[.,]\d+)?)\s*(milhão|milhoes|milhões|mi)\b/
         );
 
-
     if (millionMatch) {
-        return Math.round(
+        const value =
             Number(
                 millionMatch[1].replace(",", ".")
-            ) * 1000000
+            );
+
+        return Math.round(
+            value * 1000000
         );
     }
-
 
     const thousandMatch =
         lower.match(
             /(\d+(?:[.,]\d+)?)\s*(mil|k)\b/
         );
 
-
     if (thousandMatch) {
-        return Math.round(
+        const value =
             Number(
                 thousandMatch[1].replace(",", ".")
-            ) * 1000
+            );
+
+        return Math.round(
+            value * 1000
         );
     }
-
 
     const currencyMatch =
         text.match(
             /(?:€|eur)\s*([\d.,]+)/i
         );
-
 
     if (currencyMatch) {
         return parseCurrencyNumber(
@@ -1497,26 +1309,19 @@ function extractMoneyValue(text) {
         );
     }
 
-
     const numberMatch =
         text.match(/\b\d[\d.,]*\b/);
 
-
-    if (!numberMatch) {
-        return null;
-    }
-
+    if (!numberMatch) return null;
 
     return parseCurrencyNumber(
         numberMatch[0]
     );
 }
 
-
 function parseCurrencyNumber(value) {
     let normalized =
         String(value).trim();
-
 
     if (
         normalized.includes(".") &&
@@ -1531,7 +1336,6 @@ function parseCurrencyNumber(value) {
         const parts =
             normalized.split(".");
 
-
         if (
             parts.length > 1 &&
             parts[parts.length - 1].length === 3
@@ -1544,24 +1348,20 @@ function parseCurrencyNumber(value) {
         const parts =
             normalized.split(",");
 
-
         if (
             parts.length > 1 &&
             parts[parts.length - 1].length === 3
         ) {
             normalized =
                 normalized.replace(/,/g, "");
-
         } else {
             normalized =
                 normalized.replace(",", ".");
         }
     }
 
-
     const number =
         Number(normalized);
-
 
     if (
         !Number.isFinite(number) ||
@@ -1570,10 +1370,8 @@ function parseCurrencyNumber(value) {
         return null;
     }
 
-
     return Math.round(number);
 }
-
 
 function quickAction(action) {
     if (
@@ -1583,16 +1381,13 @@ function quickAction(action) {
         return;
     }
 
-
     const input =
         document.getElementById("messageInput");
-
 
     if (action === "accept") {
         acceptOffer();
         return;
     }
-
 
     if (action === "money") {
         const requestedValue =
@@ -1602,11 +1397,9 @@ function quickAction(action) {
                 250
             ) * 250;
 
-
         input.value =
             `Quero € ${formatMoney(requestedValue)} por semana.`;
     }
-
 
     if (action === "duration") {
         input.value =
@@ -1616,52 +1409,42 @@ function quickAction(action) {
             )} temporada(s).`;
     }
 
-
     if (action === "bonus") {
         const requestedBonus =
             Math.round(
-                Math.max(
-                    currentOffer.bonus,
-                    1000
-                ) *
+                currentOffer.bonus *
                 1.40 /
                 500
             ) * 500;
-
 
         input.value =
             `Quero aumentar o bônus para € ${formatMoney(requestedBonus)}.`;
     }
 
-
     if (action === "reject") {
         negotiationEnded = true;
+
+        setNegotiationControls(false);
 
         addUserMessage(
             "Não tenho interesse na proposta."
         );
 
-        hideNegotiationControls();
-
-
         queueAIMessage(
             "Entendemos. A negociação está encerrada.",
-            900,
+            700,
             () => {
                 addSystemMessage(
                     "NEGOCIAÇÃO ENCERRADA"
                 );
-            },
-            true
+            }
         );
 
         return;
     }
 
-
     input.focus();
 }
-
 
 function sendMessage() {
     if (
@@ -1671,19 +1454,13 @@ function sendMessage() {
         return;
     }
 
-
     const input =
         document.getElementById("messageInput");
-
 
     const text =
         input.value.trim();
 
-
-    if (!text) {
-        return;
-    }
-
+    if (!text) return;
 
     addUserMessage(text);
 
@@ -1691,248 +1468,141 @@ function sendMessage() {
 
     negotiationState.rounds++;
 
-
     setTimeout(() => {
         generateAIResponse(text);
-    }, 250);
+    }, 300);
 }
-
 
 function queueAIMessage(
     text,
-    delay = null,
-    callback = null,
-    allowEnded = false
+    minimumDelay = 700,
+    callback = null
 ) {
-    if (
-        negotiationEnded &&
-        !allowEnded
-    ) {
+    if (aiIsTyping) {
+        setTimeout(() => {
+            queueAIMessage(
+                text,
+                minimumDelay,
+                callback
+            );
+        }, 250);
+
         return;
     }
 
-
     aiIsTyping = true;
-
-    setControlsDisabled(true);
-
 
     const typing =
         showTypingIndicator();
 
-
-    const calculatedDelay =
-        delay ??
+    const readingDelay =
         Math.min(
+            2400,
             Math.max(
-                text.length * 14,
-                850
-            ),
-            2600
+                minimumDelay,
+                text.length * 9
+            )
         );
 
-
     setTimeout(() => {
-        removeTypingIndicator(typing);
+        typing?.remove();
 
         addAIMessage(text);
 
         aiIsTyping = false;
 
-
-        if (!negotiationEnded) {
-            setControlsDisabled(false);
-        }
-
-
-        if (typeof callback === "function") {
+        if (callback) {
             callback();
         }
 
-    }, calculatedDelay);
+    }, readingDelay);
 }
-
 
 function showTypingIndicator() {
     const chat =
         document.getElementById("chatMessages");
 
+    if (!chat) return null;
 
     const wrapper =
         document.createElement("div");
 
-
     wrapper.className =
-        "typingWrapper";
-
+        "typingRow";
 
     wrapper.innerHTML = `
-        <div class="typingName">
-            ${currentBrand.representative} está digitando
-        </div>
-
         <div class="typingBubble">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span class="typingName">
+                ${currentBrand?.representative || "Representante"}
+            </span>
+
+            <div class="typingDots">
+                <i></i>
+                <i></i>
+                <i></i>
+            </div>
         </div>
     `;
-
 
     chat.appendChild(wrapper);
 
     chat.scrollTop =
         chat.scrollHeight;
 
-
     return wrapper;
 }
-
-
-function removeTypingIndicator(element) {
-    if (
-        element &&
-        element.parentNode
-    ) {
-        element.remove();
-    }
-}
-
-
-function setControlsDisabled(disabled) {
-    const controls =
-        document.querySelectorAll(
-            ".quickActions button, .messageBox input, .messageBox button"
-        );
-
-
-    controls.forEach(control => {
-        control.disabled = disabled;
-    });
-}
-
-
-function hideNegotiationControls() {
-    const quickActions =
-        document.querySelector(".quickActions");
-
-
-    const messageBox =
-        document.querySelector(".messageBox");
-
-
-    if (quickActions) {
-        quickActions.classList.add(
-            "negotiationControlsHidden"
-        );
-    }
-
-
-    if (messageBox) {
-        messageBox.classList.add(
-            "negotiationControlsHidden"
-        );
-    }
-}
-
-
-function showNegotiationControls() {
-    const quickActions =
-        document.querySelector(".quickActions");
-
-
-    const messageBox =
-        document.querySelector(".messageBox");
-
-
-    if (quickActions) {
-        quickActions.classList.remove(
-            "negotiationControlsHidden"
-        );
-    }
-
-
-    if (messageBox) {
-        messageBox.classList.remove(
-            "negotiationControlsHidden"
-        );
-    }
-
-
-    setControlsDisabled(false);
-}
-
 
 function addAIMessage(text) {
     addMessage(text, "ai");
 }
 
-
 function addUserMessage(text) {
     addMessage(text, "user");
 }
-
 
 function addSystemMessage(text) {
     addMessage(text, "system");
 }
 
-
 function addMessage(text, type) {
     const chat =
         document.getElementById("chatMessages");
 
-
-    if (!chat) {
-        return;
-    }
-
+    if (!chat) return;
 
     const message =
         document.createElement("div");
 
-
     message.className =
         "message " + type;
 
-
     message.innerText = text;
-
 
     chat.appendChild(message);
 
-
     requestAnimationFrame(() => {
-        message.classList.add(
-            "messageVisible"
-        );
+        message.classList.add("messageVisible");
     });
-
 
     chat.scrollTop =
         chat.scrollHeight;
 }
 
-
 function handleEnter(event) {
     if (event.key === "Enter") {
         event.preventDefault();
-
         sendMessage();
     }
 }
-
 
 function formatMoney(value) {
     return Math.round(value)
         .toLocaleString("pt-BR");
 }
 
-
 function backToPlayer() {
     showScreen("playerScreen");
 }
-
 
 function backToBrands() {
     showScreen("brandsScreen");
