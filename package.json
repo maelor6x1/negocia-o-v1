@@ -1,0 +1,11 @@
+{
+  "name": "negotiation-ai",
+  "version": "2.0.0",
+  "description": "Negotiation AI com contas de usuário e carreira persistente, pronto pra Vercel (Turso + JWT)",
+  "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "bcryptjs": "^2.4.3",
+    "cookie": "^0.6.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
