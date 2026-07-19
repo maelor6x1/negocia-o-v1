@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <meta name="theme-color" content="#080a0e">
+
+    <title>Negotiation AI</title>
+
+    <link rel="stylesheet" href="./style.css?v=10">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header class="header">
+
+            <div class="logo">
+
+                <div class="logoIcon">
+                    N.ai
+                </div>
+
+                <div>
+                    <h1>NEGOTIATION AI</h1>
+
+                    <p>
+                        FOOTBALL SPONSOR NEGOTIATION
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="status">
+
+                <div class="statusDot"></div>
+
+                NEGOTIATION SYSTEM ONLINE
+
+            </div>
+
+            <div
+                id="headerActions"
+                class="headerActions"
+            >
+
+                <button
+                    type="button"
+                    class="navLink"
+                    onclick="renderCareerScreen(); showScreen('careerScreen')"
+                >
+                    MINHA CARREIRA
+                </button>
+
+                <span id="headerUsername"></span>
+
+                <button
+                    type="button"
+                    class="navLink"
+                    onclick="handleLogout()"
+                >
+                    SAIR
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <main>
+
+            <!-- AUTH SCREEN -->
+
+            <section
+                id="authScreen"
+                class="screen active"
+            >
+
+                <div class="hero">
+
+                    <span class="tag">
+                        ACESSO AO SISTEMA
+                    </span>
+
+                    <h2>
+                        ENTRE NA SUA
+                        <span>CARREIRA.</span>
+                    </h2>
+
+                    <p>
+                        Crie uma conta para salvar seu jogador, seus
+                        contratos de patrocínio e acompanhar renovações
+                        ao longo das temporadas.
+                    </p>
+
+                </div>
+
+
+                <div class="playerCard authCard">
+
+                    <div class="authTabs">
+
+                        <button
+                            type="button"
+                            id="loginTab"
+                            class="authTab active"
+                            onclick="switchAuthTab('login')"
+                        >
+                            ENTRAR
+                        </button>
+
+                        <button
+                            type="button"
+                            id="registerTab"
+                            class="authTab"
+                            onclick="switchAuthTab('register')"
+                        >
+                            CRIAR CONTA
+                        </button>
+
+                    </div>
+
+
+                    <p id="authError" class="authError"></p>
+
+
+                    <form
+                        id="loginForm"
+                        class="authForm"
+                        onsubmit="handleLogin(event)"
+                    >
+
+                        <div class="formGrid authGrid">
+
+                            <div class="inputGroup">
+
+                                <label for="loginUsername">
+                                    USUÁRIO
+                                </label>
+
+                                <input
+                                    id="loginUsername"
+                                    type="text"
+                                    autocomplete="username"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="inputGroup">
+
+                                <label for="loginPassword">
+                                    SENHA
+                                </label>
+
+                                <input
+                                    id="loginPassword"
+                                    type="password"
+                                    autocomplete="current-password"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="mainButton"
+                            type="submit"
+                        >
+                            ENTRAR
+                        </button>
+
+                    </form>
+
+
+                    <form
+                        id="registerForm"
+                        class="authForm hidden"
+                        onsubmit="handleRegister(event)"
+                    >
+
+                        <div class="formGrid authGrid">
+
+                            <div class="inputGroup">
+
+                                <label for="registerUsername">
+                                    USUÁRIO
+                                </label>
+
+                                <input
+                                    id="registerUsername"
+                                    type="text"
+                                    autocomplete="username"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="inputGroup">
+
+                                <label for="registerPassword">
+                                    SENHA (MÍN. 6 CARACTERES)
+                                </label>
+
+                                <input
+                                    id="registerPassword"
+                                    type="password"
+                                    autocomplete="new-password"
+                                    required
+                                    minlength="6"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="mainButton"
+                            type="submit"
+                        >
+                            CRIAR CONTA
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+
+            <!-- PLAYER SCREEN -->
+
+            <section
+                id="playerScreen"
+                class="screen"
+            >
+
+                <div class="hero">
+
+                    <span class="tag">
+                        PLAYER COMMERCIAL ANALYSIS
+                    </span>
+
+                    <h2>
+                        NEGOCIE SEU
+                        <span>PATROCÍNIO.</span>
+                    </h2>
+
+                    <p>
+                        Cadastre seu jogador e receba propostas de marcas
+                        de chuteiras com base no desempenho, clube, liga
+                        e relevância comercial.
+                    </p>
+
+                </div>
+
+
+                <div class="playerCard">
+
+                    <h3>DADOS DO JOGADOR</h3>
+
+
+                    <div class="formGrid">
+
+                        <div class="inputGroup">
+
+                            <label for="playerName">
+                                NOME
+                            </label>
+
+                            <input
+                                id="playerName"
+                                type="text"
+                                placeholder="Ex: Guilherme Assis"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <div class="inputGroup">
+
+                            <label for="playerAge">
+                                IDADE
+                            </label>
+
+                            <input
+                                id="playerAge"
+                                type="number"
+                                min="16"
+                                max="50"
+                                placeholder="18"
+                                inputmode="numeric"
+                            >
+
+                        </div>
+
+
+                        <div class="inputGroup">
+
+                            <label for="playerPosition">
+                                POSIÇÃO
+                            </label>
+
+                            <select id="playerPosition">
+
+                                <option value="ATA">Atacante</option>
+                                <option value="PE">Ponta Esquerda</option>
+                                <option value="PD">Ponta Direita</option>
+                                <option value="MEI">Meia Ofensivo</option>
+                                <option value="MC">Meio-Campista</option>
+                                <option value="VOL">Volante</option>
+                                <option value="LE">Lateral Esquerdo</option>
+                                <option value="LD">Lateral Direito</option>
+                                <option value="ZAG">Zagueiro</option>
+                                <option value="GOL">Goleiro</option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="inputGroup">
+
+                            <label for="playerOverall">
+                                OVERALL
+                            </label>
+
+                            <input
+                                id="playerOverall"
+                                type="number"
+                                min="40"
+                                max="99"
+                                placeholder="80"
+                                inputmode="numeric"
+                            >
+
+                        </div>
+
+
+                        <div class="inputGroup">
+
+                            <label for="playerClub">
+                                CLUBE
+                            </label>
+
+                            <input
+                                id="playerClub"
+                                type="text"
+                                placeholder="Ex: Arsenal"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <div class="inputGroup">
+
+                            <label for="playerLeague">
+                                LIGA
+                            </label>
+
+                            <select id="playerLeague">
+
+                                <option value="premier">Premier League</option>
+                                <option value="laliga">LaLiga</option>
+                                <option value="bundesliga">Bundesliga</option>
+                                <option value="seriea">Serie A</option>
+                                <option value="ligue1">Ligue 1</option>
+                                <option value="brasil">Brasileirão</option>
+                                <option value="portugal">Liga Portugal</option>
+                                <option value="eredivisie">Eredivisie</option>
+                                <option value="mls">MLS</option>
+                                <option value="saudi">Saudi Pro League</option>
+                                <option value="other">Outra Liga</option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="inputGroup">
+
+                            <label for="clubReputation">
+                                REPUTAÇÃO DO CLUBE
+                            </label>
+
+                            <select id="clubReputation">
+
+                                <option value="100">Elite Mundial</option>
+                                <option value="85">Grande Relevância</option>
+                                <option value="70">Clube Relevante</option>
+                                <option value="55">Clube Médio</option>
+                                <option value="35">Clube Pequeno</option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="inputGroup">
+
+                            <label for="playerValue">
+                                VALOR DE MERCADO (€ MI)
+                            </label>
+
+                            <input
+                                id="playerValue"
+                                type="number"
+                                min="0"
+                                step="0.1"
+                                placeholder="50"
+                                inputmode="decimal"
+                            >
+
+                        </div>
+
+
+                        <div class="inputGroup">
+
+                            <label for="playerGoals">
+                                GOLS NA TEMPORADA
+                            </label>
+
+                            <input
+                                id="playerGoals"
+                                type="number"
+                                min="0"
+                                placeholder="15"
+                                inputmode="numeric"
+                            >
+
+                        </div>
+
+
+                        <div class="inputGroup">
+
+                            <label for="playerAssists">
+                                ASSISTÊNCIAS
+                            </label>
+
+                            <input
+                                id="playerAssists"
+                                type="number"
+                                min="0"
+                                placeholder="8"
+                                inputmode="numeric"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="mainButton"
+                        type="button"
+                        onclick="analyzePlayer()"
+                    >
+                        ANALISAR MERCADO DE PATROCÍNIOS
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- BRANDS SCREEN -->
+
+            <section
+                id="brandsScreen"
+                class="screen"
+            >
+
+                <div class="sectionHeader">
+
+                    <div>
+
+                        <span class="tag">
+                            SPONSOR MARKET
+                        </span>
+
+                        <h2>
+                            MARCAS INTERESSADAS
+                        </h2>
+
+                        <p id="playerSummary"></p>
+
+                    </div>
+
+
+                    <div class="commercialScore">
+
+                        <span>
+                            VALOR COMERCIAL
+                        </span>
+
+                        <strong id="commercialScore">
+                            0
+                        </strong>
+
+                        <small>
+                            /100
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="brandsContainer"
+                    class="brandsGrid"
+                ></div>
+
+
+                <button
+                    class="secondaryButton"
+                    type="button"
+                    onclick="backToPlayer()"
+                >
+                    ← EDITAR JOGADOR
+                </button>
+
+            </section>
+
+
+            <!-- CAREER SCREEN -->
+
+            <section
+                id="careerScreen"
+                class="screen"
+            >
+
+                <div class="sectionHeader">
+
+                    <div>
+
+                        <span class="tag">
+                            CAREER OVERVIEW
+                        </span>
+
+                        <h2>
+                            MINHA CARREIRA
+                        </h2>
+
+                        <p id="careerSummary"></p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="activeContractCard"
+                    class="playerCard careerCard"
+                ></div>
+
+
+                <h3 class="historyTitle">
+                    HISTÓRICO DE CONTRATOS
+                </h3>
+
+
+                <div
+                    id="contractHistory"
+                    class="brandsGrid careerHistoryGrid"
+                ></div>
+
+
+                <div class="careerAccountActions">
+
+                    <button
+                        class="secondaryButton"
+                        type="button"
+                        onclick="renderCareerListScreen(); showScreen('careerListScreen')"
+                    >
+                        TROCAR / CRIAR CARREIRA
+                    </button>
+
+                    <button
+                        class="secondaryButton dangerButton"
+                        type="button"
+                        onclick="handleLogout()"
+                    >
+                        SAIR DA CONTA
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- CAREER LIST SCREEN -->
+
+            <section
+                id="careerListScreen"
+                class="screen"
+            >
+
+                <div class="hero">
+
+                    <span class="tag">
+                        CAREER SLOTS
+                    </span>
+
+                    <h2>
+                        MINHAS
+                        <span>CARREIRAS.</span>
+                    </h2>
+
+                    <p>
+                        Escolha uma carreira pra continuar ou crie uma
+                        nova do zero. Cada carreira tem seu próprio
+                        jogador, contratos e confiança com as marcas.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="careerListContainer"
+                    class="brandsGrid careerListGrid"
+                ></div>
+
+
+                <button
+                    class="mainButton"
+                    type="button"
+                    onclick="createNewCareer()"
+                >
+                    + CRIAR NOVA CARREIRA
+                </button>
+
+                <button
+                    class="secondaryButton"
+                    type="button"
+                    onclick="renderCareerScreen(); showScreen('careerScreen')"
+                >
+                    ← VOLTAR
+                </button>
+
+            </section>
+
+
+            <!-- RENEWAL SCREEN -->
+
+            <section
+                id="renewalScreen"
+                class="screen"
+            >
+
+                <div class="hero">
+
+                    <span class="tag">
+                        SEASON REVIEW
+                    </span>
+
+                    <h2>
+                        FIM DE
+                        <span>TEMPORADA.</span>
+                    </h2>
+
+                    <p id="renewalIntro">
+                        Revise as metas do contrato com
+                        <strong id="renewalBrandName"></strong>
+                        e informe os novos números da temporada.
+                    </p>
+
+                </div>
+
+
+                <div class="playerCard" id="renewalGoalsCard">
+
+                    <h3>METAS DO CONTRATO ATUAL</h3>
+
+                    <div
+                        id="renewalGoalsList"
+                        class="goalsChecklist"
+                    ></div>
+
+                    <label class="goalCheck titleCheck">
+                        <input type="checkbox" id="renewalWonTitle">
+                        <span>Conquistou um título importante nesta temporada</span>
+                    </label>
+
+                </div>
+
+
+                <div class="playerCard">
+
+                    <h3>NOVOS NÚMEROS DA TEMPORADA</h3>
+
+
+                    <div class="formGrid">
+
+                        <div class="inputGroup">
+
+                            <label for="renewalOverall">
+                                OVERALL
+                            </label>
+
+                            <input
+                                id="renewalOverall"
+                                type="number"
+                                min="40"
+                                max="99"
+                                inputmode="numeric"
+                            >
+
+                        </div>
+
+
+                        <div class="inputGroup">
+
+                            <label for="renewalValue">
+                                VALOR DE MERCADO (€ MI)
+                            </label>
+
+                            <input
+                                id="renewalValue"
+                                type="number"
+                                min="0"
+                                step="0.1"
+                                inputmode="decimal"
+                            >
+
+                        </div>
+
+
+                        <div class="inputGroup">
+
+                            <label for="renewalGoalsScored">
+                                GOLS NA TEMPORADA
+                            </label>
+
+                            <input
+                                id="renewalGoalsScored"
+                                type="number"
+                                min="0"
+                                inputmode="numeric"
+                            >
+
+                        </div>
+
+
+                        <div class="inputGroup">
+
+                            <label for="renewalAssists">
+                                ASSISTÊNCIAS
+                            </label>
+
+                            <input
+                                id="renewalAssists"
+                                type="number"
+                                min="0"
+                                inputmode="numeric"
+                            >
+
+                        </div>
+
+
+                        <div class="inputGroup">
+
+                            <label for="renewalClub">
+                                CLUBE
+                            </label>
+
+                            <input
+                                id="renewalClub"
+                                type="text"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <div class="inputGroup">
+
+                            <label for="renewalClubReputation">
+                                REPUTAÇÃO DO CLUBE
+                            </label>
+
+                            <select id="renewalClubReputation">
+
+                                <option value="100">Elite Mundial</option>
+                                <option value="85">Grande Relevância</option>
+                                <option value="70">Clube Relevante</option>
+                                <option value="55">Clube Médio</option>
+                                <option value="35">Clube Pequeno</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="mainButton"
+                        type="button"
+                        id="renewalPrimaryButton"
+                        onclick="analyzeRenewal()"
+                    >
+                        REGISTRAR TEMPORADA
+                    </button>
+
+                    <button
+                        class="secondaryButton hidden"
+                        type="button"
+                        id="renewalSeekButton"
+                        onclick="seekNewSponsors()"
+                    >
+                        PROCURAR NOVOS PATROCINADORES
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- NEGOTIATION SCREEN -->
+
+            <section
+                id="negotiationScreen"
+                class="screen"
+            >
+
+                <div class="negotiationLayout">
+
+
+                    <!-- SIDEBAR -->
+
+                    <aside class="dealSidebar">
+
+                        <button
+                            class="backButton"
+                            type="button"
+                            onclick="backToBrands()"
+                            aria-label="Voltar"
+                        >
+                            ←
+                        </button>
+
+
+                        <span class="sidebarLabel">
+                            NEGOTIATION
+                        </span>
+
+
+                        <h2 id="brandName">
+                            NIKE
+                        </h2>
+
+
+                        <div class="playerMini">
+
+                            <span>
+                                PLAYER
+                            </span>
+
+                            <strong id="miniPlayerName">
+                                PLAYER
+                            </strong>
+
+                            <small id="miniPlayerClub">
+                                CLUB
+                            </small>
+
+                        </div>
+
+
+                        <div class="dealInfo">
+
+                            <div>
+
+                                <span>
+                                    VALOR SEMANAL
+                                </span>
+
+                                <strong id="offerValue">
+                                    € 0
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    DURAÇÃO
+                                </span>
+
+                                <strong id="offerDuration">
+                                    0 TEMPORADAS
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    BÔNUS
+                                </span>
+
+                                <strong id="offerBonus">
+                                    € 0
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- TENSION SYSTEM -->
+
+                        <div class="tensionPanel">
+
+                            <div class="tensionHeader">
+
+                                <span>
+                                    TENSÃO DA NEGOCIAÇÃO
+                                </span>
+
+                                <strong id="tensionText">
+                                    CALMA
+                                </strong>
+
+                            </div>
+
+
+                            <div class="tensionBar">
+
+                                <div
+                                    id="tensionProgress"
+                                    class="tensionProgress"
+                                ></div>
+
+                            </div>
+
+
+                            <p id="tensionDescription">
+                                A marca está aberta à negociação.
+                            </p>
+
+                        </div>
+
+
+                        <div class="counterPanel">
+
+                            <span>
+                                CONTRAPROPOSTAS
+                            </span>
+
+                            <strong id="counterOffers">
+                                0 / 5
+                            </strong>
+
+                        </div>
+
+                    </aside>
+
+
+                    <!-- CHAT -->
+
+                    <div class="chatArea">
+
+
+                        <div class="chatHeader">
+
+                            <div id="representativeInitial">
+                                N
+                            </div>
+
+
+                            <section>
+
+                                <strong id="representativeName">
+                                    Representative
+                                </strong>
+
+                                <small>
+                                    BRAND REPRESENTATIVE
+                                </small>
+
+                            </section>
+
+                        </div>
+
+
+                        <div
+                            id="chatMessages"
+                            class="chatMessages"
+                        ></div>
+
+
+                        <div class="quickActions">
+
+                            <button
+                                type="button"
+                                onclick="quickAction('accept')"
+                            >
+                                ACEITAR
+                            </button>
+
+
+                            <button
+                                type="button"
+                                onclick="quickAction('money')"
+                            >
+                                PEDIR MAIS
+                            </button>
+
+
+                            <button
+                                type="button"
+                                onclick="quickAction('duration')"
+                            >
+                                CONTRATO MENOR
+                            </button>
+
+
+                            <button
+                                type="button"
+                                onclick="quickAction('bonus')"
+                            >
+                                AUMENTAR BÔNUS
+                            </button>
+
+
+                            <button
+                                class="reject"
+                                type="button"
+                                onclick="quickAction('reject')"
+                            >
+                                RECUSAR
+                            </button>
+
+                        </div>
+
+
+                        <div class="messageBox">
+
+                            <input
+                                id="messageInput"
+                                type="text"
+                                placeholder="Digite sua contraproposta..."
+                                autocomplete="off"
+                                onkeydown="handleEnter(event)"
+                            >
+
+
+                            <button
+                                type="button"
+                                onclick="sendMessage()"
+                            >
+                                ENVIAR
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="./app.js?v=10"></script>
+
+</body>
+
+</html>
